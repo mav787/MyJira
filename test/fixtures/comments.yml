@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  context: MyString
+  from_user_id: 
+  card_id: 1
+  to_user_id: 1
+
+two:
+  context: MyString
+  from_user_id: 
+  card_id: 1
+  to_user_id: 1
