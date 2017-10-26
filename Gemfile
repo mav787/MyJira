@@ -15,6 +15,7 @@ gem 'activerecord-import'
 gem "better_errors"
 gem "pry-rails"
 gem 'rails_12factor'
+gem 'rails_admin', '~> 1.2'
 
 group :development, :test do
   gem 'sqlite3', '1.3.13'
