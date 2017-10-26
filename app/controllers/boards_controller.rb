@@ -12,6 +12,11 @@ class BoardsController < ApplicationController
   def show
   end
 
+  def enroll
+    Board.find(params[:board]).users << User.find(params[:user].to_i)
+    redirect_to board_path(id:params[:board])
+  end
+
   # GET /boards/new
   def new
     @board = Board.new
@@ -25,9 +30,12 @@ class BoardsController < ApplicationController
   # POST /boards.json
   def create
     @board = Board.new(board_params)
-
     respond_to do |format|
       if @board.save
+        @board.users << current_user
+        List.create(name: "todo",board_id: @board.id.to_i)
+        List.create(name: "doing",board_id: @board.id.to_i)
+        List.create(name: "done",board_id: @board.id.to_i)
         format.html { redirect_to @board, notice: 'Board was successfully created.' }
         format.json { render :show, status: :created, location: @board }
       else
@@ -71,4 +79,6 @@ class BoardsController < ApplicationController
     def board_params
       params.require(:board).permit(:name, :leader_id)
     end
+
+
 end

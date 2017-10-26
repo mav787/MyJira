@@ -55,6 +55,15 @@ class UsersController < ApplicationController
     end
   end
 
+  def search
+    @users = User.where('name LIKE ?', "%#{params[:user_name]}%")
+    @board = Board.find(params[:board_id]);
+    respond_to do |format|
+      format.js{}
+    end
+  end
+
+
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy

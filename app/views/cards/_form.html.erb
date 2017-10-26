@@ -11,11 +11,11 @@
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="field" style="display:none;">
     <%= form.label :list_id %>
-    <%= form.number_field :list_id, id: :card_list_id %>
+    <%= form.number_field :list_id, id: :card_list_id, value: @list.id %>
   </div>
-
+  
   <div class="field">
     <%= form.label :content %>
     <%= form.text_field :content, id: :card_content %>

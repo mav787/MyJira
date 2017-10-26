@@ -16,9 +16,9 @@
     <%= form.text_field :name, id: :board_name %>
   </div>
 
-  <div class="field">
+  <div class="field" style="display:none;">
     <%= form.label :leader_id %>
-    <%= form.number_field :leader_id, id: :board_leader_id %>
+    <%= form.number_field :leader_id, id: :board_leader_id, value: current_user.id%>
   </div>
 
   <div class="actions">

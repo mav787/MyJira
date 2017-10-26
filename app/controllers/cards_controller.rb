@@ -15,6 +15,7 @@ class CardsController < ApplicationController
   # GET /cards/new
   def new
     @card = Card.new
+    @list = List.find(params[:list_id])
   end
 
   # GET /cards/1/edit
@@ -25,10 +26,11 @@ class CardsController < ApplicationController
   # POST /cards.json
   def create
     @card = Card.new(card_params)
-
+    @list = List.find(params[:card][:list_id])
+    @board = Board.find(@list.board.id)
     respond_to do |format|
       if @card.save
-        format.html { redirect_to @card, notice: 'Card was successfully created.' }
+        format.html { redirect_to @board, notice: 'Card was successfully created.' }
         format.json { render :show, status: :created, location: @card }
       else
         format.html { render :new }

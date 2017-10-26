@@ -15,6 +15,7 @@ class ListsController < ApplicationController
   # GET /lists/new
   def new
     @list = List.new
+    @board = Board.find(params[:board_id])
   end
 
   # GET /lists/1/edit
@@ -25,10 +26,10 @@ class ListsController < ApplicationController
   # POST /lists.json
   def create
     @list = List.new(list_params)
-
+    @board = Board.find(params[:list][:board_id])
     respond_to do |format|
       if @list.save
-        format.html { redirect_to @list, notice: 'List was successfully created.' }
+        format.html { redirect_to @board, notice: 'List was successfully created.' }
         format.json { render :show, status: :created, location: @list }
       else
         format.html { render :new }

@@ -9,6 +9,36 @@
   <strong>Leader:</strong>
   <%= @board.leader_id %>
 </p>
-
+<p>
+  <strong>Members:</strong><br/>
+  <% @board.users.each do |user| %>
+    <span>name:</span><%= user.name %><span>email:</span><%= user.email %>
+    <br/>
+  <% end %>
+</p>
+<%= form_tag("/search/user", method: "get", "data-remote": "true", "id": "search-form") do %>
+  <%= label_tag(:user_name, "user name:") %>
+  <%= text_field_tag(:user_name) %>
+  <%= number_field_tag(:board_id,@board.id, "style": "display:none;") %>
+  <%= submit_tag "Search", "id": "search-submit", "style": "display:none" %>
+<% end %>
+<div id="users-container">
+</div>
+<p>
+  <strong>Lists:</strong><br/>
+  <% @board.lists.each do |list| %>
+  <div class="list">
+    <span>list name:</span><%= list.name %><br/>
+    <%= link_to 'New Card', new_card_path(list_id:list.id) %>
+    <% list.cards.each do |card| %>
+    <div class="card">
+      <span>card content:</span><%= card.content %><br/>
+      <span>card deadline:</span><%= card.deadline %><br/>
+    </div>
+    <% end %>
+  </div>
+  <% end %>
+</p>
+<%= link_to 'New List', new_list_path(board_id:@board.id) %>
 <%= link_to 'Edit', edit_board_path(@board) %> |
 <%= link_to 'Back', boards_path %>
