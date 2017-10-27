@@ -7,7 +7,7 @@
 
 <p>
   <strong>Leader:</strong>
-  <%= @board.leader_id %>
+  <%= User.find(@board.leader_id).name %>
 </p>
 <p>
   <strong>Members:</strong><br/>

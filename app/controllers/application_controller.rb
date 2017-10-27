@@ -3,6 +3,9 @@ class ApplicationController < ActionController::Base
   include SessionsHelper
 
   def hello
-    render html: "hello, my jira!"
+    if logged_in?
+      redirect_to user_path(current_user.id)
+    end
+
   end
 end
