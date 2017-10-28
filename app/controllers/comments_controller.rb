@@ -28,6 +28,7 @@ class CommentsController < ApplicationController
 
     respond_to do |format|
       if @comment.save
+        Notification.create(recipient_id: params[:to_user_id], card_id: params[:card_id])
         format.html { redirect_to @comment, notice: 'Comment was successfully created.' }
         format.json { render :show, status: :created, location: @comment }
       else

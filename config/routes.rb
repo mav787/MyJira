@@ -5,6 +5,12 @@ Rails.application.routes.draw do
   resources :cards
   resources :tags
   resources :comments
+  resources :notifications do
+    collection do
+        post :mark_as_read
+    end
+  end
+  
   get 'sessions/new'
 
 # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

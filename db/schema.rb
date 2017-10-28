@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171026025518) do
+ActiveRecord::Schema.define(version: 20171027202344) do
 
   create_table "board_enrollments", force: :cascade do |t|
     t.integer "user_id"
@@ -61,6 +61,14 @@ ActiveRecord::Schema.define(version: 20171026025518) do
   create_table "lists", force: :cascade do |t|
     t.string "name"
     t.integer "board_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.integer "recipient_id"
+    t.boolean "read"
+    t.integer "card_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
