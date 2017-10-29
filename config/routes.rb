@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'prerequisites/add'
+
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   resources :boards
   resources :lists
@@ -6,7 +8,9 @@ Rails.application.routes.draw do
   resources :tags
   resources :comments
   get 'sessions/new'
-
+  get '/prerequisites_add', to:'prerequisites#add'
+  get '/prerequisites_index', to: 'prerequisites#index'
+  get 'prerequisites_delete', to: 'prerequisites#delete'
 # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root 'application#hello'
   get '/signup', to: 'users#new'
