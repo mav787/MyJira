@@ -38,6 +38,14 @@
       <ul class="nav navbar-nav navbar-right">
         <% if logged_in? %>
             <li><%= link_to 'Log Out', logout_path, method: :delete%></li>
+            <li class="nav-item btn-group" data-behavior="notifications">
+              <a class="dropdown-toggle nav-link" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <%= fa_icon "bell" %>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenu" data-behavior="notification-items">
+              </div>
+            </li>
+
           <% else %>
             <li><%= link_to 'Log In', login_path %></li>
             <li><%= link_to 'Sign Up', signup_path %></li>
