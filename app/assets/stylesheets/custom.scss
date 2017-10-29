@@ -2,76 +2,89 @@
 @import "bootstrap";
 
 /* mixins, variables, etc. */
-
-$gray-medium-light: #eaeaea;
-
-@mixin box_sizing {
-  -moz-box-sizing:    border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing:         border-box;
+body {
+  margin: 0 !important;
+  background-image: url("background.jpg");
+  background-size: cover;
+  background-repeat:no-repeat;
+}
+.navbar-brand{
+  font-weight: bold;
+}
+.jumbotron{
+  margin-top: 50px;
+  background-color:rgba(255,255,255,0.7) !important;
+}
+.welcome{
+  margin-bottom: 30px;
 }
 
-/* forms */
-
-input, textarea, select, .uneditable-input {
-  border: 1px solid #bbb;
-  width: 100%;
-  margin-bottom: 15px;
-  @include box_sizing;
+.sign-btn{
+    color: #fff !important;
 }
 
-input {
-  height: auto !important;
+.my-form-field{
+  margin-top: 10px;
+  margin-bottom: 20px;
 }
 
-#error_explanation {
-  color: red;
-  ul {
-    color: red;
-    margin: 0 0 30px 0;
-  }
+.board{
+  border: 1px solid grey;
+  border-radius: 5px;
+  height: 150px;
+  margin: 10px 30px;
+  background-color: rgba(255,255,255,0.8);
 }
 
-.field_with_errors {
-  @extend .has-error;
-  .form-control {
-    color: $state-danger-text;
-  }
+.board:hover{
+  color: #000;
+  background-color: rgba(255,255,255,1);
 }
 
-/* sidebar */
-
-aside {
-  section.user_info {
-    margin-top: 20px;
-  }
-  section {
-    padding: 10px 0;
-    margin-top: 20px;
-    &:first-child {
-      border: 0;
-      padding-top: 0;
-    }
-    span {
-      display: block;
-      margin-bottom: 3px;
-      line-height: 1;
-    }
-    h1 {
-      font-size: 1.4em;
-      text-align: left;
-      letter-spacing: -1px;
-      margin-bottom: 3px;
-      margin-top: 0px;
-    }
-  }
-}
-
-.gravatar {
-  float: left;
-  margin-right: 10px;
-}
-
-.gravatar_edit {
+.board-name, .board-leader{
+  font-size: 20px;
   margin-top: 15px;
+}
+
+.side-menu{
+  background-color: #eee;
+  float: left;
+  width: 300px;
+  height: -webkit-fill-available;
+}
+
+.menu-title{
+  text-align: center;
+  font-size: 20px;
+  padding: 20px 0;
+}
+
+.list-container{
+  background-color: #E2E4E6;
+  border-radius: 5px;
+  float: left;
+  margin-left: 10px;
+  width: 300px;
+  padding-bottom: 10px;
+}
+
+.list-name{
+  text-align: center;
+  font-size: 20px;
+  padding: 20px 0;
+}
+
+.card-container{
+  background-color: #fdfdfd;
+  border-radius: 10px;
+  margin: 5px 10px;
+  padding: 10px;
+}
+
+.new-card{
+  margin: 10px 30px;
+}
+
+#users-container{
+  margin: 10px 0;
 }

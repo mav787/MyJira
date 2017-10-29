@@ -13,15 +13,16 @@
 
   <div class="field">
     <%= form.label :name %>
-    <%= form.text_field :name, id: :list_name %>
+    <%= form.text_field :name, id: :list_name, class: 'form-control my-form-field' %>
   </div>
 
   <div class="field" style="display:none;">
     <%= form.label :board_id %>
-    <%= form.number_field :board_id, id: :list_board_id, value: @board.id %>
+    <%= form.number_field :board_id, id: :list_board_id, value: @board.id, class: 'form-control my-form-field' %>
   </div>
 
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit class: "btn btn-primary"%>
+    <a href=”#” onClick=javascript:history.go(-1); class="btn btn-primary sign-btn">Cancel</a>
   </div>
 <% end %>

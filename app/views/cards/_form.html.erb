@@ -13,20 +13,21 @@
 
   <div class="field" style="display:none;">
     <%= form.label :list_id %>
-    <%= form.number_field :list_id, id: :card_list_id, value: @list.id %>
+    <%= form.number_field :list_id, id: :card_list_id, value: @list.id, class: 'form-control my-form-field' %>
   </div>
-  
+
   <div class="field">
     <%= form.label :content %>
-    <%= form.text_field :content, id: :card_content %>
+    <%= form.text_field :content, id: :card_content, class: 'form-control my-form-field' %>
   </div>
 
   <div class="field">
     <%= form.label :deadline %>
-    <%= form.datetime_select :deadline, id: :card_deadline %>
+    <%= form.datetime_select :deadline, id: :card_deadline, class: 'form-control my-form-field' %>
   </div>
 
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit class: "btn btn-primary" %>
+    <a href=”#” onClick=javascript:history.go(-1); class="btn btn-primary sign-btn">Cancel</a>
   </div>
 <% end %>

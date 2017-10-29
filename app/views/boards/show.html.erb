@@ -1,44 +1,50 @@
-<p id="notice"><%= notice %></p>
+<div class="side-menu col-md-2">
+  <div class="menu-title">Menu</div>
+  <div class="menu-content">
+    <p>
+      <strong>Name:</strong>
+      <%= @board.name %>
+    </p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @board.name %>
-</p>
-
-<p>
-  <strong>Leader:</strong>
-  <%= User.find(@board.leader_id).name %>
-</p>
-<p>
-  <strong>Members:</strong><br/>
-  <% @board.users.each do |user| %>
-    <span>name:</span><%= user.name %><span>email:</span><%= user.email %>
-    <br/>
-  <% end %>
-</p>
-<%= form_tag("/search/user", method: "get", "data-remote": "true", "id": "search-form") do %>
-  <%= label_tag(:user_name, "user name:") %>
-  <%= text_field_tag(:user_name) %>
-  <%= number_field_tag(:board_id,@board.id, "style": "display:none;") %>
-  <%= submit_tag "Search", "id": "search-submit", "style": "display:none" %>
-<% end %>
-<div id="users-container">
-</div>
-<p>
-  <strong>Lists:</strong><br/>
-  <% @board.lists.each do |list| %>
-  <div class="list">
-    <span>list name:</span><%= list.name %><br/>
-    <%= link_to 'New Card', new_card_path(list_id:list.id) %>
-    <% list.cards.each do |card| %>
-    <div class="card">
-      <span>card content:</span><%= card.content %><br/>
-      <span>card deadline:</span><%= card.deadline %><br/>
-    </div>
+    <p>
+      <strong>Leader:</strong>
+      <%= User.find(@board.leader_id).name %>
+    </p>
+    <p>
+      <strong>Members:</strong><br/>
+      <% @board.users.each do |user| %>
+        <span>name:</span><%= user.name %><br/><span>email:</span><%= user.email %>
+        <br/>
+      <% end %>
+    </p>
+    <%= form_tag("/search/user", method: "get", "data-remote": "true", "id": "search-form") do %>
+      <%= label_tag(:user_name, "search user:") %>
+      <%= text_field_tag :user_name, "",class: "form-control"  %>
+      <%= number_field_tag(:board_id,@board.id, "style": "display:none;") %>
+      <%= submit_tag "Search", "id": "search-submit", "style": "display:none" %>
     <% end %>
+    <div id="users-container">
+    </div>
+    <%= link_to 'New List', new_list_path(board_id:@board.id) %>
+    <%= link_to 'Edit', edit_board_path(@board) %> |
+    <%= link_to 'Back', root_path %>
   </div>
+</div>
+<div class="container">
+  <p id="notice"><%= notice %></p>
+  <% @board.lists.each do |list| %>
+    <div class="list-container">
+      <div class="list-name"><span><%= list.name %></span></div>
+      <% list.cards.each do |card| %>
+      <div class="card-container">
+        <span>content:</span><%= card.content %><br/>
+        <span>deadline:</span><%= card.deadline %><br/>
+      </div>
+      <% end %>
+      <%= link_to 'New Card', new_card_path(list_id:list.id), class: "new-card"%>
+    </div>
   <% end %>
-</p>
-<%= link_to 'New List', new_list_path(board_id:@board.id) %>
-<%= link_to 'Edit', edit_board_path(@board) %> |
-<%= link_to 'Back', boards_path %>
+
+
+
+</div>

@@ -1,4 +1,28 @@
 <% provide(:title, @user.name) %>
+
+<div class="container">
+  <div class="jumbotron">
+    <h2>My Boards</h2>
+
+    <div class="row">
+      <% @user.boards.each do |board| %>
+      <a href="/boards/<%= board.id%>">
+        <div class="col-md-3 board">
+          <div class="board-name"><%= board.name %></div>
+          <div class="board-leader">leader:<%= User.find(board.leader_id).name %></div>
+        </div>
+      </a>
+      <% end %>
+      <a href="/boards/new">
+        <div class="col-md-3 board">
+          <div class="board-name">Create a new board</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+
 <div class="row">
   <aside class="col-md-4">
     <section class="user_info">
@@ -9,24 +33,3 @@
     </section>
   </aside>
 </div>
-
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Leader</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @user.boards.each do |board| %>
-      <tr>
-        <td><%= board.name %></td>
-        <td><%= User.find(board.leader_id).name %></td>
-        <td><%= link_to 'Show', board %></td>
-      </tr>
-    <% end %>
-  </tbody>
-  <%= link_to 'New Board', new_board_path %>
-</table>
