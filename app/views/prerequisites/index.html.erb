@@ -1,0 +1,42 @@
+
+<h1>Prerequisites</h1>
+<div class = "pre-container">
+<h2>Current Prerequisites</h2>
+<% if @precards.count == 0%>
+  <p> This card has no prerequisite </p>
+<% else%>
+
+    <table>
+      <body>
+        <% @precards.each do |each| %>
+        <tr>
+          <td><%=each.content%></td>
+          <td><%=List.find(each.list_id).name%></td>
+          <td><%=link_to "Delete",prerequisites_delete_path(card_id:@card.id,todelete_id:each.id)%></td>
+        </tr>
+        <%end%>
+      </body>
+    </table>
+<%end%>
+</div>
+
+<div class = "pre-container">
+<h2> Card lists(Can be Added to Prerequisites) </h2>
+<% if @notprecards.count == 0%>
+  <p> No more card can be added</p>
+<% else%>
+    <table>
+      <body>
+        <% @notprecards.each do |each| %>
+        <tr>
+          <td><%=each.content%></td>
+          <td><%=List.find(each.list_id).name%></td>
+          <td><%=link_to "Add", prerequisites_add_path(card_id:@card.id,toaddcard_id:each.id)%></td>
+        </tr>
+        <%end%>
+      </body>
+    </table>
+<%end%>
+</div>
+
+<%= link_to "Back", root_path,class: "btn btn-primary sign-btn"%>
