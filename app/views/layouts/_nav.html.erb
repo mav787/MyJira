@@ -38,6 +38,25 @@
       <ul class="nav navbar-nav navbar-right">
         <% if logged_in? %>
             <li><%= link_to 'Log Out', logout_path, method: :delete%></li>
+            <li class="nav-item btn-group" data-behavior="notifications">
+              <div class="dropdown-toggle nav-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="fa fa-bell fa-lg" type="button"></a>
+                <% notes = current_user.notifications.where(read: false) %>
+                <% if !notes.empty? %>
+                  <span class="badge"><%= notes.size %></span>
+                <% end %>
+              </div>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenu" data-behavior="notification-items">
+                <% if !notes.empty? %>
+                  <% notes.each do |notification| %>
+                    <li><%= link_to "Card #{notification.card.content} has new update", notification.card %></li>
+                  <% end %>
+                <% else %>
+                  <li>You don't have any notifications now.</li>
+                <% end %>
+              </ul>
+            </li>
+
           <% else %>
             <li><%= link_to 'Log In', login_path %></li>
             <li><%= link_to 'Sign Up', signup_path %></li>

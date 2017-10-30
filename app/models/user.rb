@@ -14,5 +14,6 @@ class User < ApplicationRecord
   has_many :boards, through: :board_enrollments
   has_many :givecomments, class_name: :Comment, foreign_key: :from_user_id
   has_many :getcomments, class_name: :Comment, foreign_key: :to_user_id
+  has_many :notifications, class_name: :Notification, foreign_key: :recipient_id
 
 end

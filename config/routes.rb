@@ -7,6 +7,12 @@ Rails.application.routes.draw do
   resources :cards
   resources :tags
   resources :comments
+  resources :notifications do
+    collection do
+        post :mark_as_read
+    end
+  end
+  
   get 'sessions/new'
   get '/prerequisites_add', to:'prerequisites#add'
   get '/prerequisites_index', to: 'prerequisites#index'
