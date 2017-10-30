@@ -11,14 +11,8 @@
 </p>
 
 <p>
-  <strong>Card:</strong>
-  <%= @comment.card_id %>
-</p>
-
-<p>
   <strong>To user:</strong>
   <%= @comment.to_user_id %>
 </p>
 
-<%= link_to 'Edit', edit_comment_path(@comment) %> |
 <%= link_to 'Back', comments_path %>

@@ -1,3 +1,4 @@
+<% provide(:title, @board.name) %>
 <div class="side-menu col-md-2">
   <div class="menu-title">Menu</div>
   <div class="menu-content">
@@ -37,8 +38,9 @@
       <div class="list-name"><span><%= list.name %></span></div>
       <% list.cards.each do |card| %>
       <div class="card-container">
-        <span>content:</span><%= card.content %><br/>
-        <span>deadline:</span><%= card.deadline %><br/>
+        <span>Content:</span>
+        <%= link_to card.content, card_path(card)%><br/>
+        <span>Deadline:</span><%= card.deadline %><br/>
         <%= link_to 'Add Prerequisite',prerequisites_index_path(card_id:card.id)%>
         <%= link_to 'Add Comment',new_comment_path(card_id:card.id)%>
       </div>

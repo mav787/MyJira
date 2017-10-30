@@ -49,7 +49,9 @@
               <ul class="dropdown-menu" aria-labelledby="dropdownMenu" data-behavior="notification-items">
                 <% if !notes.empty? %>
                   <% notes.each do |notification| %>
-                    <li><%= link_to "Card #{notification.card.content} has new update", notification.card %></li>
+                    <% if notification.source == 'comment' %>
+                      <li><%= link_to "You received a new comment under card #{notification.card.content}", notification.card %></li>
+                    <% end %>
                   <% end %>
                 <% else %>
                   <li>You don't have any notifications now.</li>

@@ -16,4 +16,23 @@
 </p>
 
 <%= link_to 'Edit', edit_card_path(@card) %> |
-<%= link_to 'Back', cards_path %>
+<%= link_to 'Back', board_path(@card.list.board) %>
+
+<p>
+  Comments:
+  <% @card.comments.each do |c| %>
+    <p>
+      <%= c.context %>
+    </p>
+
+    <p>
+      From
+      <%= c.from_user.name %>
+    </p>
+
+    <p>
+      To
+      <%= c.to_user.name %>
+    </p>
+  <%end%>
+</p>
