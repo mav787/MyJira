@@ -42,8 +42,16 @@
               <a class="dropdown-toggle nav-link" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <%= fa_icon "bell" %>
               </a>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenu" data-behavior="notification-items">
-              </div>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenu" data-behavior="notification-items">
+                <% notes = current_user.notifications.where(read: false) %>
+                <% if !notes.empty? %>
+                  <% notes.each do |notification| %>
+                    <li><%= link_to "Card #{notification.card.content} has new update", notification.card %></li>
+                  <% end %>
+                <% else %>
+                  <li>You don't have any notifications now.</li>
+                <% end %>
+              </ul>
             </li>
 
           <% else %>

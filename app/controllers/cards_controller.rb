@@ -10,6 +10,12 @@ class CardsController < ApplicationController
   # GET /cards/1
   # GET /cards/1.json
   def show
+    notes = current_user.notifications.where(card_id: @card.id)
+    if (notes != nil)
+      notes.each do |note|
+        note.update(read: true)
+      end
+    end
   end
 
   # GET /cards/new

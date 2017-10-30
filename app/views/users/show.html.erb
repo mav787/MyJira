@@ -9,7 +9,7 @@
       <a href="/boards/<%= board.id%>">
         <div class="col-md-3 board">
           <div class="board-name"><%= board.name %></div>
-          <div class="board-leader">leader:<%= User.find(board.leader_id).name %></div>
+          <div class="board-leader">Leader:<%= User.find(board.leader_id).name %></div>
         </div>
       </a>
       <% end %>
@@ -24,11 +24,13 @@
 
 
 <div class="row">
-  <aside class="col-md-4">
+  <aside class="col-md-5">
     <section class="user_info">
       <h1>
         <%= gravatar_for @user %>
-        <%= @user.name %>
+        <font color="white">
+          Welcome <%= @user.name %>!
+        </font>
       </h1>
     </section>
   </aside>
