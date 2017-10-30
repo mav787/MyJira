@@ -40,6 +40,7 @@
         <span>content:</span><%= card.content %><br/>
         <span>deadline:</span><%= card.deadline %><br/>
         <%= link_to 'Add Prerequisite',prerequisites_index_path(card_id:card.id)%>
+        <%= link_to 'Add Comment',new_comment_path(card_id:card.id)%>
       </div>
       <% end %>
       <%= link_to 'New Card', new_card_path(list_id:list.id), class: "new-card"%>
