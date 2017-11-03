@@ -56,7 +56,13 @@ class UsersController < ApplicationController
   end
 
   def search
-    @users = User.where('name LIKE ?', "%#{params[:user_name]}%")
+
+    likesyntax = 'name LIKE ?'
+    if Rails.env.production?
+       likesyntax = 'name ILIKE ?'
+    end
+
+    @users = User.where(likesyntax, "%#{params[:user_name]}%")
     @board = Board.find(params[:board_id]);
     respond_to do |format|
       format.js{}
