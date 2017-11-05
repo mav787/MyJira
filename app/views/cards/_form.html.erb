@@ -26,6 +26,11 @@
     <%= form.datetime_select :deadline, id: :card_deadline, class: 'form-control my-form-field' %>
   </div>
 
+  <div class="field">
+    <%= form.label :tags %>
+    <%= form.text_field :tagst, id: :card_tags, class: 'form-control my-form-field' %>
+  </div>
+
   <div class="actions">
     <%= form.submit class: "btn btn-primary" %>
     <a href=”#” onClick=javascript:history.go(-1); class="btn btn-primary sign-btn">Cancel</a>

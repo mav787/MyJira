@@ -10,4 +10,8 @@ class Card < ApplicationRecord
   has_many :card_tag_associations
   has_many :tags, through: :card_tag_associations
   belongs_to :list, foreign_key: :list_id
+
+  def self.search_cards name
+    Card.all.select { |c| c.content.downcase.include?(name) }
+  end
 end

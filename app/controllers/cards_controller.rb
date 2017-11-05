@@ -31,11 +31,21 @@ class CardsController < ApplicationController
   # POST /cards
   # POST /cards.json
   def create
-    @card = Card.new(card_params)
-    @list = List.find(params[:card][:list_id])
+    pars = params[:card]
+    @list = List.find(pars[:list_id])
+    @tags = pars[:tagst].split(',')
+    @card = Card.new(content: pars[:content], deadline: pars[:deadline], list_id: @list.id)
     @board = Board.find(@list.board.id)
     respond_to do |format|
       if @card.save
+        @tags.each do |tag_name|
+          tag = Tag.find_by_name(tag_name)
+          if (tag == nil)
+            tag = Tag.new(name: tag_name, color: 'default')
+            tag.save
+          end
+          CardTagAssociation.create(card_id: @card.id, tag_id: tag.id)
+        end
         format.html { redirect_to @board, notice: 'Card was successfully created.' }
         format.json { render :show, status: :created, location: @card }
       else
@@ -59,6 +69,15 @@ class CardsController < ApplicationController
     end
   end
 
+  def search
+    name = params[:search].downcase
+    @cards = Card.search_cards name
+    respond_to do |format|
+      format.html { render(:index) }
+      format.js
+    end
+  end
+
   # DELETE /cards/1
   # DELETE /cards/1.json
   def destroy
@@ -77,6 +96,6 @@ class CardsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def card_params
-      params.require(:card).permit(:list_id, :content, :deadline)
+      params.require(:card).permit(:list_id, :content, :deadline, :tagst)
     end
 end
