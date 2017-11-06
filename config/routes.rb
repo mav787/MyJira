@@ -28,4 +28,5 @@ Rails.application.routes.draw do
   get '/search/user', to: 'users#search'
   get '/enroll', to:'boards#enroll'
   get '/search', to:'cards#search'
+  post '/card/move', to: 'cards#move'
 end

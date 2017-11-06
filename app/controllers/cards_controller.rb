@@ -55,6 +55,25 @@ class CardsController < ApplicationController
     end
   end
 
+  def move
+    moving_card = Card.find(params[:card_id])
+    origin_list_cards = Card.where("list_id = ? AND card_order > ?", moving_card.list_id, moving_card.card_order)
+    origin_list_cards.each do |card|
+      card.card_order -= 1
+      card.save
+    end
+    moving_card.card_order = params[:new_position]
+    moving_card.list_id = params[:new_list_id]
+    moving_card.save
+    new_list_cards = Card.where("list_id = ? AND card_order >= ?", moving_card.list_id, moving_card.card_order).where.not(id:moving_card.id)
+    new_list_cards.each do |card|
+      card.card_order += 1
+      card.save
+    end
+    respond_to do |format|
+      format.js{}
+    end
+  end
   # PATCH/PUT /cards/1
   # PATCH/PUT /cards/1.json
   def update

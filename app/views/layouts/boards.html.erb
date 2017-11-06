@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= yield(:title) %> | MyJira - Your project management tool</title>
+    <%= csrf_meta_tags %>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <style>
+
+    </style>
+  </head>
+
+  <body>
+    <%= render "layouts/nav"%>
+    <%= yield %>
+    <!--<%= debug(params) if Rails.env.development? %>-->
+    <script type="text/javascript">
+    $(document).ready(function(){
+      $('#user_name').on('input',function(){
+        $('#search-submit').click();
+      });
+
+      $('.card-container').sortable({
+      placeholder: "ui-state-highlight",
+      connectWith: ".card-container",
+      dropOnEmpty: true,
+      start: function(event,ui) {
+        $(ui.item).addClass('rotate');
+      },
+      beforeStop: function(event,ui) {
+        //$(ui.helper).removeClass('rotate');
+
+      },
+      stop: function(event,ui) {
+        $(ui.item).removeClass('rotate');
+        $.ajax({ url: '/card/move',
+          type: 'POST',
+          beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+          data: {
+            card_id: $(ui.item).attr("card_id"),
+            new_list_id: $(ui.item).parents('.card-container').attr("list_id"),
+            new_position: $(ui.item).index()+1
+          },
+          success: function(data,status) {
+            //alert("数据: \n" + data + "\n状态: " + status);
+          }
+        });
+        //var children = $(ui.item).parents('.card-container').children();
+        //alert($(ui.item).index());
+      }
+    }).disableSelection();
+
+
+    });
+
+    </script>
+  </body>
+</html>

@@ -36,15 +36,17 @@
   <% @board.lists.each do |list| %>
     <div class="list-container">
       <div class="list-name"><span><%= list.name %></span></div>
-      <% list.cards.each do |card| %>
-      <div class="card-container">
-        <span>Content:</span>
-        <%= link_to card.content, card_path(card)%><br/>
-        <span>Deadline:</span><%= card.deadline %><br/>
-        <%= link_to 'Add Prerequisite',prerequisites_index_path(card_id:card.id)%>
-        <%= link_to 'Add Comment',new_comment_path(card_id:card.id)%>
+      <div class="card-container" list_id="<%= list.id%>">
+        <% list.cards.order(:card_order).each do |card| %>
+        <div class="card" card_id="<%= card.id%>">
+          <span>Content:</span>
+          <%= link_to card.content, card_path(card)%><br/>
+          <span>Deadline:</span><%= card.deadline %><br/>
+          <%= link_to 'Add Prerequisite',prerequisites_index_path(card_id:card.id)%>
+          <%= link_to 'Add Comment',new_comment_path(card_id:card.id)%>
+        </div>
+        <% end %>
       </div>
-      <% end %>
       <%= link_to 'New Card', new_card_path(list_id:list.id), class: "new-card"%>
     </div>
   <% end %>
