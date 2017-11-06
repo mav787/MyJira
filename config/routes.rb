@@ -12,7 +12,7 @@ Rails.application.routes.draw do
         post :mark_as_read
     end
   end
-  
+
   get 'sessions/new'
   get '/prerequisites_add', to:'prerequisites#add'
   get '/prerequisites_index', to: 'prerequisites#index'
@@ -27,4 +27,5 @@ Rails.application.routes.draw do
   resources :users
   get '/search/user', to: 'users#search'
   get '/enroll', to:'boards#enroll'
+  post '/card/move', to: 'cards#move'
 end
