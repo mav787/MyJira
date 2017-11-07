@@ -32,10 +32,9 @@ class CardsController < ApplicationController
   # POST /cards.json
   def create
     pars = params[:card]
-    @list = List.find(pars[:list_id])
     @tags = pars[:tagst].split(',')
-    @card = Card.new(content: pars[:content], deadline: pars[:deadline], list_id: @list.id)
-    @board = Board.find(@list.board.id)
+    @card = Card.new(card_params)
+    @board = Board.find(List.find(pars[:list_id]).board.id)
     respond_to do |format|
       if @card.save
         @tags.each do |tag_name|
@@ -115,6 +114,6 @@ class CardsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def card_params
-      params.require(:card).permit(:list_id, :content, :deadline, :tagst)
+      params.require(:card).permit(:list_id, :content, :deadline)
     end
 end
