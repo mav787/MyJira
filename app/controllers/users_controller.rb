@@ -31,8 +31,8 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        log_in @user
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
+        UserMailer.registration_confirmation(@user).deliver
+        format.html { redirect_to root_url, notice: 'Please confirm your email address to continue' }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new }
@@ -79,6 +79,19 @@ class UsersController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def confirm_email
+    user = User.find_by_confirm_token(params[:id])
+    if user
+      user.email_activate
+      flash[:success] = "Welcome to MyJira! Your email has been confirmed.
+      Please sign in to continue."
+      redirect_to login_url
+    else
+      flash[:error] = "Sorry. User does not exist"
+      redirect_to root_url
+    end
+end
 
   private
     # Use callbacks to share common setup or constraints between actions.

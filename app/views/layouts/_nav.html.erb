@@ -48,27 +48,58 @@
       <ul class="nav navbar-nav navbar-right">
         <% if logged_in? %>
             <li><%= link_to 'Log Out', logout_path, method: :delete%></li>
-            <li class="nav-item btn-group" data-behavior="notifications">
-              <div class="dropdown-toggle nav-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <a class="fa fa-bell fa-lg"></a>
+            <li class="dropdown dropdown-notifications">
+              <a href="#notifications-panel" class="dropdown-toggle" data-toggle="dropdown">
                 <% notes = current_user.notifications.where(read: false) %>
                 <% if !notes.empty? %>
-                  <span class="badge"><%= notes.size %></span>
-                <% end %>
-              </div>
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenu" data-behavior="notification-items">
-                <% if !notes.empty? %>
-                  <% notes.each do |notification| %>
-                    <% if notification.source == 'comment' %>
-                      <li><%= link_to "You received a new comment under card #{notification.card.content}", notification.card %></li>
-                    <% end %>
-                  <% end %>
+                  <i data-count="<%= notes.size %>" class="glyphicon glyphicon-bell notification-icon"></i>
                 <% else %>
-                  <li>You don't have any notifications now.</li>
+                  <i class="glyphicon glyphicon-bell"></i>
+                <% end %>
+              </a>
+
+              <div class="dropdown-container dropdown-position-bottomright">
+
+              <div class="dropdown-toolbar">
+                <h3 class="dropdown-toolbar-title">Notifications (<%= notes.size %>)</h3>
+              </div><!-- /dropdown-toolbar -->
+
+              <ul class="dropdown-menu">
+                <ul class="notifications">
+                  <% if !notes.empty? %>
+                    <% notes.each do |notification| %>
+                        <li class="notification">
+                          <div class="media">
+                            <div class="media-body">
+                              <strong class="notification-title">
+                                <% if notification.source == 'comment' %>
+                                  <%= link_to "You received a new comment under card #{notification.card.content}", notification.card %>
+                                <% elsif notification.source == 'card' %>
+                                  <%= link_to "You are assigned to a new card #{notification.card.content}", notification.card %>
+                                <% end %>
+                              </strong>
+                              <% if notification.source == 'comment' %>
+                                <p class="notification-desc"><%= notification.comment.context %></p>
+                              <% end %>
+                              <div class="notification-meta">
+                                <small class="timestamp"><%= notification.created_at %></small>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                    <% end %>
+                  <% else %>
+                    <li class="notification">
+                      <div class="media">
+                        <div class="media-body">
+                          <strong class="notification-title">You don't have any notifications now.</strong>
+                        </div>
+                      </div>
+                    </li>
                 <% end %>
               </ul>
-            </li>
-
+            </div><!-- /dropdown-container -->
+          </li><!-- /dropdown -->
           <% else %>
             <li><%= link_to 'Log In', login_path %></li>
             <li><%= link_to 'Sign Up', signup_path %></li>
