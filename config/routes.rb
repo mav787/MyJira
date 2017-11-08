@@ -18,6 +18,13 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :sessions, only: [:create,:destroy]
+  resources :application, only: [:hello]
+
+  get 'auth/:provider/callback', to: 'sessions#create'
+  get 'auth/failure', to: redirect('/')
+  get 'signout', to: 'sessions#destroy', as: 'signout'
+
   get 'sessions/new'
   get '/prerequisites_add', to:'prerequisites#add'
   get '/prerequisites_index', to: 'prerequisites#index'

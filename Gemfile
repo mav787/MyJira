@@ -18,6 +18,8 @@ gem "pry-rails"
 gem 'rails_12factor'
 gem 'rails_admin', '~> 1.2'
 gem 'font-awesome-rails'
+gem 'devise'
+gem "omniauth-google-oauth2", "~> 0.2.1"
 
 group :development, :test do
   gem 'sqlite3', '1.3.13'
