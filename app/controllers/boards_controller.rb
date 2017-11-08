@@ -10,10 +10,20 @@ class BoardsController < ApplicationController
   # GET /boards/1
   # GET /boards/1.json
   def show
+    notes = current_user.notifications.where(board_id: @board.id)
+    if (notes != nil)
+      notes.each do |note|
+        note.update(read: true)
+      end
+    end
   end
 
   def enroll
-    Board.find(params[:board]).users << User.find(params[:user].to_i)
+    enrolled = User.find(params[:user].to_i)
+    Board.find(params[:board]).users << enrolled
+    n = Notification.new(recipient_id: enrolled.id, board_id: params[:board].to_i, read: false, source: "board")
+    n.save
+    BoardMailer.enroll_note(enrolled, n).deliver
     redirect_to board_path(id:params[:board])
   end
 

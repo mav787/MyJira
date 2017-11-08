@@ -1,0 +1,40 @@
+
+
+<table class="body-wrap">
+	<tr>
+		<td></td>
+		<td class="container" width="600">
+			<div class="content">
+				<table class="main" width="100%" cellpadding="0" cellspacing="0">
+					<tr>
+						<td class="content-wrap">
+							<table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+									<td class="content-block">
+										Hi <%= @user.name %>,
+									</td>
+								</tr>
+								<tr>
+									<td class="content-block">
+										<%= @note.board.leader.name %> invited you to join board <%= @note.board.name %> on MyJira.
+									</td>
+								</tr>
+								<tr>
+									<td class="content-block">
+										<a href="<%= board_url(@note.board) %>" class="btn-primary">Go To Board</a>
+									</td>
+								</tr>
+								<tr>
+									<td class="content-block">
+										&mdash; MyJira Team
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+				</div>
+		</td>
+		<td></td>
+	</tr>
+</table>
