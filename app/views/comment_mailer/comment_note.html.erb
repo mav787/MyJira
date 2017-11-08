@@ -16,17 +16,13 @@
 								</tr>
 								<tr>
 									<td class="content-block">
-										Thanks for registering on MyJira! To confirm your registration please click the URL below.
+										You received a comment on MyJira from <%= @note.comment.from_user.name %> in card
+										<%= link_to @note.card.content, card_url(@note.card)%>:
 									</td>
 								</tr>
 								<tr>
 									<td class="content-block">
-										We may need to send you crucial notifications about your projects and it is important that we have an accurate email address.
-									</td>
-								</tr>
-								<tr>
-									<td class="content-block">
-										<a href="<%= confirm_email_user_url(@user.confirm_token) %>" class="btn-primary">Confirm email address</a>
+										<%= @note.comment.context %>
 									</td>
 								</tr>
 								<tr>
