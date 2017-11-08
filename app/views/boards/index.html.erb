@@ -3,13 +3,13 @@
 <div class="container">
   <div class="jumbotron">
     <% if logged_in? %>
-      <h2>Boards</h2>
+      <h2 class="center">Boards</h2>
 
-      <table>
+      <table class="table">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Leader</th>
+            <th class="col-md-2">Name</th>
+            <th class="col-md-2">Leader</th>
             <th colspan="3"></th>
           </tr>
         </thead>
@@ -31,7 +31,7 @@
 
       <%= link_to 'New Board', new_board_path, class: "btn btn-primary" %>
       <% else %>
-        <h3> Please log in first!</h3>
+        <h3 class="center"> Please log in first!</h3>
       <% end %>
   </div>
 </div>
