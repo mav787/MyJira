@@ -1,6 +1,12 @@
-<h1>Editing Board</h1>
+<% provide(:title, 'Boards') %>
+<p id="notice"><%= notice %></p>
+<div class="container">
+  <div class="jumbotron">
+    <h1 class="center">Editing Board</h1>
 
-<%= render 'form', board: @board %>
+    <%= render 'form', board: @board %>
 
-<%= link_to 'Show', @board %> |
-<%= link_to 'Back', boards_path %>
+    <%= link_to 'Show', @board %> |
+    <%= link_to 'Back', boards_path %>
+  </div>
+</div>

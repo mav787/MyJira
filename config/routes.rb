@@ -19,6 +19,12 @@ Rails.application.routes.draw do
   end
 
   post '/email_processor', to:'griddler/emails#create'
+  resources :sessions, only: [:create,:destroy]
+  resources :application, only: [:hello]
+
+  get 'auth/:provider/callback', to: 'sessions#google_create'
+  get 'auth/failure', to: redirect('/')
+  get 'signout', to: 'sessions#destroy', as: 'signout'
 
   get 'sessions/new'
   get '/prerequisites_add', to:'prerequisites#add'

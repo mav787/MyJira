@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171108155328) do
+ActiveRecord::Schema.define(version: 20171108222704) do
 
   create_table "board_enrollments", force: :cascade do |t|
     t.integer "user_id"
@@ -99,6 +99,10 @@ ActiveRecord::Schema.define(version: 20171108155328) do
     t.string "password_digest"
     t.boolean "email_confirmed"
     t.string "confirm_token"
+    t.string "provider"
+    t.string "uid"
+    t.string "oauth_token"
+    t.datetime "oauth_expires_at"
   end
 
 end

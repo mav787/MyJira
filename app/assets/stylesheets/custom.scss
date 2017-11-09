@@ -2,12 +2,32 @@
 @import "bootstrap";
 
 /* mixins, variables, etc. */
+
+
 body {
   margin: 0 !important;
   background-image: image-url("background.jpg");
   background-size: cover;
   background-repeat:no-repeat;
 }
+
+/* universal */
+
+section {
+  overflow: auto;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.center {
+  text-align: center;
+  h2 {
+    margin-bottom: 60px;
+  }
+}
+
 .navbar-brand{
   font-weight: bold;
 }

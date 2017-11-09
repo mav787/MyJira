@@ -101,6 +101,7 @@
             </div><!-- /dropdown-container -->
           </li><!-- /dropdown -->
           <% else %>
+            <li><%= link_to "Sign in with Google", "/auth/google_oauth2"%></li>
             <li><%= link_to 'Log In', login_path %></li>
             <li><%= link_to 'Sign Up', signup_path %></li>
           <% end %>

@@ -18,6 +18,22 @@ class User < ApplicationRecord
   has_many :notifications, class_name: :Notification, foreign_key: :recipient_id
 
 
+  def self.from_omniauth(auth)
+    where(provider: auth.provider, uid: auth.uid).first_or_initialize.tap do |user|
+
+      user.uid = auth.uid
+      user.provider = auth.provider
+
+      user.name = auth.info.name
+      user.oauth_token = auth.credentials.token
+      user.oauth_expires_at = Time.at(auth.credentials.expires_at)
+      user.email = auth.info.email
+      user.password = "123123"
+      user.email_confirmed = true
+      user.save!
+    end
+  end
+
   def email_activate
     self.email_confirmed = true
     self.confirm_token = nil
