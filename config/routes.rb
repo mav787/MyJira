@@ -18,6 +18,8 @@ Rails.application.routes.draw do
     end
   end
 
+  post '/email_processor', to:'griddler/emails#create'
+
   get 'sessions/new'
   get '/prerequisites_add', to:'prerequisites#add'
   get '/prerequisites_index', to: 'prerequisites#index'

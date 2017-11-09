@@ -32,7 +32,7 @@ class CommentsController < ApplicationController
       if @comment.save
         n = Notification.new(recipient_id: comment_params[:to_user_id], comment_id: @comment.id, card_id: @card.id, read: false, source: "comment")
         n.save
-        CommentMailer.comment_note(current_user, n).deliver
+        CommentMailer.comment_note(n.recipient, n).deliver
         format.html { redirect_to @comment, notice: 'Comment was successfully created.' }
         format.json { render :show, status: :created, location: @comment }
       else

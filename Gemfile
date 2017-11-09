@@ -18,6 +18,9 @@ gem "pry-rails"
 gem 'rails_12factor'
 gem 'rails_admin', '~> 1.2'
 gem 'font-awesome-rails'
+gem 'localtunnel'
+gem 'griddler'
+gem 'griddler-postmark'
 
 group :development, :test do
   gem 'sqlite3', '1.3.13'

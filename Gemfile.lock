@@ -73,6 +73,11 @@ GEM
     formatador (0.2.5)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
+    griddler (1.4.0)
+      htmlentities
+      rails (>= 3.2.0)
+    griddler-postmark (1.0.0)
+      griddler
     guard (2.13.0)
       formatador (>= 0.2.4)
       listen (>= 2.7, <= 4.0)
@@ -89,6 +94,7 @@ GEM
     haml (5.0.4)
       temple (>= 0.8.0)
       tilt
+    htmlentities (4.3.4)
     i18n (0.9.1)
       concurrent-ruby (~> 1.0)
     jbuilder (2.7.0)
@@ -116,6 +122,7 @@ GEM
     listen (3.0.8)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
+    localtunnel (1.0.3)
     loofah (2.1.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -260,6 +267,8 @@ DEPENDENCIES
   byebug (= 9.0.6)
   coffee-rails (= 4.2.2)
   font-awesome-rails
+  griddler
+  griddler-postmark
   guard (= 2.13.0)
   guard-minitest (= 2.4.4)
   jbuilder (= 2.7.0)
@@ -267,6 +276,7 @@ DEPENDENCIES
   jquery-ui-rails
   json
   listen (= 3.0.8)
+  localtunnel
   minitest-reporters (= 1.1.14)
   pg (= 0.18.4)
   pry-rails
