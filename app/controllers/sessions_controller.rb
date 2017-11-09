@@ -3,9 +3,7 @@ class SessionsController < ApplicationController
   end
 
   def create
-    user = User.from_omniauth(request.env["omniauth.auth"])
-    sessions[:user_id] = user.id
-    ###!!user = User.find_by(email: params[:session][:email].downcase)
+    user = User.find_by(email: params[:session][:email].downcase)
     if user && user.authenticate(params[:session][:password])
       if user.email_confirmed
           log_in user
@@ -19,6 +17,12 @@ class SessionsController < ApplicationController
       flash.now[:danger] = 'Invalid email/password combination'
       render 'new'
     end
+  end
+
+  def google_create
+    user = User.from_omniauth(request.env["omniauth.auth"])
+    log_in user
+    redirect_to user
   end
 
   def destroy
