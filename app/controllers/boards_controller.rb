@@ -4,7 +4,11 @@ class BoardsController < ApplicationController
   # GET /boards
   # GET /boards.json
   def index
-    @boards = Board.all
+    if logged_in?
+      @boards = current_user.boards
+    else
+      @boards = []
+    end
   end
 
   # GET /boards/1

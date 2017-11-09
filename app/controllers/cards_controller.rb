@@ -4,7 +4,20 @@ class CardsController < ApplicationController
   # GET /cards
   # GET /cards.json
   def index
-    @cards = Card.all
+    if logged_in?
+      @cards = []
+      current_user.boards.each do |board|
+        board.lists.each do |list|
+          list.cards.each do |card|
+            @cards.push(card)
+          end
+        end
+      end
+    else
+      @cards = []
+    end
+
+    # @cards = Card.all
   end
 
   # GET /cards/1
