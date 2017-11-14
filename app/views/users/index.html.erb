@@ -1,37 +1,41 @@
 <% provide(:title, 'All users') %>
 <div class="container">
   <div class="jumbotron">
-    <h2 class="center">All users</h2>
+    <% if logged_in? %>
+      <h2 class="center">All users</h2>
 
-    <!-- <ul class="users">
-      <% @users.each do |user| %>
-        <li>
-          <%= gravatar_for user, size: 50 %>
-          <%= link_to user.name, user %>
-        </li>
-      <% end %>
-    </ul> -->
-
-    <table class="users">
-      <thead>
-        <tr>
-          <th class="col-md-2">Gravatar</th>
-          <th class="col-md-2">User</th>
-          <!-- <th class="col-md-4">Description</th>
-          <th class="col-md-1">Credits</th>
-          <th class="col-md-2">Independent study</th>
-          <th class="col-md-1">Select</th> -->
-        </tr>
-      </thead>
-
-      <tbody>
+      <!-- <ul class="users">
         <% @users.each do |user| %>
-          <tr>
-            <td><%= gravatar_for user, size: 50 %></td>
-            <td><%= link_to user.name, user %></td>
-          </tr>
+          <li>
+            <%= gravatar_for user, size: 50 %>
+            <%= link_to user.name, user %>
+          </li>
         <% end %>
-      </tbody>
-    </table>
+      </ul> -->
+
+      <table class="users">
+        <thead>
+          <tr>
+            <th class="col-md-2">Gravatar</th>
+            <th class="col-md-2">User</th>
+            <!-- <th class="col-md-4">Description</th>
+            <th class="col-md-1">Credits</th>
+            <th class="col-md-2">Independent study</th>
+            <th class="col-md-1">Select</th> -->
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @users.each do |user| %>
+            <tr>
+              <td><%= gravatar_for user, size: 50 %></td>
+              <td><%= link_to user.name, user %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <% else %>
+        <h3 class="center"> Please log in first!</h3>
+      <% end %>
   </div>
 </div>
