@@ -3,6 +3,7 @@ require 'test_helper'
 class CardsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @card = cards(:one)
+    @list = lists(:one)
   end
 
   test "should get index" do
@@ -11,16 +12,16 @@ class CardsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get new" do
-    get new_card_url
+    get new_card_url, params: {list_id: @list.id}
     assert_response :success
   end
 
   test "should create card" do
     assert_difference('Card.count') do
-      post cards_url, params: { card: { content: @card.content, deadline: @card.deadline, list_id: @card.list_id } }
+      post cards_url, params: { card: { content: @card.content, deadline: @card.deadline, list_id: @card.list_id, tagst: "tag" } }
     end
 
-    assert_redirected_to card_url(Card.last)
+    assert_redirected_to board_url(Card.last.list.board)
   end
 
   test "should show card" do

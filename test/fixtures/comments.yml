@@ -2,12 +2,12 @@
 
 one:
   context: MyString
-  from_user_id: 
+  from_user_id: 1
   card_id: 1
   to_user_id: 1
 
 two:
   context: MyString
-  from_user_id: 
+  from_user_id: 1
   card_id: 1
   to_user_id: 1
