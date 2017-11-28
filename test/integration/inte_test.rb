@@ -10,12 +10,6 @@ class BoardFlowsTest < ActionDispatch::IntegrationTest
   fixtures :users
   fixtures :boards
 
-    test "get enrolled to board" do
-      assert_difference('BoardEnrollment.count') do
-        get enroll_url, params: {board:@board.id,user:@user.id}
-      end
-      assert_redirected_to board_url(id:@board.id)
-    end
 
     test "sign up and login" do
 

@@ -76,10 +76,12 @@
                                   <%= link_to "You received a new comment under card #{notification.card.content}", notification.card %>
                                 <% elsif notification.source == 'card' %>
                                   <%= link_to "You are assigned to a new card #{notification.card.content}", notification.card %>
+                                <% elsif notification.source == 'board' %>
+                                  <%= link_to "You are invited to a new board #{notification.board.name}", notification.board %>
                                 <% end %>
                               </strong>
                               <% if notification.source == 'comment' %>
-                                <p class="notification-desc"><%= notification.comment.context %></p>
+                                <p class="notification-desc"><%= notification.comment.from_user.name %>: <%= notification.comment.context %></p>
                               <% end %>
                               <div class="notification-meta">
                                 <small class="timestamp"><%= notification.created_at %></small>
