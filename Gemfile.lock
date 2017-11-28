@@ -83,6 +83,8 @@ GEM
       rails (>= 3.2.0)
     griddler-postmark (1.0.0)
       griddler
+    groupdate (3.2.0)
+      activesupport (>= 3)
     guard (2.13.0)
       formatador (>= 0.2.4)
       listen (>= 2.7, <= 4.0)
@@ -298,6 +300,7 @@ DEPENDENCIES
   font-awesome-rails
   griddler
   griddler-postmark
+  groupdate
   guard (= 2.13.0)
   guard-minitest (= 2.4.4)
   jbuilder (= 2.7.0)

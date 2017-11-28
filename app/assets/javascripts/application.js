@@ -12,6 +12,8 @@
 //
 //= require rails-ujs
 //= require turbolinks
+//= require highcharts
+//= require chartkick
 //= require jquery
 //= require jquery-ui
 //= require bootstrap/dropdown
