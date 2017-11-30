@@ -16,7 +16,6 @@
 //= require chartkick
 //= require jquery
 //= require jquery-ui
-//= require bootstrap/dropdown
-//= require bootstrap/alert
+//= require bootstrap
 //= require cable
 //= require_tree .

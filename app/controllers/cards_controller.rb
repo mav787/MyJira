@@ -33,6 +33,13 @@ class CardsController < ApplicationController
     end
   end
 
+  def show_modal
+    @card = Card.find(params["card_id"])
+    respond_to do |format|
+      format.json { render json: @card}
+    end
+  end
+
   # GET /cards/new
   def new
     @card = Card.new

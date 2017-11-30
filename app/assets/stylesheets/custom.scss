@@ -110,8 +110,9 @@ transform:rotate(7deg);
 .card{
   background-color: #fdfdfd;
   border-radius: 10px;
-  margin: 5px 10px;
-  padding: 10px;
+  margin: 10px 10px;
+  padding: 20px 10px;
+  box-shadow: 3px 3px 5px #888888;
 }
 .ui-state-highlight{
   height: 80px;
@@ -136,4 +137,8 @@ transform:rotate(7deg);
   margin-left: 10px;
   width: 3000px;
   padding-bottom: 10px;
+}
+
+.form-group {
+  margin-bottom: 0px !important;
 }

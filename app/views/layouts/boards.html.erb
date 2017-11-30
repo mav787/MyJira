@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag "boards" %>
     <style>
 
     </style>
@@ -51,6 +52,23 @@
       }
     }).disableSelection();
 
+    $('.card').click(function(){
+      $.ajax({ url: '/card/show_modal.json',
+        type: 'GET',
+        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+        data: {
+          card_id: $(this).attr("card_id")
+        },
+        success: function(data,status) {
+
+          //alert("data: \n" + data.id + "\nstatus: " + status);
+          $('#myModalLabel').html(data.content);
+          $('.modal-body').html('<span>Deadline:</span>'+data.deadline+'<br/><a class="btn btn-default" href="/prerequisites_index?card_id='+data.id+'">Add Prerequisite</a><a class="btn btn-default" href="/comments/new?card_id='+data.id+'">Add Comment</a>');
+          $('#modal-button').click();
+        }
+      });
+
+    });
 
     });
 

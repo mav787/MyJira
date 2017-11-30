@@ -42,4 +42,5 @@ Rails.application.routes.draw do
   get '/enroll', to:'boards#enroll'
   get '/search', to:'cards#search'
   post '/card/move', to: 'cards#move'
+  get '/card/show_modal.json', to: 'cards#show_modal'
 end
