@@ -20,6 +20,7 @@ class BoardsController < ApplicationController
         note.update(read: true)
       end
     end
+    @cards = List.joins(:cards).where(lists: {board_id: @board.id})
   end
 
   def enroll

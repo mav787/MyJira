@@ -33,7 +33,7 @@
     </div>
     <p>
       <strong>Project progress by day:</strong>
-      <%= line_chart Card.all.group_by_day(:created_at).count %>
+      <%= line_chart @cards.group_by_day("cards.created_at").count %>
     </p>
     <%= link_to 'New List', new_list_path(board_id:@board.id) %>
     <%= link_to 'Edit', edit_board_path(@board) %> |
