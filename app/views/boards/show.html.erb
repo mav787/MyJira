@@ -51,8 +51,10 @@
           <span>Content:</span>
           <%= link_to card.content, card_path(card)%><br/>
           <span>Deadline:</span><%= card.deadline %><br/>
-          <%= link_to 'Add Prerequisite',prerequisites_index_path(card_id:card.id)%>
-          <%= link_to 'Add Comment',new_comment_path(card_id:card.id)%>
+          <!--
+            <%= link_to 'Add Prerequisite',prerequisites_index_path(card_id:card.id)%>
+            <%= link_to 'Add Comment',new_comment_path(card_id:card.id)%>
+          -->
         </div>
         <% end %>
       </div>
@@ -60,6 +62,26 @@
     </div>
   <% end %>
 
+  <!-- card edit modal -->
+  <button id="modal-button" class="hide" data-toggle="modal" data-target="#myModal"></button>
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h4 class="modal-title" id="myModalLabel">Modal Title</h4>
+              </div>
+              <div class="modal-body">
+
+
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary hide">Submit</button>
+              </div>
+          </div><!-- /.modal-content -->
+      </div><!-- /.modal -->
+  </div>
 
 <div id="tmp-card-container" class="hide"></div>
 </div>
