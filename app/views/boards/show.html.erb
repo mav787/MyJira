@@ -1,4 +1,5 @@
 <% provide(:title, @board.name) %>
+<div id="board-id" data-board-id="<%= @board.id %>"></div>
 <div class="side-menu col-md-2">
   <div class="menu-title">Menu</div>
   <div class="menu-content">
@@ -52,5 +53,5 @@
   <% end %>
 
 
-
+<div id="tmp-card-container" class="hide"></div>
 </div>

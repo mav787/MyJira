@@ -16,4 +16,5 @@
 //= require jquery-ui
 //= require bootstrap/dropdown
 //= require bootstrap/alert
+//= require cable
 //= require_tree .
