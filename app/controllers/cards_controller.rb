@@ -47,9 +47,16 @@ class CardsController < ApplicationController
   # POST /cards
   # POST /cards.json
   def create
+=begin
+@card = Card.new(card_params)
+@card.card_order = Card.where(list_id:params[:card][:list_id]).count+1
+@list = List.find(params[:card][:list_id])
+@board = Board.find(@list.board.id)
+=end
     pars = params[:card]
     @tags = pars[:tagst].split(',')
     @card = Card.new(card_params)
+    @card.card_order = Card.where(list_id:params[:card][:list_id]).count+1
     @board = Board.find(List.find(pars[:list_id]).board.id)
     respond_to do |format|
       if @card.save
