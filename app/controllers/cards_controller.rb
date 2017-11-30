@@ -85,6 +85,11 @@ class CardsController < ApplicationController
       card.card_order += 1
       card.save
     end
+    #$("div[card_id='1']")
+    ActionCable.server.broadcast "team_#{moving_card.list.board.id}_channel",
+                                 card_id: moving_card.id,
+                                 list_id: moving_card.list.id,
+                                 order: moving_card.card_order
     respond_to do |format|
       format.js{}
     end
