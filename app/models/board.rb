@@ -3,4 +3,5 @@ class Board < ApplicationRecord
   has_many :users, through: :board_enrollments
   has_many :lists, class_name: :List, foreign_key: :board_id
   belongs_to :leader, class_name: :User
+  has_many :tags, class_name: :List, foreign_key: :board_id
 end

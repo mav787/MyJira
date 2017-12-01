@@ -91,6 +91,13 @@ class CardsController < ApplicationController
       card.card_order -= 1
       card.save
     end
+    old_list = moving_card.list
+    new_list = List.find(params[:new_list_id])
+    if new_list.name == 'done'
+      moving_card.finished_at = Time.now
+    elsif old_list.name == 'done'
+      moving_card.finished_at = nil      
+    end
     moving_card.card_order = params[:new_position]
     moving_card.list_id = params[:new_list_id]
     moving_card.save
