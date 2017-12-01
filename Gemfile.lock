@@ -57,6 +57,7 @@ GEM
       sass (>= 3.3.4)
     builder (3.2.3)
     byebug (9.0.6)
+    chartkick (1.4.1)
     coderay (1.1.2)
     coffee-rails (4.2.2)
       coffee-script (>= 2.2.0)
@@ -82,6 +83,8 @@ GEM
       rails (>= 3.2.0)
     griddler-postmark (1.0.0)
       griddler
+    groupdate (3.2.0)
+      activesupport (>= 3)
     guard (2.13.0)
       formatador (>= 0.2.4)
       listen (>= 2.7, <= 4.0)
@@ -292,10 +295,12 @@ DEPENDENCIES
   better_errors
   bootstrap-sass (= 3.3.7)
   byebug (= 9.0.6)
+  chartkick (= 1.4.1)
   coffee-rails (= 4.2.2)
   font-awesome-rails
   griddler
   griddler-postmark
+  groupdate
   guard (= 2.13.0)
   guard-minitest (= 2.4.4)
   jbuilder (= 2.7.0)
@@ -323,4 +328,4 @@ DEPENDENCIES
   web-console (= 3.5.1)
 
 BUNDLED WITH
-   1.15.4
+   1.16.0.pre.3

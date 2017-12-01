@@ -33,6 +33,13 @@ class CardsController < ApplicationController
     end
   end
 
+  def show_modal
+    @card = Card.find(params["card_id"])
+    respond_to do |format|
+      format.json { render json: @card}
+    end
+  end
+
   # GET /cards/new
   def new
     @card = Card.new
@@ -47,9 +54,16 @@ class CardsController < ApplicationController
   # POST /cards
   # POST /cards.json
   def create
+=begin
+@card = Card.new(card_params)
+@card.card_order = Card.where(list_id:params[:card][:list_id]).count+1
+@list = List.find(params[:card][:list_id])
+@board = Board.find(@list.board.id)
+=end
     pars = params[:card]
     @tags = pars[:tagst].split(',')
     @card = Card.new(card_params)
+    @card.card_order = Card.where(list_id:params[:card][:list_id]).count+1
     @board = Board.find(List.find(pars[:list_id]).board.id)
     respond_to do |format|
       if @card.save
@@ -77,6 +91,13 @@ class CardsController < ApplicationController
       card.card_order -= 1
       card.save
     end
+    old_list = moving_card.list
+    new_list = List.find(params[:new_list_id])
+    if new_list.name == 'done'
+      moving_card.finished_at = Time.now
+    elsif old_list.name == 'done'
+      moving_card.finished_at = nil
+    end
     moving_card.card_order = params[:new_position]
     moving_card.list_id = params[:new_list_id]
     if moving_card.list_id == 2
@@ -88,7 +109,11 @@ class CardsController < ApplicationController
       card.card_order += 1
       card.save
     end
-
+    #$("div[card_id='1']")
+    ActionCable.server.broadcast "team_#{moving_card.list.board.id}_channel",
+                                 card_id: moving_card.id,
+                                 list_id: moving_card.list.id,
+                                 order: moving_card.card_order
     respond_to do |format|
       format.js{}
     end

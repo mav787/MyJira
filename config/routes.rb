@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   get 'prerequisites/add'
 
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
+  mount ActionCable.server, at: '/cable'
   resources :boards
   resources :lists
   resources :cards
@@ -43,5 +44,9 @@ Rails.application.routes.draw do
   get '/search/user', to: 'users#search'
   get '/enroll', to:'boards#enroll'
   get '/search', to:'cards#search'
+
+  get '/board/stats', to: 'boards#stats'
+
   post '/card/move', to: 'cards#move'
+  get '/card/show_modal.json', to: 'cards#show_modal'
 end

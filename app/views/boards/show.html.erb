@@ -1,10 +1,15 @@
 <% provide(:title, @board.name) %>
+<div id="board-id" data-board-id="<%= @board.id %>"></div>
 <div class="side-menu col-md-2">
   <div class="menu-title">Menu</div>
   <div class="menu-content">
     <p>
       <strong>Name:</strong>
       <%= @board.name %>
+    </p>
+    <p>
+      <strong>Description:</strong>
+      <%= @board.description %>
     </p>
 
     <p>
@@ -19,13 +24,17 @@
       <% end %>
     </p>
     <%= form_tag("/search/user", method: "get", "data-remote": "true", "id": "search-form") do %>
-      <%= label_tag(:user_name, "search user:") %>
+      <%= label_tag(:user_name, "Search user to enroll in board:") %>
       <%= text_field_tag :user_name, "",class: "form-control"  %>
       <%= number_field_tag(:board_id,@board.id, "style": "display:none;") %>
       <%= submit_tag "Search", "id": "search-submit", "style": "display:none" %>
     <% end %>
     <div id="users-container">
     </div>
+    <p>
+      <strong>Project progress by day:</strong>
+      <%= line_chart @cards.group_by_day("cards.created_at").count %>
+    </p>
     <%= link_to 'New List', new_list_path(board_id:@board.id) %>
     <%= link_to 'Edit', edit_board_path(@board) %> |
     <%= link_to 'Back', root_path %>
@@ -63,6 +72,26 @@
     </div>
   <% end %>
 
+  <!-- card edit modal -->
+  <button id="modal-button" class="hide" data-toggle="modal" data-target="#myModal"></button>
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h4 class="modal-title" id="myModalLabel">Modal Title</h4>
+              </div>
+              <div class="modal-body">
 
 
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary hide">Submit</button>
+              </div>
+          </div><!-- /.modal-content -->
+      </div><!-- /.modal -->
+  </div>
+
+<div id="tmp-card-container" class="hide"></div>
 </div>

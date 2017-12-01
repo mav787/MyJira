@@ -22,6 +22,8 @@ gem 'localtunnel'
 gem 'griddler'
 gem 'griddler-postmark'
 gem "omniauth-google-oauth2", "~> 0.2.1"
+gem 'chartkick', '1.4.1'
+gem 'groupdate'
 
 group :development, :test do
   gem 'sqlite3', '1.3.13'

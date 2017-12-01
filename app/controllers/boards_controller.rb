@@ -1,5 +1,5 @@
 class BoardsController < ApplicationController
-  before_action :set_board, only: [:show, :edit, :update, :destroy]
+  before_action :set_board, only: [:show, :edit, :update, :destroy, :stats]
 
   # GET /boards
   # GET /boards.json
@@ -21,6 +21,7 @@ class BoardsController < ApplicationController
         note.update(read: true)
       end
     end
+    @cards = List.joins(:cards).where(lists: {board_id: @board.id})
   end
 
   def enroll
@@ -84,6 +85,10 @@ class BoardsController < ApplicationController
     end
   end
 
+  def stats
+    @users = @board.users
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_board
@@ -92,7 +97,7 @@ class BoardsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def board_params
-      params.require(:board).permit(:name, :leader_id)
+      params.require(:board).permit(:name, :description, :leader_id)
     end
 
 
