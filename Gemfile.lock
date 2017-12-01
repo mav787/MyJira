@@ -291,6 +291,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-import
+  arel
   bcrypt (= 3.1.11)
   better_errors
   bootstrap-sass (= 3.3.7)
