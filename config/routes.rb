@@ -30,6 +30,9 @@ Rails.application.routes.draw do
   get '/prerequisites_add', to:'prerequisites#add'
   get '/prerequisites_index', to: 'prerequisites#index'
   get 'prerequisites_delete', to: 'prerequisites#delete'
+  get 'searchresult', to: 'cards#searchmember'
+  get 'search_for_assign', to: 'users#search_for_assign'
+  get 'addmember', to: 'cards#addmember'
 
   root 'application#hello'
   get '/signup', to: 'users#new'

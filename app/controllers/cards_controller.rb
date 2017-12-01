@@ -79,16 +79,38 @@ class CardsController < ApplicationController
     end
     moving_card.card_order = params[:new_position]
     moving_card.list_id = params[:new_list_id]
+    if moving_card.list_id == 2
+       moving_card.startdate = Time.now
+    end
     moving_card.save
     new_list_cards = Card.where("list_id = ? AND card_order >= ?", moving_card.list_id, moving_card.card_order).where.not(id:moving_card.id)
     new_list_cards.each do |card|
       card.card_order += 1
       card.save
     end
+
     respond_to do |format|
       format.js{}
     end
   end
+
+  def searchmember
+    @thiscard = Card.find(params[:card_id].to_i)
+  end
+
+  def addmember
+    new_member = User.find(params[:user_id].to_i)
+    card = Card.find(params[:card_id])
+    if card.users.include? new_member
+      flash[:alert] = "User has been enrolled!"
+    else
+      card.users << new_member
+    end
+    redirect_to root_path#board_path(id:params[:board])
+  end
+
+
+
   # PATCH/PUT /cards/1
   # PATCH/PUT /cards/1.json
   def update
