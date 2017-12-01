@@ -1,0 +1,8 @@
+<h1>Search a member</h1>
+<%= form_tag("search_for_assign", method: "get", "data-remote": "true", "id": "search-form") do %>
+  <%= label_tag(:user_name, "search user:") %>
+  <%= text_field_tag :user_name, "",class: "form-control"  %>
+  <%= number_field_tag(:card_id,@thiscard.id, "style": "display:none;") %>
+  <%= submit_tag "Search", "id": "search-submit", "style": "display:none" %>
+<% end %>
+<div id = "cardusers-container">

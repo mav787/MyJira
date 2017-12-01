@@ -16,7 +16,7 @@
           <tr>
             <td><%= user.name %></td>
             <td><%= user.email %></td>
-            <td><%= link_to 'Enroll', enroll_path(user: user,board: @board.id) %></td>
+            <td><%= link_to 'Enroll', addmember_path(user_id: user,card_id: @thiscard.id) %></td>
           </tr>
         <% end %>
       </tbody>

@@ -48,13 +48,23 @@
       <div class="card-container" list_id="<%= list.id%>">
         <% list.cards.order(:card_order).each do |card| %>
         <div class="card" card_id="<%= card.id%>">
+          <% card.tags.each do |tag| %>
+            <%= tag.name %>
+          <%end%><br/>
           <span>Content:</span>
           <%= link_to card.content, card_path(card)%><br/>
+          <%if ['doing','done'].include? list.name %>
+            <span>Start at:</span><%= card.startdate %><br/>
+          <%end%>
           <span>Deadline:</span><%= card.deadline %><br/>
-          <!--
-            <%= link_to 'Add Prerequisite',prerequisites_index_path(card_id:card.id)%>
-            <%= link_to 'Add Comment',new_comment_path(card_id:card.id)%>
-          -->
+          <%= link_to 'Prerequisite List',prerequisites_index_path(card_id:card.id)%><br/>
+          Members:
+          <%= link_to 'Assign Member',searchresult_path(card_id:card.id) %></br>
+
+          <% card.users.each do |user| %>
+            <%= user.name%>
+          <% end %><br/>
+          <%= link_to 'Add Comment',new_comment_path(card_id:card.id)%>
         </div>
         <% end %>
       </div>
