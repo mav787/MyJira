@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
     user = User.find_by(email: params[:session][:email].downcase)
     if user && user.authenticate(params[:session][:password])
       if user.email_confirmed
-          log_in user
+        log_in user
         redirect_to user
       else
         flash.now[:error] = 'Please activate your account by following the
