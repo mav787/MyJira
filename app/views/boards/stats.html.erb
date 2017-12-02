@@ -30,10 +30,8 @@
           cards finished on time: <%= @ind_user_cards[u.id]
             .where("cards.finished_at is not null and cards.finished_at <= cards.deadline").count %>
           </p>
+        <% end %>
       </p>
-      <% end %>
-
-
       <% else %>
         <h3 class="center"> Please log in first!</h3>
       <% end %>
