@@ -56,7 +56,7 @@ class UsersController < ApplicationController
   end
 
   def search
-
+ 
     likesyntax = 'name LIKE ?'
     if Rails.env.production?
        likesyntax = 'name ILIKE ?'

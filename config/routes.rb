@@ -35,6 +35,7 @@ Rails.application.routes.draw do
   get 'search_for_assign', to: 'users#search_for_assign'
   get 'addmember', to: 'cards#addmember'
 
+  get 'delmember', to: 'cards#deletemember'
   root 'application#hello'
   get '/signup', to: 'users#new'
   post '/signup', to: 'users#create'

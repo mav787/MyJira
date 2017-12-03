@@ -120,6 +120,7 @@ class CardsController < ApplicationController
   end
 
   def searchmember
+    # flash[:alert] = "User has been enrolled!"
     @thiscard = Card.find(params[:card_id].to_i)
   end
 
@@ -128,12 +129,20 @@ class CardsController < ApplicationController
     card = Card.find(params[:card_id])
     if card.users.include? new_member
       flash[:alert] = "User has been enrolled!"
+      redirect_to searchresult_path
     else
       card.users << new_member
+      redirect_to root_path
     end
-    redirect_to root_path#board_path(id:params[:board])
+    #board_path(id:params[:board])
   end
 
+  def deletemember
+    delete_member = User.find(params[:user_id].to_i)
+    card = Card.find(params[:card_id])
+
+
+  end
 
 
   # PATCH/PUT /cards/1
