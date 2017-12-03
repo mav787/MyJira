@@ -31,13 +31,13 @@
     <% end %>
     <div id="users-container">
     </div>
-    <p>
-      <strong>Project progress by day:</strong>
-      <%= line_chart @cards.group_by_day("cards.created_at").count %>
-    </p>
+
     <%= link_to 'New List', new_list_path(board_id:@board.id) %>
+    <br>
     <%= link_to 'Edit', edit_board_path(@board) %> |
     <%= link_to 'Back', root_path %>
+    <br>
+    <%= link_to 'Stats', board_stats_path(id:@board.id) %>
   </div>
 </div>
 <div class="container">

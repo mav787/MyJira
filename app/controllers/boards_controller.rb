@@ -5,7 +5,8 @@ class BoardsController < ApplicationController
   # GET /boards.json
   def index
     if logged_in?
-      @boards = current_user.boards
+      # @boards = current_user.boards
+      @boards = Board.all
     else
       @boards = []
     end
@@ -21,7 +22,6 @@ class BoardsController < ApplicationController
         note.update(read: true)
       end
     end
-    @cards = List.joins(:cards).where(lists: {board_id: @board.id})
   end
 
   def enroll
@@ -87,6 +87,12 @@ class BoardsController < ApplicationController
 
   def stats
     @users = @board.users
+    @cards = Card.joins("inner join lists on cards.list_id = lists.id").where(lists: {board_id: @board.id})
+    @user_cards = @cards.joins("join card_enrollments on card_enrollments.card_id = cards.id join users on card_enrollments.user_id = users.id")
+    @ind_user_cards = Hash.new
+    @users.each do |u|
+      @ind_user_cards[u.id] = @user_cards.where(users: {id: u.id})
+    end
   end
 
   private

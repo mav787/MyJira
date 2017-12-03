@@ -25,6 +25,8 @@
           </tr>
         </thead>
 
+        <%= will_paginate %>
+
         <tbody>
           <% @users.each do |user| %>
             <tr>
@@ -33,6 +35,9 @@
             </tr>
           <% end %>
         </tbody>
+
+        <%= will_paginate %>
+        
       </table>
       <% else %>
         <h3 class="center"> Please log in first!</h3>
