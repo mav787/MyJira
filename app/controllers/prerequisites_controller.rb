@@ -3,8 +3,6 @@ class PrerequisitesController < ApplicationController
   def add
     Prerequisite.create(card_id:params[:card_id],precard_id:params[:toaddcard_id])
     redirect_to prerequisites_index_path(card_id:params[:card_id])
-
-
   end
 
   def delete

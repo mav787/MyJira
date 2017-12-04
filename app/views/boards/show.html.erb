@@ -1,8 +1,11 @@
 <% provide(:title, @board.name) %>
 <div id="board-id" data-board-id="<%= @board.id %>"></div>
 <div class="side-menu col-md-2">
-  <div class="menu-title">Menu</div>
-  <div class="menu-content">
+  <div class = "panel-heading blue">
+    <div class="menu-title">Menu</div>
+  </div>
+  </br>
+  <div class="menu-content" style="padding:20px;">
     <p>
       <strong>Name:</strong>
       <%= @board.name %>
@@ -43,8 +46,10 @@
 <div class="container">
   <p id="notice"><%= notice %></p>
   <% @board.lists.each do |list| %>
-    <div class="list-container">
-      <div class="list-name"><span><%= list.name %></span></div>
+    <div class="list-container " >
+      <div class = "panel-heading lightgrey">
+        <div class="list-name"><span><%= list.name %></span></div>
+      </div>
       <div class="card-container" list_id="<%= list.id%>">
         <% list.cards.order(:card_order).each do |card| %>
         <div class="card" card_id="<%= card.id%>">

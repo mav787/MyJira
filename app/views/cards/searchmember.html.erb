@@ -1,4 +1,21 @@
-<h1>Search a member</h1>
+<h2> Current member </h2>
+<% if @current_member.count == 0%>
+  <p> This card has no member </p>
+<% else%>
+    <table>
+      <body>
+        <% @current_member.each do |each| %>
+        <tr>
+          <td><%=each.name%></td>
+          <td><%=each.email%></td>
+          <td><%=link_to "Delete",delmember_path(card_id:@thiscard.id,todeleteuser_id:each.id)%></td>
+        </tr>
+        <%end%>
+      </body>
+    </table>
+<%end%>
+</div>
+<h2>Search a member</h2>
 <%= form_tag("search_for_assign", method: "get", "data-remote": "true", "id": "search-form") do %>
   <%= label_tag(:user_name, "search user:") %>
   <%= text_field_tag :user_name, "",class: "form-control"  %>
@@ -6,3 +23,4 @@
   <%= submit_tag "Search", "id": "search-submit", "style": "display:none" %>
 <% end %>
 <div id = "cardusers-container">
+<%= link_to "Back", board_path(@thiscard.list.board), class: "btn btn-primary sign-btn"%>

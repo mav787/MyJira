@@ -12,6 +12,7 @@
 
   <%= f.label :password_confirmation %>
   <%= f.password_field :password_confirmation, class: 'form-control my-form-field' %>
-
-  <%= f.submit yield(:button_text), class: "btn btn-primary" %>
+  <div class = "sign-btn-wrapper">
+    <%= f.submit yield(:button_text), class: "btn btn-primary" %>
+  </div>
 <% end %>
