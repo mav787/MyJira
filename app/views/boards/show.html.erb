@@ -62,7 +62,7 @@
     </div>
   <% end %>
 
-  <!-- card edit modal -->
+  <!-- card edit modal
   <button id="modal-button" class="hide" data-toggle="modal" data-target="#myModal"></button>
   <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -79,9 +79,97 @@
                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                   <button type="button" class="btn btn-primary hide">Submit</button>
               </div>
+          </div>
+      </div>
+  </div>-->
+
+  <button id="modal-button" class="hide" data-toggle="modal" data-target="#myModal"></button>
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <span class="head-icon"></span>
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h4 class="modal-title" id="myModalLabel">Modal Title</h4>
+              </div>
+              <div class="modal-bod">
+                <div class="tags-container">
+                  <span class="field">Tags:</span><div class="gap"></div>
+                  <span class="tag" style="background-color: #5555dd;">test</span>
+                  <span class="tag" style="background-color: #55dd55;">database</span>
+                  <span class="tag" style="background-color: #dd5555;">routes</span>
+                  <button id="show-tags-modal" type="button" class="btn btn-grey btn-sm">
+                    <span class="glyphicon glyphicon-plus"></span> Add
+                  </button>
+                </div>
+                <div class="card-member-container">
+                  <span class="field">Members:</span><div class="gap"></div>
+                  <div class="card-member"><span class="member-initials">Y</span></div>
+                  <div class="card-member"><span class="member-initials">S</span></div>
+                  <div class="card-member"><span class="member-initials">P</span></div>
+                  <button type="button" class="btn btn-grey btn-sm">
+                    <span class="glyphicon glyphicon-plus"></span> Add
+                  </button>
+                </div>
+                <div class="description-container">
+                  <span class="field">Description</span>
+                  <button type="button"  id="edit-description">edit description</button>
+                  <div class="description">this is the description</div>
+                  <div class="edit-description-window hide">
+                    <textarea class="description-input-area" placeholder="put your description here" style="overflow: hidden; word-wrap: break-word; resize: none; height: 108px;"></textarea>
+                    <div class="edit-controls">
+                      <button type="button" class="btn btn-success" id="save-edit-description">save</button>
+                      <button type="button" class="btn btn-default" id="cancel-edit-description">cancel</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="comments-container">
+                  <span class="field">Comments</span>
+                  <div class="comments-list">
+                    <div class="comment-container">
+                      <div class="headshot"><span class="member-initials">Y</span></div>
+                      <span class="username">Jinli Yu</span>
+                      <span class="sent-date">posted on 2017-10-10</span>
+                      <div class="comment-content">
+                        <span class="left"></span>
+                        <span class="at-user">@spencer</span>
+                        <span class="comment">let's go out for fun!</span>
+
+                      </div>
+                    </div>
+                  </div>
+                  <div class="new-comments"></div>
+                </div>
+
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary hide">Submit</button>
+              </div>
           </div><!-- /.modal-content -->
       </div><!-- /.modal -->
   </div>
-
+  <div class="my-modal">
+    <div class="modal-dialog edit-tag-modal" id="tag-modal-dialog" style="display:none;">
+      <div class="modal-content">
+        <div class="modal-header">
+                  <button type="button" class="close close-tag-modal">&times;</button>
+                  <h4 class="modal-title">Edit Tags</h4>
+        </div>
+            <div class="modal-body">
+              <form data-remote="true" id="search-tag-form" action="/search/user" accept-charset="UTF-8" method="get"><input name="utf8" type="hidden" value="✓">
+                    <input type="text" placeholder="search tags here" name="tag_name" id="tag_name" value="" class="form-control">
+                    <input type="number" name="board_id" id="tag-board_id" value="7" style="display:none;">
+                    <input type="submit" name="commit" value="Search" id="tag-search-submit" style="display:none" data-disable-with="Search">
+              </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default close-tag-modal">Close</button>
+                <button type="button" class="btn btn-primary hide">Submit</button>
+            </div>
+        </div>
+    </div>
+  </div>
 <div id="tmp-card-container" class="hide"></div>
+
 </div>
