@@ -37,8 +37,10 @@
         </tbody>
 
         <%= will_paginate %>
-        
+
       </table>
+
+      <p><%= link_to("Generate Report", users_path(format: :csv), class: "btn btn-success",) %></p>
       <% else %>
         <h3 class="center"> Please log in first!</h3>
       <% end %>

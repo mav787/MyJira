@@ -6,6 +6,10 @@ class UsersController < ApplicationController
   def index
     # @users = User.all
     @users = User.paginate(page: params[:page])
+    respond_to do |format|
+      format.html
+      format.csv { send_data @users.to_csv }
+    end
   end
 
   # GET /users/1
@@ -57,7 +61,7 @@ class UsersController < ApplicationController
   end
 
   def search
- 
+
     likesyntax = 'name LIKE ?'
     if Rails.env.production?
        likesyntax = 'name ILIKE ?'

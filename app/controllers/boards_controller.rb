@@ -19,6 +19,11 @@ class BoardsController < ApplicationController
     else
       @boards = []
     end
+
+    respond_to do |format|
+      format.html
+      format.csv { send_data @boards.to_csv }
+    end
   end
 
   # GET /boards/1

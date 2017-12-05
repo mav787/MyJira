@@ -40,6 +40,8 @@
       <br>
 
       <%= link_to 'New Board', new_board_path, class: "btn btn-primary" %>
+      <br>
+      <p><%= link_to("Generate Report", boards_path(format: :csv), class: "btn btn-success",) %></p>
       <% else %>
         <h3 class="center"> Please log in first!</h3>
       <% end %>

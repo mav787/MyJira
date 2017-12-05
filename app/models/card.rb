@@ -14,4 +14,14 @@ class Card < ApplicationRecord
   def self.search_cards name
     Card.all.select { |c| c.content.downcase.include?(name) }
   end
+
+  def self.to_csv
+    attributes = %w{list_id content deadline card_order startdate finished_at description created_at updated_at}
+    CSV.generate(headers: true) do |csv|
+      csv << attributes
+      all.each do |card|
+        csv << card.attributes.values_at(*attributes)
+      end
+    end
+  end
 end

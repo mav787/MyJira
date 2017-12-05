@@ -22,8 +22,8 @@
               <td><%= card.list_id %></td>
               <td><%= card.content %></td>
               <td><%= card.deadline %></td>
-              <td><%= link_to 'Show', card %></td>
-              <td><%= link_to 'Destroy', card, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+              <!-- <td><%= link_to 'Show', card %></td>
+              <td><%= link_to 'Destroy', card, method: :delete, data: { confirm: 'Are you sure?' } %></td> -->
             </tr>
           <% end %>
         </tbody>
@@ -31,6 +31,7 @@
       </table>
 
       <br>
+      <p><%= link_to("Generate Report", cards_path(format: :csv), class: "btn btn-success",) %></p>
       <% else %>
         <h3 class="center"> Please log in first!</h3>
       <% end %>

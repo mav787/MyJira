@@ -34,11 +34,24 @@ class User < ApplicationRecord
     end
   end
 
+  def self.to_csv
+    attributes = %w{id name email created_at updated_at}
+    CSV.generate(headers: true) do |csv|
+      csv << attributes
+      all.each do |user|
+        csv << user.attributes.values_at(*attributes)
+      end
+
+    end
+  end
+
   def email_activate
     self.email_confirmed = true
     self.confirm_token = nil
     save!(:validate => false)
   end
+
+
 
   private
     def confirmation_token

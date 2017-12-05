@@ -6,6 +6,10 @@ class CardsController < ApplicationController
   def index
     if logged_in?
       @cards = Card.paginate(page: params[:page])
+      respond_to do |format|
+        format.html
+        format.csv { send_data @cards.to_csv }
+      end
       # @cards = []
       # current_user.boards.each do |board|
       #   board.lists.each do |list|
