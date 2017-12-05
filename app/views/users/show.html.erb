@@ -2,67 +2,24 @@
 
 <div class="container">
   <div class="jumbotron">
-    <h1>My Boards</h1></br>
+    <h2>My Boards</h2>
 
     <div class="row">
       <% @user.boards.each do |board| %>
-
-
-
-          <div class="block task task-high">
-      				<div class="row with-padding">
-      					<div class="col-sm-8">
-      							<%= link_to board.name, "/boards/#{board.id}", class: "mytitle"%>
-                  </br>
-            				<div style = "margin-top:15px;margin-bottom:5px;font-size:20px;">
-                      Leader:<%= User.find(board.leader_id).name %>
-                    </div>
-                  </br>
-      							<span class = "task-description" >
-                    <% if board.description.nil? %>
-                    This Board has no description.
-                    <%else %>
-                     <%=board.description%>
-                     <%end%>
-                    </span>
-      					</div>
-      					<div class="col-sm-4">
-                </br></br>
-      						<div class="task-info">
-      							<span><%= board.created_at%></span>
-      							<span>3 days | <span class="label label-danger">12%</span></span>
-      						</div>
-      					</div>
-      				</div>
-      			</div>
-
+      <a href="/boards/<%= board.id%>">
+        <div class="col-md-3 board">
+          <div class="board-name"><%= board.name %></div>
+          <div class="board-leader">Leader:<%= User.find(board.leader_id).name %></div>
+        </div>
+      </a>
       <% end %>
-
-
-      <div class="block task task-high">
-          <a href="/boards/new">
-          <div class = "row">
-
-                  <div class="img-circle add-but"></div>
-
-          </div>
-          </a>
-      </div>
-
-      </div>
-
-
+      <a href="/boards/new">
+        <div class="col-md-3 board">
+          <div class="board-name">Create a new board</div>
+        </div>
+      </a>
     </div>
-
-
-
-
-
   </div>
-
-
-
-
 </div>
 
 <!--

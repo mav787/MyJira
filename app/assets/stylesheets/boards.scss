@@ -1,3 +1,151 @@
 // Place all the styles related to the Boards controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+.modal-content{
+    background-color: #f0f5f9 !important;
+}
+.head-icon{
+  left: 18px;
+  height: 20px;
+  width: 20px;
+  top: 20px;
+  position: absolute;
+  background-image: image-url("icons8-task-filled-50.png");
+  background-repeat: no-repeat;
+  background-size: 18px;
+
+}
+.modal-header{
+  margin-left: 30px;
+}
+.btn-grey{
+  background-color: #e2e4e6;
+  color: #838c91;
+}
+.btn-grey:hover{
+  background-color: #999;
+}
+.tag{
+  padding: 5px;
+  border-radius: 3px;
+  color: #fff;
+}
+
+.tags-container, .card-member-container, .description-container, .comments-container{
+  padding: 10px 40px;
+}
+.card-member-container::after{
+  content: "";
+  display: block;
+  clear: both;
+}
+.gap{
+  height: 10px;
+}
+.card-member, .headshot{
+  background-color: #d6dadc;
+    border-radius: 25em;
+    color: #4d4d4d;
+    cursor: pointer;
+    display: block;
+    float: left;
+    height: 30px;
+    margin: 0 4px 4px 0;
+    overflow: visible;
+    position: relative;
+    width: 30px;
+    text-decoration: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    z-index: 0;
+}
+.member-initials{
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  height: 30px;
+  left: 0;
+  line-height: 30px;
+  overflow: hidden;
+  position: absolute;
+  text-align: center;
+  top: 0;
+  width: 100%;
+}
+.field{
+  color: #838c91;
+}
+.description{
+  padding: 10px;
+}
+.edit-controls{
+  padding: 10px 0;
+}
+.description-input-area{
+  margin-top: 10px;
+  width: 100%;
+  border-radius: 5px;
+  background: rgba(0,0,0,.03);
+  border-color: rgba(0,0,0,.15);
+}
+#save-edit-description{
+  margin-right: 10px;
+}
+#edit-description{
+  border: none;
+  background: transparent;
+  text-decoration: underline;
+  color: #838c91;
+}
+#edit-description:hover{
+  color: #444;
+}
+.comment-container{
+  min-height: 30px;
+  padding: 10px 0;
+  position: relative;
+}
+.sent-date, .username{
+  margin-left: 20px;
+}
+.comment-content{
+  background-color: #fff;
+  border-radius: 3px;
+  box-shadow: 1px 1px 1px #888888;
+  margin: 10px 20px;
+  padding: 5px 10px;
+  display:inline-block;
+}
+.comment-content .left{
+  background: #fff;
+  border-width: 1px;
+  width: 16px;
+  height: 16px;
+  border-color: #CCC #CCC transparent transparent;
+  border-style: solid solid dashed dashed;
+  left: 270px;
+  top: 30px;
+  border-radius: 0 0 100% 0;
+  line-height: 0;
+  box-shadow: 1px 1px 1px #888888;
+}
+.my-modal{
+  display: none;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1050;
+  -webkit-overflow-scrolling: touch;
+  outline: 0;
+}
+#tag-modal-dialog{
+  z-index: 1100;
+}
+.edit-tag-modal{
+  width: 300px !important;
+}

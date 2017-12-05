@@ -63,11 +63,62 @@
 
           //alert("data: \n" + data.id + "\nstatus: " + status);
           $('#myModalLabel').html(data.content);
-          $('.modal-body').html('<span>Deadline:</span>'+data.deadline+'<br/><a class="btn btn-default" href="/prerequisites_index?card_id='+data.id+'">Add Prerequisite</a><a class="btn btn-default" href="/comments/new?card_id='+data.id+'">Add Comment</a>');
+          $('#card-modal-body').html('<span>Deadline:</span>'+data.deadline+'<br/><a class="btn btn-default" href="/prerequisites_index?card_id='+data.id+'">Add Prerequisite</a><a class="btn btn-default" href="/comments/new?card_id='+data.id+'">Add Comment</a>');
           $('#modal-button').click();
         }
       });
 
+    });
+
+    $('#edit-description').click(function(){
+      $('.edit-description-window').removeClass('hide');
+      $('#edit-description').addClass('hide');
+      $('.description').addClass('hide');
+    });
+
+    $('#save-edit-description').click(function(){
+      $.ajax({ url: 'placeholder',
+        type: 'GET',
+        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+        data: {
+          card_id: $(this).attr("card_id")
+        },
+        success: function(data,status) {
+
+          //alert("data: \n" + data.id + "\nstatus: " + status);
+          $('#myModalLabel').html(data.content);
+          $('#card-modal-body').html('<span>Deadline:</span>'+data.deadline+'<br/><a class="btn btn-default" href="/prerequisites_index?card_id='+data.id+'">Add Prerequisite</a><a class="btn btn-default" href="/comments/new?card_id='+data.id+'">Add Comment</a>');
+          $('#modal-button').click();
+        }
+      });
+    });
+
+    $('#cancel-edit-description').click(function(){
+      $('.edit-description-window').addClass('hide');
+      $('#edit-description').removeClass('hide');
+      $('.description').removeClass('hide');
+    });
+
+    $('#show-tags-modal').click(function(){
+      $('#tag-modal-dialog').css({
+           'margin-top': function () {
+               return $('#show-tags-modal').offset().top;
+           },
+           'margin-left': function () {
+               return $('#show-tags-modal').offset().left;
+           }
+       });
+       $('.my-modal').css({
+         'display': 'block'
+       })
+      $('#tag-modal-dialog').fadeIn();
+    });
+
+    $('.close-tag-modal').click(function(){
+      $('.my-modal').css({
+        'display': 'none'
+      })
+     $('#tag-modal-dialog').fadeOut();
     });
 
     });
