@@ -5,7 +5,7 @@ class CardsController < ApplicationController
   # GET /cards.json
   def index
     if logged_in?
-      @cards = Card.all
+      @cards = Card.paginate(page: params[:page])
       # @cards = []
       # current_user.boards.each do |board|
       #   board.lists.each do |list|

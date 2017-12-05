@@ -14,6 +14,8 @@
           </tr>
         </thead>
 
+        <%= will_paginate %>
+
         <tbody>
           <% @boards.each do |board| %>
             <tr>
@@ -22,9 +24,17 @@
               <td><%= link_to 'Show', board %></td>
               <td><%= link_to 'Edit', edit_board_path(board) %></td>
               <td><%= link_to 'Destroy', board, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+              <td>
+              <% if @states[board.id] == false %>
+                <button class="btn btn-primary">Not Enrolled</button>
+              <% else %>
+                <button class="btn btn-warning">Enrolled</button>
+              <% end %>
+            </td>
             </tr>
           <% end %>
         </tbody>
+        <%= will_paginate %>
       </table>
 
       <br>

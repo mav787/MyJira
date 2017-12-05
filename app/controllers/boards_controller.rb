@@ -6,7 +6,16 @@ class BoardsController < ApplicationController
   def index
     if logged_in?
       # @boards = current_user.boards
-      @boards = Board.all
+      @boards = Board.paginate(page: params[:page])
+      @states = {}
+      user_boards = current_user.boards
+      @boards.each do |board|
+      if user_boards.include?(board)
+        @states[board.id] = true
+      else
+        @states[board.id] = false
+      end
+    end
     else
       @boards = []
     end
