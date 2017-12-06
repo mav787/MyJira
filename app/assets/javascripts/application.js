@@ -19,3 +19,4 @@
 //= require bootstrap
 //= require cable
 //= require_tree .
+//= require jquery.terminal.min.js
