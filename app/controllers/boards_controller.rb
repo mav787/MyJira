@@ -1,6 +1,5 @@
 class BoardsController < ApplicationController
   before_action :set_board, only: [:show, :edit, :update, :destroy, :stats]
-
   # GET /boards
   # GET /boards.json
   def index
@@ -106,6 +105,38 @@ class BoardsController < ApplicationController
     @ind_user_cards = Hash.new
     @users.each do |u|
       @ind_user_cards[u.id] = @user_cards.where(users: {id: u.id})
+    end
+    if @board.repo != nil
+      url = "https://api.github.com/repos/" +@board.repo+ "/stats/contributors"
+      response = HTTParty.get(url)
+      @valid = (response.code == 200)
+      if (@valid)
+        stats = response.parsed_response
+        @commit = Hash.new
+        @add = Hash.new
+        @delete = Hash.new
+        stats.each do |u|
+          name = u["author"]["login"]
+          @commit[name] = u["total"]
+          a = 0
+          d = 0
+          u["weeks"].each do |w|
+            a += w["a"]
+            d += w["d"]
+          end
+          @add[name] = a
+          @delete[name] = d
+        end
+      end
+    end
+  end
+
+  def git
+    @board = Board.find(params[:board_id])
+    @board.update(repo: params[:repo])
+    respond_to do |format|
+      format.html { render(:text => "not implemented") }
+      format.js
     end
   end
 
