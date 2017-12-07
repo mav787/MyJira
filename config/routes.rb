@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       get :confirm_email
     end
   end
+  get '/git/board', to: 'boards#git'
 
   post '/email_processor', to:'griddler/emails#create'
   resources :sessions, only: [:create,:destroy]

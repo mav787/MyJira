@@ -105,6 +105,8 @@ GEM
       tilt
     hashie (3.5.6)
     htmlentities (4.3.4)
+    httparty (0.15.6)
+      multi_xml (>= 0.5.2)
     i18n (0.9.1)
       concurrent-ruby (~> 1.0)
     jbuilder (2.7.0)
@@ -308,6 +310,7 @@ DEPENDENCIES
   groupdate
   guard (= 2.13.0)
   guard-minitest (= 2.4.4)
+  httparty
   jbuilder (= 2.7.0)
   jquery-rails
   jquery-ui-rails

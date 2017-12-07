@@ -149,3 +149,46 @@
 .edit-tag-modal{
   width: 300px !important;
 }
+
+//Stats
+.stats-value {
+    padding-top: 50px;
+    color: #A0A0A0;
+    text-align: center;
+    font-size: 60pt;
+}
+.stats-title {
+    color: #404040;
+    font-size: 12pt;
+    text-align: center;
+    min-height: 2.3em;
+}
+.stats-days {
+  padding-top: 20px;
+  color: #A0A0A0;
+  text-align: center;
+  font-size: 20pt;
+  line-height: 30px;
+}
+.analysis-block {
+  display: block;
+    height: 225px;
+    background-color: #FFFFFF;
+    padding: 5px;
+    margin: 5px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #DDD;
+    border-bottom: 2px solid #BBB;
+    -webkit-border-top-left-radius: 3px;
+    border-top-left-radius: 3px;
+    -webkit-border-top-right-radius: 3px;
+    border-top-right-radius: 3px;
+    -webkit-border-bottom-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    text-align: center;
+    width: initial;
+    box-sizing: border-box;
+}
