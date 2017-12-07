@@ -50,9 +50,9 @@ ActiveRecord::Schema.define(version: 20171207192203) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "card_order"
+    t.datetime "startdate"
     t.datetime "finished_at"
     t.string "description"
-    t.datetime "startdate"
   end
 
   create_table "comments", force: :cascade do |t|

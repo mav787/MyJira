@@ -5,7 +5,8 @@ class CardsController < ApplicationController
   # GET /cards.json
   def index
     if logged_in?
-      @cards = Card.paginate(page: params[:page])
+      # @cards = Card.paginate(page: params[:page])
+      @cards = Card.all
       # @cards = []
       # current_user.boards.each do |board|
       #   board.lists.each do |list|
@@ -180,10 +181,6 @@ class CardsController < ApplicationController
     end
   end
 
-  def changelist(card_id,to_list_id)
-    card = Card.find(card_id)
-    card.list_id = to_list_id
-  end
 
 
   private
