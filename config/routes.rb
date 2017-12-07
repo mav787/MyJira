@@ -34,7 +34,6 @@ Rails.application.routes.draw do
   get 'searchresult', to: 'cards#searchmember'
   get 'search_for_assign', to: 'users#search_for_assign'
   get 'addmember', to: 'cards#addmember'
-  get 'changelist', to: 'cards#changelist'
 
   get 'delmember', to: 'cards#deletemember'
   root 'application#hello'

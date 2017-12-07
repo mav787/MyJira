@@ -182,10 +182,6 @@ class CardsController < ApplicationController
     end
   end
 
-  def changelist(card_id,to_list_id)
-    card = Card.find(card_id)
-    card.list_id = to_list_id
-  end
 
 
   private
