@@ -2,10 +2,10 @@ class GithubWebhooksController < ActionController::Base
   include GithubWebhook::Processor
 
   # Handle push event
-  def github_push(payload)
+  def github_push
     puts "here"
-    payload["commits"].each do |c|
-      puts c["message"]
+    params["commits"].each do |c|
+      Card.new(content: c["message"], list_id: 7).save
     end
   end
 
