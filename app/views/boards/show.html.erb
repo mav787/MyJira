@@ -1,4 +1,5 @@
 <% provide(:title, @board.name) %>
+
 <div id="board-id" data-board-id="<%= @board.id %>"></div>
 <div class="side-menu col-md-2">
   <div class = "panel-heading blue">
@@ -53,6 +54,7 @@
       <div class="card-container" list_id="<%= list.id%>">
         <% list.cards.order(:card_order).each do |card| %>
         <div class="card" card_id="<%= card.id%>">
+          <span class="hidden-id hide">ID: <%=card.id%></span>
           <% card.tags.each do |tag| %>
             <%= tag.name %>
           <%end%><br/>
@@ -74,7 +76,6 @@
       <%= link_to 'New Card', new_card_path(list_id:list.id), class: "new-card"%>
     </div>
   <% end %>
-
   <!-- card edit modal
   <button id="modal-button" class="hide" data-toggle="modal" data-target="#myModal"></button>
   <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -183,4 +184,128 @@
   </div>
 <div id="tmp-card-container" class="hide"></div>
 
+
+
+
 </div>
+<div class="terminal">
+
+</div>
+
+<script>
+$(".side-menu").click(function(){
+  $(".side-menu").hide();
+});
+
+
+
+(function($) {
+    $.extend_if_has = function(desc, source, array) {
+        for (var i=array.length;i--;) {
+            if (typeof source[array[i]] != 'undefined') {
+                desc[array[i]] = source[array[i]];
+            }
+        }
+        return desc;
+    };
+    $.fn.dterm = function(interpeter, options) {
+        var defaults = Object.keys($.terminal.defaults);
+        var op = $.extend_if_has({}, options, defaults);
+
+        var term = this.append('<div/>').
+              terminal(interpeter, op);
+        if (!options.title) {
+            options.title = 'JQuery Terminal Emulator';
+        }
+        if (options.logoutOnClose) {
+            options.close = function(e, ui) {
+                term.logout();
+                term.clear();
+            };
+        } else {
+            options.close = function(e, ui) {
+                term.focus(false);
+            };
+        }
+        var self = this;
+        if (window.IntersectionObserver) {
+            var visibility_observer = new IntersectionObserver(function() {
+                if (self.is(':visible')) {
+                    terminal.enable().resize();
+                } else {
+                    self.disable();
+                }
+            }, {
+                root: document.body
+            });
+            visibility_observer.observe(terminal[0]);
+        }
+        this.dialog($.extend({}, options, {
+            resizeStop: function() {
+                var content = self.find('.ui-dialog-content');
+                terminal.resize(content.width(), content.height());
+            },
+            open: function(event, ui) {
+                if (!window.IntersectionObserver) {
+                    setTimeout(function() {
+                        terminal.enable().resize();
+                    }, 100);
+                }
+                if (typeof options.open == 'function') {
+                    options.open(event, ui);
+                }
+            },
+            show: 'fade',
+            closeOnEscape: false
+        }));
+        self.terminal = terminal;
+        return self;
+    };
+})(jQuery);
+
+jQuery(function($, undefined) {
+  $('.terminal').terminal({
+      echo: function(arg1){
+          this.echo(arg1);
+      },
+
+      id_on: function(){
+
+        $(".hidden-id").removeClass("hide");
+      },
+
+      id_off: function(){
+
+        $(".hidden-id").addClass("hide");
+      },
+
+      move:  function(arg1,arg2){
+        $.ajax({ url: '/card/move',
+          type: 'POST',
+          beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+          data: {
+            card_id: arg1,//$(ui.item).attr("card_id"),
+            new_list_id: arg2,// $(ui.item).parents('.card-container').attr("list_id"),
+            new_position:1,// $(ui.item).index()+1
+          },
+          success: function(data,status) {
+            //alert("数据: \n" + data + "\n状态: " + status);
+          }
+        });
+      },
+      calc: {
+          add: function(a, b) {
+              this.echo(a+b);
+          },
+          sub: function(a, b) {
+              this.echo(a-b);
+          }
+      }
+  }, {
+        greetings: 'This is MyJira Console.',
+        name: 'js_demo',
+        height: 200,
+        width: 450,
+        prompt: 'MyJira> '});
+});
+</script>

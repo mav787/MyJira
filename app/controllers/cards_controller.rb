@@ -6,10 +6,6 @@ class CardsController < ApplicationController
   def index
     if logged_in?
       @cards = Card.paginate(page: params[:page])
-      respond_to do |format|
-        format.html
-        format.csv { send_data @cards.to_csv }
-      end
       # @cards = []
       # current_user.boards.each do |board|
       #   board.lists.each do |list|
@@ -90,6 +86,11 @@ class CardsController < ApplicationController
   end
 
   def move
+    if (params[:new_list_id].is_a?Integer)
+      params_list_id = params[:new_list_id]
+    else
+      params_list_id = List.where(name:params[:new_list_id]).first.id
+    end
     moving_card = Card.find(params[:card_id])
     origin_list_cards = Card.where("list_id = ? AND card_order > ?", moving_card.list_id, moving_card.card_order)
     origin_list_cards.each do |card|
@@ -97,14 +98,14 @@ class CardsController < ApplicationController
       card.save
     end
     old_list = moving_card.list
-    new_list = List.find(params[:new_list_id])
+    new_list = List.find(params_list_id)
     if new_list.name == 'done'
       moving_card.finished_at = Time.now
     elsif old_list.name == 'done'
       moving_card.finished_at = nil
     end
     moving_card.card_order = params[:new_position]
-    moving_card.list_id = params[:new_list_id]
+    moving_card.list_id = params_list_id
     if moving_card.list_id == 2
        moving_card.startdate = Time.now
     end
@@ -137,9 +138,8 @@ class CardsController < ApplicationController
       redirect_to searchresult_path(card_id: params[:card_id])
     else
       card.users << new_member
-      redirect_to root_path
     end
-    #board_path(id:params[:board])
+    redirect_to root_path#board_path(id:params[:board])
   end
 
   def deletemember
@@ -181,6 +181,12 @@ class CardsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def changelist(card_id,to_list_id)
+    card = Card.find(card_id)
+    card.list_id = to_list_id
+  end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.
