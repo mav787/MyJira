@@ -3,6 +3,7 @@ class GithubWebhooksController < ActionController::Base
 
   # Handle push event
   def github_push(payload)
+    puts "here"
     payload["commits"].each do |c|
       puts c["message"]
     end
