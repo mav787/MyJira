@@ -7,6 +7,7 @@
       <div class="agile-grids">
         <div class="chart-heading">
           <h2><%= @board.name %> Board Statistics</h2>
+          <%= link_to 'Back to board', @board %>
         </div>
         <div class="row">
           <div class="col-md-3 no-padding">
@@ -15,7 +16,7 @@
                 <h4>Average members per card</h4>
               </div>
               <div class="stats-value">
-                <%= @user_cards.count/@cards.count.to_f %>
+                <%= (@user_cards.count/@cards.count.to_f).round(2) %>
               </div>
             </div>
           </div>
@@ -25,17 +26,26 @@
                 <h4>Average cards per member</h4>
               </div>
               <div class="stats-value">
-                <%= @user_cards.count/@board.users.count.to_f %>
+                <%= (@user_cards.count/@board.users.count.to_f).round(2) %>
               </div>
             </div>
           </div>
           <div class="col-md-3 no-padding">
             <div class="analysis-block">
               <div class-"stats-title">
-                <h4>Cards by lists</h4>
+                <h4>Average Task Finish Time</h4>
               </div>
-              <div>
-                <%= pie_chart @cards.group("lists.name").count, id: 'list_chart' %>
+              <div class="stats-days">
+                <% time = 0 %>
+                <% @finished_cards.each do |c| %>
+                  <% time += (c.finished_at - c.startdate) %>
+                <% end %>
+                <% time /= @finished_cards.count %>
+                <%= (time/86400).to_i %> Days <br/>
+                <%= ((time%86400)/3600).to_i %> Hours </br>
+                <%= ((time%3600)/60).to_i %> Minutes </br>
+
+              <!--  <%= pie_chart @cards.group("lists.name").count, id: 'list_chart' %> -->
               </div>
             </div>
           </div>
@@ -46,83 +56,142 @@
               </div>
               <div class="stats-days">
                 <% diff = 0 %>
-                <% @cards.where("cards.finished_at is not null").each do |c| %>
+                <% @finished_cards.each do |c| %>
                   <% diff += (c.deadline - c.finished_at) %>
                 <% end %>
-                <% diff /= @board.users.count %>
+                <% diff /= @finished_cards.count %>
                 <% if diff.abs < 60 %> On Time
                 <% else %>
-
                   <%= (diff.abs/86400).to_i %> Days <br/>
                   <%= ((diff.abs%86400)/3600).to_i %> Hours </br>
                   <%= ((diff.abs%3600)/60).to_i %> Minutes </br>
                   <% if diff < 0 %> Late
                   <% else %> Ahead
                   <% end %>
-
                 <% end %>
               </div>
             </div>
           </div>
         </div>
         <div class="row">
-          <div class="col-md-6 agile-grid-left">
+          <div class="col-md-6">
             <div class="main">
-              <h3>Progress Chart</h3>
+              <h3>Card Creation Progress Chart</h3>
               <%= line_chart @cards.group_by_day("cards.created_at").count, id: 'progress_chart' %>
             </div>
           </div>
-          <div class="col-md-6 agile-grid-right">
+          <div class="col-md-6">
             <div class="main">
-              <h3>Finished Progress Chart</h3>
-              <%= line_chart @cards.where("cards.finished_at is not null").group_by_day("cards.created_at").count, id:"finish_chart" %>
+              <h3>Card Completion Progress Chart</h3>
+              <%= line_chart @finished_cards.group_by_day("cards.finished_at").count, id:"finish_chart" %>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="main">
+              <h3>Cards Distribution By List</h3>
+              <%= pie_chart @cards.group("lists.name").count, id: "list_chart" %>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="main">
+              <h3>Card Distribution By Tag</h3>
+              <%= bar_chart @tag_cards.group("tags.name").count, id:"tag_chart" %>
             </div>
           </div>
         </div>
 
+        <div class="row">
           <h3>User Stats</h3>
           <ul class="nav nav-tabs">
-            <li class="active"><a data-toggle="tab" href="#home">Progress By Users</a></li>
+            <li class="active"><a data-toggle="tab" href="#home">All Users</a></li>
             <% @users.each do |u| %>
               <li><a data-toggle="tab" href="#<%= u.name %>"><%= u.name %></a></li>
             <% end %>
           </ul>
           <div class="tab-content">
             <div id="home" class="tab-pane active">
-              <h4>Users</h4>
               <div class="col-md-6">
+                <h4>All Cards By Users</h4>
                 <%= pie_chart @user_cards.group("users.name").count, id: "user_chart" %>
               </div>
               <div class="col-md-6">
+                <h4>Finished Cards By Users</h4>
                 <%= pie_chart @user_cards.where("cards.finished_at is not null").group("users.name").count, id:"user_finish_chart" %>
               </div>
             </div>
             <% @users.each do |u| %>
               <div id="<%= u.name %>" class="tab-pane fade">
-              <h4><%= u.name %>:</h4>
-              <p>
-                <%= pie_chart @user_cards.where("users.name = ?", u.name).group("lists.name").count, id: u.name+"_chart" %>
-              total cards: <%= @ind_user_cards[u.id].count %>
-              finished cards: <%= @ind_user_cards[u.id].where("cards.finished_at is not null").count %>
-              cards finished on time: <%= @ind_user_cards[u.id]
-                .where("cards.finished_at is not null and cards.finished_at <= cards.deadline").count %>
-              </p>
+                <div class="row">
+                  <div class="col-md-4 no-padding analysis-block">
+                    <h4><%= u.name %>'s Cards By Lists</h4>
+                    <%= pie_chart @user_cards.where("users.name = ?", u.name).group("lists.name").count, id: u.name+"_chart", library: {plotOptions: {pie: {dataLabels: {enabled: false},showInLegend: true}}}, height: "200px", width: "300px" %>
+                  </div>
+                  <div class="col-md-4 no-padding analysis-block">
+                    <h4><%= u.name %>'s Most Urgent Cards</h4>
+                    <div>
+                      <% all_cards = @user_cards.where("users.name = ?", u.name).where("cards.finished_at is null").where("cards.deadline > ?", Time.now).order("cards.deadline") %>
+                      <% if !all_cards.empty? %>
+                        <table>
+                          <tr>
+                            <th>Content</th>
+                            <th>Deadline</th>
+                          </tr>
+                          <% all_cards[0..2].each do |c| %>
+                            <tr>
+                              <td><%= c.content %></td>
+                              <td><%= c.deadline %></td>
+                            </tr>
+                          <% end %>
+                        </table>
+                      <% else %>
+                        N/A
+                      <% end %>
+                    </div>
+                  </div>
+                  <div class="col-md-3 no-padding analysis-block">
+                    <h4><%= u.name %>'s Average Timeline Status</h4>
+                    <div class="stats-days">
+                      <% diff = 0 %>
+                      <% ucards = @user_cards.where("users.name = ?", u.name).where("cards.finished_at is not null") %>
+                      <% if !ucards.empty? %>
+                        <% ucards.each do |c| %>
+                          <% diff += (c.deadline - c.finished_at) %>
+                        <% end %>
+                        <% diff /= ucards.count %>
+                        <% if diff.abs < 60 %> On Time
+                        <% else %>
+                          <%= (diff.abs/86400).to_i %> Days <br/>
+                          <%= ((diff.abs%86400)/3600).to_i %> Hours </br>
+                          <%= ((diff.abs%3600)/60).to_i %> Minutes </br>
+                          <% if diff < 0 %> Late
+                          <% else %> Ahead
+                          <% end %>
+                        <% end %>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
               </div>
             <% end %>
 
 
           </div>
-
-          <div>
-            <h3>Github Stats</h3>
-          <%= form_tag("/git/board", method: "get", "data-remote": "true", "id": "search-form") do %>
-            <%= label_tag(:repo, "Configure your project's github repo name") %>
-            <%= text_field_tag :repo, "",class: "form-control", placeholder: @board.repo %>
-            <%= number_field_tag(:board_id,@board.id, "style": "display:none;") %>
-            <%= submit_tag "Submit", "id": "search-submit", "style": "display:none" %>
-          <% end %>
         </div>
-          <div id="git-stats-container">
+
+          <div class="row">
+            <h3>Github Stats</h3>
+            <div class="col-md-6">
+              <%= form_tag("/git/board", method: "get", "data-remote": "true", "id": "search-form") do %>
+                <%= label_tag(:repo, "Configure your project's github repo name") %>
+                <%= text_field_tag :repo, "",class: "form-control", placeholder: @board.repo %>
+                <%= number_field_tag(:board_id,@board.id, "style": "display:none;") %>
+                <%= submit_tag "Submit", "id": "search-submit" %>
+              <% end %>
+            </div>
+          </div>
+          <div class="row" id="git-stats-container">
             <% if @board.repo != nil && @valid %>
             <div class="col-md-4">
               <h4> Total Commits </h4>

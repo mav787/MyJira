@@ -17,8 +17,6 @@ class CardsController < ApplicationController
     else
       @cards = []
     end
-
-    # @cards = Card.all
   end
 
   # GET /cards/1
