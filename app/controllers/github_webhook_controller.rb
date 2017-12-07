@@ -1,11 +1,18 @@
 class GithubWebhooksController < ActionController::Base
   include GithubWebhook::Processor
 
-  # Handle push event
   def github_push
-    puts "here"
+    repo = params["full_name"]
+    board = Board.find_by_repo(repo)
+    done_list = List.where("board_id = ?", board.id).where("name = ?", "done")
     params["commits"].each do |c|
-      Card.new(content: c["message"], list_id: 7).save
+      board.lists.each do |l|
+        l.cards.each do |card|
+          if card.content == c["message"]
+            card.move(:card_id => card.id, :new_list_id => done_list.id )
+          end
+        end
+      end
     end
   end
 
