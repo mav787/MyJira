@@ -36,16 +36,18 @@
                 <h4>Average Task Finish Time</h4>
               </div>
               <div class="stats-days">
-                <% time = 0 %>
-                <% @finished_cards.each do |c| %>
-                  <% time += (c.finished_at - c.startdate) %>
+                <% if !@finished_cards.empty? %>
+                  <% time = 0 %>
+                  <% @finished_cards.each do |c| %>
+                    <% time += (c.finished_at - c.startdate) %>
+                  <% end %>
+                  <% time /= @finished_cards.count %>
+                  <%= (time/86400).to_i %> Days <br/>
+                  <%= ((time%86400)/3600).to_i %> Hours </br>
+                  <%= ((time%3600)/60).to_i %> Minutes </br>
+                <% else %> N/A
                 <% end %>
-                <% time /= @finished_cards.count %>
-                <%= (time/86400).to_i %> Days <br/>
-                <%= ((time%86400)/3600).to_i %> Hours </br>
-                <%= ((time%3600)/60).to_i %> Minutes </br>
 
-              <!--  <%= pie_chart @cards.group("lists.name").count, id: 'list_chart' %> -->
               </div>
             </div>
           </div>
@@ -55,19 +57,22 @@
                 <h4>Average timeline status</h4>
               </div>
               <div class="stats-days">
-                <% diff = 0 %>
-                <% @finished_cards.each do |c| %>
-                  <% diff += (c.deadline - c.finished_at) %>
-                <% end %>
-                <% diff /= @finished_cards.count %>
-                <% if diff.abs < 60 %> On Time
-                <% else %>
-                  <%= (diff.abs/86400).to_i %> Days <br/>
-                  <%= ((diff.abs%86400)/3600).to_i %> Hours </br>
-                  <%= ((diff.abs%3600)/60).to_i %> Minutes </br>
-                  <% if diff < 0 %> Late
-                  <% else %> Ahead
+                <% if !@finished_cards.empty? %>
+                  <% diff = 0 %>
+                  <% @finished_cards.each do |c| %>
+                    <% diff += (c.deadline - c.finished_at) %>
                   <% end %>
+                  <% diff /= @finished_cards.count %>
+                  <% if diff.abs < 60 %> On Time
+                  <% else %>
+                    <%= (diff.abs/86400).to_i %> Days <br/>
+                    <%= ((diff.abs%86400)/3600).to_i %> Hours </br>
+                    <%= ((diff.abs%3600)/60).to_i %> Minutes </br>
+                    <% if diff < 0 %> Late
+                    <% else %> Ahead
+                    <% end %>
+                  <% end %>
+                <% else %> N/A
                 <% end %>
               </div>
             </div>
