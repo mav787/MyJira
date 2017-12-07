@@ -28,6 +28,8 @@ gem 'chartkick', '1.4.1'
 gem 'groupdate'
 gem 'arel'
 gem 'httparty'
+gem 'github_webhook', '~> 1.1'
+gem 'octokit'
 
 group :development, :test do
   gem 'sqlite3', '1.3.13'
