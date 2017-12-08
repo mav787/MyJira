@@ -68,12 +68,12 @@
             <span>Start at:</span><%= card.startdate %><br/>
           <%end%>
           <span>Deadline:</span><%= card.deadline %><br/>
-          Members:
-          <%= link_to 'Assign Member',searchresult_path(card_id:card.id) %></br>
+          <!-- Members: -->
+          <!-- <%= link_to 'Assign Member',searchresult_path(card_id:card.id) %></br> -->
 
-          <% card.users.each do |user| %>
+          <!-- <% card.users.each do |user| %>
             <%= user.name%>
-          <% end %><br/>
+          <% end %><br/> -->
         </div>
         <% end %>
       </div>

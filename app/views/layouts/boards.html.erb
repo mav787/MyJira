@@ -236,11 +236,15 @@
 
 
           $("#submit-new-comment").click(function(){
+            if($('#submit-new-comment').attr('enabled')=='false'){
+              return;
+            }
             if($('#comment-input').val()==""){
               alert("write some comment before submit!");
               return;
             }
             var to_user_id = $('#at-member-name').attr('data-user-id');
+            $('#submit-new-comment').attr('enabled','false');
             $.ajax({ url: '/comments.json',
               type: 'POST',
               beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
@@ -253,6 +257,7 @@
                 }
               },
               success: function(data,status) {
+                $('#submit-new-comment').attr('enabled','true');
                 //alert("data: \n" + data.id + "\nstatus: " + status);
               }
             });
