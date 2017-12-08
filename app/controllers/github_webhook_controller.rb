@@ -9,7 +9,7 @@ class GithubWebhooksController < ActionController::Base
     params["commits"].each do |c|
       doing_list.cards.each do |card|
         if card.content == c["message"]
-          card.list_id = done_list
+          card.list_id = done_list.id
           card.finished_at = Time.now
           card.card_order = 1
           card.save
