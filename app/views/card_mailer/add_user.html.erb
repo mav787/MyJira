@@ -1,40 +1,51 @@
-
-
-<table class="body-wrap">
-	<tr>
-		<td></td>
-		<td class="container" width="600">
-			<div class="content">
-				<table class="main" width="100%" cellpadding="0" cellspacing="0">
-					<tr>
-						<td class="content-wrap">
-							<table width="100%" cellpadding="0" cellspacing="0">
+<table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable" bgcolor="#F2F2F2">
+    <tr>
+        <td align="center" valign="top">
+            <table border="0" cellpadding="20" cellspacing="0" width="600" id="emailContainer">
                 <tr>
-									<td class="content-block">
-										Hi <%= @user.name %>,
-									</td>
-								</tr>
-								<tr>
-									<td class="content-block">
-										You are assigned a new card <%= link_to @note.card.content, card_url(@note.card)%> in board <%= @note.card.list.board.name %> on MyJira.
-									</td>
-								</tr>
-								<tr>
-									<td class="content-block">
-										You can directly reply "doing" or "done" to this email to update the status of the task.
-									</td>
-								</tr>
-								<tr>
-									<td class="content-block">
-										&mdash; MyJira Team
-									</td>
-								</tr>
-							</table>
-						</td>
-					</tr>
-				</table>
-				</div>
-		</td>
-		<td></td>
-	</tr>
+                    <td align="center" valign="top">
+                        <table border="0" cellpadding="20" cellspacing="0" width="100%" id="emailHeader">
+                            <tr>
+                                <td align="left" valign="top" style="font-family:Arial, Helvetica, sans-serif;">
+                                    Hi <%= @user.name %>,
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" valign="top">
+                        <table border="0" cellpadding="20" cellspacing="0" width="100%" id="emailBody">
+                            <tr>
+                                <td align="center" valign="top" style="font-family:Arial, Helvetica, sans-serif;">
+																	You are assigned a new card <%= @note.card.content %> in board <%= @note.card.list.board.name %> on MyJira.
+                                </td>
+                            </tr>
+														<tr>
+															<td align="center" valign="top">
+																<a href="<%= card_url(@note.card) %>" target="_blank" style="font-family: Arial, sans-serif; color:#000000; display: inline-block; text-decoration: none; line-height:44px; width:200px; font-weight:bold;">Go To Card</a>
+															</td>
+														</tr>
+														<tr>
+															<td align="center" valign="top" style="font-family:Arial, Helvetica, sans-serif;">
+																You can directly reply "doing" or "done" to this email to update the status of the task.
+															</td>
+														</tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" valign="top">
+                        <table border="0" cellpadding="20" cellspacing="0" width="100%" id="emailFooter">
+                            <tr>
+                                <td align="right" valign="top" style="font-family:Arial, Helvetica, sans-serif;">
+                                    &mdash; MyJira Team
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
 </table>
