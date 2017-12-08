@@ -18,6 +18,10 @@ class CardsController < ApplicationController
     else
       @cards = []
     end
+    respond_to do |format|
+      format.html
+      format.csv { send_data @cards.to_csv }
+    end
   end
 
   # GET /cards/1
