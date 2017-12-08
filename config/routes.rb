@@ -52,4 +52,6 @@ Rails.application.routes.draw do
   post '/card/move', to: 'cards#move'
   get '/card/show_modal.json', to: 'cards#show_modal'
   post '/card/edit_description.json', to: 'cards#edit_description'
+  post '/tag/bind.json', to: 'tags#bind'
+  post '/tag/unbind.json', to: 'tags#unbind'
 end

@@ -45,6 +45,12 @@ class CardsController < ApplicationController
     card_attributes['tags'] = @card.tags.as_json
     card_attributes['members'] = @card.users.as_json
     card_attributes['comments'] = @card.comments.as_json
+    card_attributes['comments'].each do |comment|
+      comment['from_user_name'] = User.find(comment['from_user_id'].to_i).name
+      if comment['to_user_id'] != nil
+        comment['to_user_name'] = User.find(comment['to_user_id'].to_i).name
+      end
+    end
     respond_to do |format|
       format.json { render json: card_attributes}
     end

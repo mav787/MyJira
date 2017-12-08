@@ -64,7 +64,116 @@
 
           //alert("data: \n" + data.id + "\nstatus: " + status);
           $('#myModalLabel').html(data.content);
-          $('#card-modal-body').html('<span>Deadline:</span>'+data.deadline+'<br/><a class="btn btn-default" href="/prerequisites_index?card_id='+data.id+'">Add Prerequisite</a><a class="btn btn-default" href="/comments/new?card_id='+data.id+'">Add Comment</a>');
+          var html = "";
+          //var html2 = "";
+          html = html.concat('<span class="field">Tags:</span><div class="gap"></div>');
+          $('.card-tag').removeClass('selected');
+          for(var index in data.tags){
+            var tag = data.tags[index];
+            html = html.concat('<span class="tag card-tag-color-label" data-color-id="'+tag.color+'">'+tag.name+'</span>');
+            //html2 = html2.concat('<div class="tag-in-list"><span class="edit-tag"></span><span class="card-tag mod-selectable card-tag-color-label active js-select-label" data-color-id="'+tag.color+'">'+tag.name+'<span class="icon-sm icon-check card-label-selectable-icon light"></span></span></div>');
+            $('.card-tag[data-tag-id='+tag.id+']').addClass('selected');
+          }
+          //$('#tag-list').html(html2);
+          html = html.concat('<button id="show-tags-modal" type="button" class="btn btn-grey btn-sm"><span class="glyphicon glyphicon-plus"></span> Add</button>');
+          $('.tags-container').html(html);
+          html = "";
+          html = html.concat('<span class="field">Members:</span><div class="gap"></div>');
+          $('.member-in-list').removeClass('member-selected');
+          for(var index in data.members){
+            var member = data.members[index];
+            html = html.concat('<div class="card-member"><span class="member-initials" data-user-id="'+member.id+'">'+member.name[0].toUpperCase()+'</span></div>');
+            $('.member-in-list[data-user-id='+member.id+']').addClass('member-selected');
+          }
+          html = html.concat('<button id="show-members-modal" type="button" class="btn btn-grey btn-sm"><span class="glyphicon glyphicon-plus"></span> Add</button>');
+          $('.card-member-container').html(html);
+          html = "";
+          $('.description').html(data.description);
+          for(var index in data.comments){
+            var comment = data.comments[index];
+            html = html.concat('<div class="comment-container">');
+            html = html.concat('<div class="headshot"><span class="member-initials">'+comment.from_user_name[0].toUpperCase()+'</span></div>');
+            html = html.concat('<span class="username">'+comment.from_user_name+'</span>');
+            html = html.concat('<span class="sent-date">posted on '+comment.created_at+'</span><br/>');
+            html = html.concat('<div class="comment-content">');
+            if(comment.to_user_id != null){
+              html = html.concat('<span class="at-user">@'+comment.to_user_name+'</span>');
+            }
+            html = html.concat('<span class="comment">'+comment.context+'</span>');
+            html = html.concat('</div></div>');
+          }
+          $('.comments-list').html(html);
+          $('#show-tags-modal').click(function(){
+            $('#tag-modal-dialog').css({
+                 'margin-top': function () {
+                     return $('#show-tags-modal').offset().top+35;
+                 },
+                 'margin-left': function () {
+                     return $('#show-tags-modal').offset().left;
+                 }
+             });
+             $('#tag-my-modal').css({
+               'display': 'block'
+             });
+            $('#tag-modal-dialog').fadeIn();
+          });
+          $('#show-members-modal').click(function(){
+            $('#member-modal-dialog').css({
+                 'margin-top': function () {
+                     return $('#show-members-modal').offset().top+35;
+                 },
+                 'margin-left': function () {
+                     return $('#show-members-modal').offset().left;
+                 }
+             });
+             $('#member-my-modal').css({
+               'display': 'block'
+             })
+            $('#member-modal-dialog').fadeIn();
+          });
+          $('.card-tag').click(function(){
+            if($(this).hasClass('selected')){
+              $.ajax({ url: '/tag/unbind.json',
+                type: 'POST',
+                beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+                data: {
+                  card_id: $('#modal-card-id').data("card-id"),
+                  tag_id: $(this).data('tag-id')
+                },
+                success: function(data,status) {
+                  $('.card-tag[data-tag-id='+data.tag_id+']').removeClass('selected');
+                }
+              });
+            }
+            else{
+              $.ajax({ url: '/tag/bind.json',
+                type: 'POST',
+                beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+                data: {
+                  card_id: $('#modal-card-id').data("card-id"),
+                  tag_id: $(this).data('tag-id')
+                },
+                success: function(data,status) {
+                  $('.card-tag[data-tag-id='+data.tag_id+']').addClass('selected');
+                }
+              });
+            }
+          });
+          $('#save-edit-description').click(function(){
+            $.ajax({ url: '/card/edit_description.json',
+              type: 'POST',
+              beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+              data: {
+                card_id: $('#modal-card-id').data('card-id'),
+                description: $("#description-input").val()
+              },
+              success: function(data,status) {
+
+              }
+            });
+          });
+          colorTags();
+          //$('#card-modal-body').html('<span>Deadline:</span>'+data.deadline+'<br/><a class="btn btn-default" href="/prerequisites_index?card_id='+data.id+'">Add Prerequisite</a><a class="btn btn-default" href="/comments/new?card_id='+data.id+'">Add Comment</a>');
           $('#modal-button').click();
         }
       });
@@ -77,23 +186,7 @@
       $('.description').addClass('hide');
     });
 
-    $('#save-edit-description').click(function(){
-      $.ajax({ url: '/card/edit_description.json',
-        type: 'POST',
-        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-        data: {
-          card_id: $('#modal-card-id').data('card-id'),
-          description: $("#description-input").val()
-        },
-        success: function(data,status) {
 
-          //alert("data: \n" + data.id + "\nstatus: " + status);
-          $('#myModalLabel').html(data.content);
-          $('#card-modal-body').html('<span>Deadline:</span>'+data.deadline+'<br/><a class="btn btn-default" href="/prerequisites_index?card_id='+data.id+'">Add Prerequisite</a><a class="btn btn-default" href="/comments/new?card_id='+data.id+'">Add Comment</a>');
-          $('#modal-button').click();
-        }
-      });
-    });
 
     $('#cancel-edit-description').click(function(){
       $('.edit-description-window').addClass('hide');
@@ -101,39 +194,13 @@
       $('.description').removeClass('hide');
     });
 
-    $('#show-tags-modal').click(function(){
-      $('#tag-modal-dialog').css({
-           'margin-top': function () {
-               return $('#show-tags-modal').offset().top+35;
-           },
-           'margin-left': function () {
-               return $('#show-tags-modal').offset().left;
-           }
-       });
-       $('#tag-my-modal').css({
-         'display': 'block'
-       })
-      $('#tag-modal-dialog').fadeIn();
-    });
+
 
     $('.close-tag-modal').click(function(){
       $('.my-modal').css({
         'display': 'none'
       })
      $('#tag-modal-dialog').fadeOut();
-    });
-
-    $('.card-tag').click(function(){
-      if($(this).hasClass('selected')){
-        $(this).removeClass('selected');
-      }
-      else{
-        $(this).addClass('selected');
-      }
-    });
-
-    $('.edit-tag').click(function(){
-
     });
 
     $('.new-tag-button').click(function(){
@@ -149,7 +216,7 @@
       $('#create-tag-modal-content').addClass('hide');
       $('#tag-modal-content').removeClass('hide');
     });
-    $('.card-tag-color-label').click(function(){
+    $('.card-tag-color-label-choose').click(function(){
       if(!$(this).hasClass('color-selected')){
         $(this).siblings(".color-selected").removeClass('color-selected');
         $(this).addClass('color-selected');
@@ -173,16 +240,7 @@
         }
       });
     });
-    $(".card-tag-color-label[data-color-id=1]").addClass('card-tag-green');
-    $(".card-tag-color-label[data-color-id=2]").addClass('card-tag-yellow');
-    $(".card-tag-color-label[data-color-id=3]").addClass('card-tag-orange');
-    $(".card-tag-color-label[data-color-id=4]").addClass('card-tag-red');
-    $(".card-tag-color-label[data-color-id=5]").addClass('card-tag-purple');
-    $(".card-tag-color-label[data-color-id=6]").addClass('card-tag-blue');
-    $(".card-tag-color-label[data-color-id=7]").addClass('card-tag-sky');
-    $(".card-tag-color-label[data-color-id=8]").addClass('card-tag-lime');
-    $(".card-tag-color-label[data-color-id=9]").addClass('card-tag-pink');
-    $(".card-tag-color-label[data-color-id=10]").addClass('card-tag-black');
+
 
     $("#submit-new-comment").click(function(){
       if($('#comment-input').val()==""){
@@ -207,20 +265,7 @@
       });
     });
 
-    $('#show-members-modal').click(function(){
-      $('#member-modal-dialog').css({
-           'margin-top': function () {
-               return $('#show-members-modal').offset().top+35;
-           },
-           'margin-left': function () {
-               return $('#show-members-modal').offset().left;
-           }
-       });
-       $('#member-my-modal').css({
-         'display': 'block'
-       })
-      $('#member-modal-dialog').fadeIn();
-    });
+
     $('.close-member-modal').click(function(){
       $('.my-modal').css({
         'display': 'none'
@@ -260,7 +305,7 @@
     $('#at-member-button').click(function(){
       $('#comment-at-member-modal-dialog').css({
            'margin-top': function () {
-               return $('#at-member-button').offset().top+20;
+               return $('#at-member-button').offset().top-250;
            },
            'margin-left': function () {
                return $('#at-member-button').offset().left;
@@ -291,8 +336,21 @@
         $('.close-comment-at-member-modal').click();
       }
     });
+    colorTags();
   });
 
+  var colorTags = function(){
+    $(".card-tag-color-label[data-color-id=1]").addClass('card-tag-green');
+    $(".card-tag-color-label[data-color-id=2]").addClass('card-tag-yellow');
+    $(".card-tag-color-label[data-color-id=3]").addClass('card-tag-orange');
+    $(".card-tag-color-label[data-color-id=4]").addClass('card-tag-red');
+    $(".card-tag-color-label[data-color-id=5]").addClass('card-tag-purple');
+    $(".card-tag-color-label[data-color-id=6]").addClass('card-tag-blue');
+    $(".card-tag-color-label[data-color-id=7]").addClass('card-tag-sky');
+    $(".card-tag-color-label[data-color-id=8]").addClass('card-tag-lime');
+    $(".card-tag-color-label[data-color-id=9]").addClass('card-tag-pink');
+    $(".card-tag-color-label[data-color-id=10]").addClass('card-tag-black');
+  };
     </script>
   </body>
 </html>

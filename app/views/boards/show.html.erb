@@ -55,7 +55,7 @@
         <div class="card" card_id="<%= card.id%>">
           <div>
           <% card.tags.each do |tag| %>
-            <span class="card-tag-color-label" data-color-id="<%= tag.color%>"><%= tag.name %></span>
+            <span class="card-tag-color-label tag outside-tag" data-color-id="<%= tag.color%>"><%= tag.name %></span>
           <%end%>
           <div style="clear:both;"></div>
           </div>
@@ -107,7 +107,7 @@
                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                   <h4 class="modal-title" id="myModalLabel">Modal Title</h4>
               </div>
-              <div class="modal-bod">
+              <div class="modal-body">
                 <div class="tags-container">
                   <span class="field">Tags:</span><div class="gap"></div>
                   <span class="tag" style="background-color: #5555dd;">test</span>
@@ -181,9 +181,13 @@
             <div class="modal-body">
 
               <div class="edit-tags-pop-over">
-                <div class="tag-in-list">
-                  <span class="edit-tag"></span>
-                  <span class="card-tag mod-selectable card-tag-green active js-select-label" data-color="green">Database<span class="icon-sm icon-check card-label-selectable-icon light"></span></span>
+                <div id="tag-list">
+                  <% @board.tags.each do |tag| %>
+                    <div class="tag-in-list">
+                      <span class="edit-tag"></span>
+                      <span class="card-tag mod-selectable card-tag-color-label" data-color-id="<%= tag.color%>" data-tag-id="<%= tag.id %>"><%= tag.name %><span class="icon-sm icon-check card-label-selectable-icon light"></span></span>
+                    </div>
+                  <%end%>
 
                 </div>
                 <div class="new-tag-button">
@@ -212,16 +216,16 @@
                     <input id="tagName" name="name" type="text" class="input-text">
                     <label for="tagColor">tag color</label>
                     <div class="card-tag-color-label-wrap">
-                      <span class="card-tag-color-label card-tag-green " data-color="green" data-color-id="1"></span>
-                      <span class="card-tag-color-label card-tag-yellow " data-color="yellow" data-color-id="2"></span>
-                      <span class="card-tag-color-label card-tag-orange " data-color="orange" data-color-id="3"></span>
-                      <span class="card-tag-color-label card-tag-red " data-color="red" data-color-id="4"></span>
-                      <span class="card-tag-color-label card-tag-purple " data-color="purple" data-color-id="5"></span>
-                      <span class="card-tag-color-label card-tag-blue " data-color="blue" data-color-id="6"></span>
-                      <span class="card-tag-color-label card-tag-sky " data-color="sky" data-color-id="7"></span>
-                      <span class="card-tag-color-label card-tag-lime " data-color="lime" data-color-id="8"></span>
-                      <span class="card-tag-color-label card-tag-pink " data-color="pink" data-color-id="9"></span>
-                      <span class="card-tag-color-label card-tag-black " data-color="black" data-color-id="10"></span>
+                      <span class="card-tag-color-label card-tag-green card-tag-color-label-choose" data-color="green" data-color-id="1"></span>
+                      <span class="card-tag-color-label card-tag-yellow card-tag-color-label-choose" data-color="yellow" data-color-id="2"></span>
+                      <span class="card-tag-color-label card-tag-orange card-tag-color-label-choose" data-color="orange" data-color-id="3"></span>
+                      <span class="card-tag-color-label card-tag-red card-tag-color-label-choose" data-color="red" data-color-id="4"></span>
+                      <span class="card-tag-color-label card-tag-purple card-tag-color-label-choose" data-color="purple" data-color-id="5"></span>
+                      <span class="card-tag-color-label card-tag-blue card-tag-color-label-choose" data-color="blue" data-color-id="6"></span>
+                      <span class="card-tag-color-label card-tag-sky card-tag-color-label-choose" data-color="sky" data-color-id="7"></span>
+                      <span class="card-tag-color-label card-tag-lime card-tag-color-label-choose" data-color="lime" data-color-id="8"></span>
+                      <span class="card-tag-color-label card-tag-pink card-tag-color-label-choose" data-color="pink" data-color-id="9"></span>
+                      <span class="card-tag-color-label card-tag-black card-tag-color-label-choose" data-color="black" data-color-id="10"></span>
                       <div style="clear:both;"></div>
                     </div>
 
@@ -238,7 +242,7 @@
     </div>
   </div>
 
-  <div class="my-modal" id="member-my-modal">  <!--tag modal-->
+  <div class="my-modal" id="member-my-modal">  <!--member modal-->
     <div class="modal-dialog edit-tag-modal" id="member-modal-dialog" style="display:none;">
       <div class="modal-content" id="member-modal-content">
         <div class="modal-header">
@@ -248,26 +252,26 @@
             <div class="modal-body">
 
               <div class="edit-members">
-                <div class="member-in-list" data-user-id="1">
+                <% @board.users.each do |member| %>
+                <div class="member-in-list" data-user-id="<%= member.id%>">
                   <div class="card-member">
-                    <span class="member-initials">J</span>
+                    <span class="member-initials"><%= member.name[0].upcase%></span>
                   </div>
-                  <span class="member-name">Jinli Yu</span>
+                  <span class="member-name"><%= member.name%></span>
                   <div style="clear:both;"></div>
                 </div>
-
+                <%end%>
               </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default close-tag-modal">Close</button>
-                <button type="button" class="btn btn-primary hide">Submit</button>
             </div>
         </div>
 
     </div>
   </div>
 
-  <div class="my-modal" id="comment-at-member-my-modal">  <!--tag modal-->
+  <div class="my-modal" id="comment-at-member-my-modal">  <!--comment modal-->
     <div class="modal-dialog edit-tag-modal" id="comment-at-member-modal-dialog" style="display:none;">
       <div class="modal-content" id="comment-at-member-modal-content">
         <div class="modal-header">
@@ -277,27 +281,15 @@
             <div class="modal-body">
 
               <div class="edit-members">
-                <div class="at-member-in-list" data-user-id="1" data-user-name="Jinli Yu">
+                <% @board.users.each do |member| %>
+                <div class="at-member-in-list" data-user-id="<%= member.id%>" data-user-name="<%= member.name%>">
                   <div class="card-member">
-                    <span class="member-initials">J</span>
+                    <span class="member-initials"><%= member.name[0].upcase%></span>
                   </div>
-                  <span class="member-name">Jinli Yu</span>
+                  <span class="member-name"><%= member.name%></span>
                   <div style="clear:both;"></div>
                 </div>
-                <div class="at-member-in-list" data-user-id="2" data-user-name="Yuan Zhou">
-                  <div class="card-member">
-                    <span class="member-initials">Y</span>
-                  </div>
-                  <span class="member-name">Yuan Zhou</span>
-                  <div style="clear:both;"></div>
-                </div>
-                <div class="at-member-in-list" data-user-id="3" data-user-name="Chenyue Zhang">
-                  <div class="card-member">
-                    <span class="member-initials">C</span>
-                  </div>
-                  <span class="member-name">Chenyue Zhang</span>
-                  <div style="clear:both;"></div>
-                </div>
+                <%end%>
 
               </div>
             </div>

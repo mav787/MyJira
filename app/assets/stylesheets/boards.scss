@@ -32,7 +32,7 @@
 }
 
 .tags-container, .card-member-container, .description-container, .comments-container{
-  padding: 10px 40px;
+  padding: 10px 30px;
 }
 .card-member-container::after{
   content: "";
@@ -271,21 +271,35 @@ margin-bottom: 12px;
 padding: 7px;
 }
 
-.card-tag-color-label{
+.tag{
   float: left;
-height: 30px;
 margin: 0 10px 10px 0;
-width: 50px;
 border-radius: 3px;
 color: #fff;
 display: block;
 margin-right: 3px;
 max-width: 100%;
 overflow: hidden;
-padding: 3px 6px;
+padding: 6px 6px;
 position: relative;
 text-overflow: ellipsis;
 white-space: nowrap;
+}
+.card-tag-color-label-choose{
+  height: 35px;
+  width: 50px;
+  float: left;
+  margin: 0 10px 10px 0;
+  border-radius: 3px;
+  color: #fff;
+  display: block;
+  margin-right: 3px;
+  max-width: 100%;
+  overflow: hidden;
+  padding: 6px 6px;
+  position: relative;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .color-selected::after{
   background-image: url('icons8-checkmark-50.png');
@@ -362,4 +376,10 @@ position: relative;
 #at-member-name{
   position: relative;
     top: -4px;
+}
+.at-user{
+  margin-right: 10px;
+}
+.outside-tag{
+  padding: 4px 6px !important;
 }

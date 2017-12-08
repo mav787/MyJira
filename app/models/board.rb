@@ -3,7 +3,7 @@ class Board < ApplicationRecord
   has_many :users, through: :board_enrollments
   has_many :lists, class_name: :List, foreign_key: :board_id
   belongs_to :leader, class_name: :User
-  has_many :tags, class_name: :List, foreign_key: :board_id
+  has_many :tags, class_name: :Tag, foreign_key: :board_id
 
   def self.to_csv
     attributes = %w{name leader_id created_at updated_at description}

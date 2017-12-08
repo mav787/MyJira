@@ -35,6 +35,21 @@ class TagsController < ApplicationController
     end
   end
 
+  def bind
+    CardTagAssociation.create(card_id: params['card_id'], tag_id: params['tag_id'])
+    respond_to do |format|
+      format.json { render json: {status: 'success', tag_id: params['tag_id']} }
+    end
+  end
+
+  def unbind
+    card_tag = CardTagAssociation.where(card_id: params['card_id'], tag_id: params['tag_id'])[0]
+    card_tag.destroy
+    card_tag.save
+    respond_to do |format|
+      format.json { render json: {status: 'success', tag_id: params['tag_id']} }
+    end
+  end
   # PATCH/PUT /tags/1
   # PATCH/PUT /tags/1.json
   def update
