@@ -153,6 +153,9 @@ class CardsController < ApplicationController
     else
       card.users << new_member
       card.save
+      n = Notification.new(recipient_id: new_member.id, card_id: card.id, read: false, source: "card")
+      n.save
+      CardMailer.add_user(new_member, n).deliver
     end
     ActionCable.server.broadcast "team_#{card.list.board.id}_channel",
                                  event: "add_member_to_card",
