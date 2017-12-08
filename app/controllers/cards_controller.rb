@@ -40,8 +40,13 @@ class CardsController < ApplicationController
 
   def show_modal
     @card = Card.find(params["card_id"])
+
+    card_attributes = @card.as_json
+    card_attributes['tags'] = @card.tags.as_json
+    card_attributes['members'] = @card.users.as_json
+    card_attributes['comments'] = @card.comments.as_json
     respond_to do |format|
-      format.json { render json: @card}
+      format.json { render json: card_attributes}
     end
   end
 
@@ -59,12 +64,6 @@ class CardsController < ApplicationController
   # POST /cards
   # POST /cards.json
   def create
-=begin
-@card = Card.new(card_params)
-@card.card_order = Card.where(list_id:params[:card][:list_id]).count+1
-@list = List.find(params[:card][:list_id])
-@board = Board.find(@list.board.id)
-=end
     pars = params[:card]
     @tags = pars[:tagst].split(',')
     @card = Card.new(card_params)
@@ -75,7 +74,7 @@ class CardsController < ApplicationController
         @tags.each do |tag_name|
           tag = Tag.find_by_name(tag_name)
           if (tag == nil)
-            tag = Tag.new(name: tag_name, color: 'default')
+            tag = Tag.new(name: tag_name, color: 0, board_id: @board.id)
             tag.save
           end
           CardTagAssociation.create(card_id: @card.id, tag_id: tag.id)
@@ -134,18 +133,45 @@ class CardsController < ApplicationController
     card = Card.find(params[:card_id])
     if card.users.include? new_member
       flash[:danger] = "User has been enrolled!"
+    else
+      card.users << new_member
+      card.save
+    end
+    respond_to do |format|
+      format.json { render json: {status: "success",member_id: new_member.id}}
+    end
+=begin
+    new_member = User.find(params[:user_id].to_i)
+    card = Card.find(params[:card_id])
+    if card.users.include? new_member
+      flash[:danger] = "User has been enrolled!"
       redirect_to searchresult_path(card_id: params[:card_id])
     else
       card.users << new_member
       redirect_to root_path
     end
     #board_path(id:params[:board])
+=end
   end
 
   def deletemember
     CardEnrollment.delete(CardEnrollment.where(card_id:params[:card_id],user_id:params[:todeleteuser_id].to_i))
-    redirect_to searchresult_path(card_id: params[:card_id])
+    #redirect_to searchresult_path(card_id: params[:card_id])
+    respond_to do |format|
+      format.json { render json: {status: "success",member_id: params[:todeleteuser_id]}}
+    end
+  end
 
+  def edit_description
+    card = Card.find(params[:card_id])
+    card.description = params[:description]
+    respond_to do |format|
+      if card.save
+        format.json { render json: {status: "success"}}
+      else
+        format.json { render json: {status: "failed"}}
+      end
+    end
   end
 
 

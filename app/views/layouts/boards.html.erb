@@ -16,6 +16,7 @@
     <%= render "layouts/nav"%>
     <%= yield %>
     <!--<%= debug(params) if Rails.env.development? %>-->
+    <div id="user" data-user-id="<%= current_user.id %>"></div>
     <script type="text/javascript">
     $(document).ready(function(){
       $('#user_name').on('input',function(){
@@ -77,11 +78,12 @@
     });
 
     $('#save-edit-description').click(function(){
-      $.ajax({ url: 'placeholder',
-        type: 'GET',
+      $.ajax({ url: '/card/edit_description.json',
+        type: 'POST',
         beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
         data: {
-          card_id: $(this).attr("card_id")
+          card_id: $('#modal-card-id').data('card-id'),
+          description: $("#description-input").val()
         },
         success: function(data,status) {
 
@@ -102,13 +104,13 @@
     $('#show-tags-modal').click(function(){
       $('#tag-modal-dialog').css({
            'margin-top': function () {
-               return $('#show-tags-modal').offset().top;
+               return $('#show-tags-modal').offset().top+35;
            },
            'margin-left': function () {
                return $('#show-tags-modal').offset().left;
            }
        });
-       $('.my-modal').css({
+       $('#tag-my-modal').css({
          'display': 'block'
        })
       $('#tag-modal-dialog').fadeIn();
@@ -121,7 +123,175 @@
      $('#tag-modal-dialog').fadeOut();
     });
 
+    $('.card-tag').click(function(){
+      if($(this).hasClass('selected')){
+        $(this).removeClass('selected');
+      }
+      else{
+        $(this).addClass('selected');
+      }
     });
+
+    $('.edit-tag').click(function(){
+
+    });
+
+    $('.new-tag-button').click(function(){
+      $('#tag-modal-content').addClass('hide');
+      $('#create-tag-modal-content').removeClass('hide');
+    });
+    $('.close-create-tag').click(function(){
+      $('#create-tag-modal-content').addClass('hide');
+      $('#tag-modal-content').removeClass('hide');
+      $('#close-create-tag-button').click();
+    });
+    $('#back-to-taglist').click(function(){
+      $('#create-tag-modal-content').addClass('hide');
+      $('#tag-modal-content').removeClass('hide');
+    });
+    $('.card-tag-color-label').click(function(){
+      if(!$(this).hasClass('color-selected')){
+        $(this).siblings(".color-selected").removeClass('color-selected');
+        $(this).addClass('color-selected');
+      }
+    });
+
+    $('#create-tag-button').click(function(){
+      $.ajax({ url: '/tags',
+        type: 'POST',
+        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+        data: {
+          name: $('#tagName').val(),
+          color: $('.color-selected').data('color-id'),
+          board_id: $('#board-id').data('board-id'),
+          card_id: $('#modal-card-id').data('card-id')
+        },
+        success: function(data,status) {
+
+          //alert("data: \n" + data.id + "\nstatus: " + status);
+
+        }
+      });
+    });
+    $(".card-tag-color-label[data-color-id=1]").addClass('card-tag-green');
+    $(".card-tag-color-label[data-color-id=2]").addClass('card-tag-yellow');
+    $(".card-tag-color-label[data-color-id=3]").addClass('card-tag-orange');
+    $(".card-tag-color-label[data-color-id=4]").addClass('card-tag-red');
+    $(".card-tag-color-label[data-color-id=5]").addClass('card-tag-purple');
+    $(".card-tag-color-label[data-color-id=6]").addClass('card-tag-blue');
+    $(".card-tag-color-label[data-color-id=7]").addClass('card-tag-sky');
+    $(".card-tag-color-label[data-color-id=8]").addClass('card-tag-lime');
+    $(".card-tag-color-label[data-color-id=9]").addClass('card-tag-pink');
+    $(".card-tag-color-label[data-color-id=10]").addClass('card-tag-black');
+
+    $("#submit-new-comment").click(function(){
+      if($('#comment-input').val()==""){
+        alert("write some comment before submit!");
+        return;
+      }
+      var to_user_id = $('#at-member-name').data('user-id');
+      $.ajax({ url: '/comments.json',
+        type: 'POST',
+        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+        data: {
+          comment: {
+            context: $('#comment-input').val(),
+            from_user_id: $("#user").data("user-id"),
+            card_id: $('#modal-card-id').data('card-id'),
+            to_user_id: to_user_id
+          }
+        },
+        success: function(data,status) {
+          //alert("data: \n" + data.id + "\nstatus: " + status);
+        }
+      });
+    });
+
+    $('#show-members-modal').click(function(){
+      $('#member-modal-dialog').css({
+           'margin-top': function () {
+               return $('#show-members-modal').offset().top+35;
+           },
+           'margin-left': function () {
+               return $('#show-members-modal').offset().left;
+           }
+       });
+       $('#member-my-modal').css({
+         'display': 'block'
+       })
+      $('#member-modal-dialog').fadeIn();
+    });
+    $('.close-member-modal').click(function(){
+      $('.my-modal').css({
+        'display': 'none'
+      })
+     $('#member-modal-dialog').fadeOut();
+    });
+    $('.member-in-list').click(function(){
+      if($(this).hasClass('member-selected')){
+        $.ajax({ url: '/delmember.json',
+          type: 'POST',
+          beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+          data: {
+              todeleteuser_id: $(this).data("user-id"),
+              card_id: $('#modal-card-id').data('card-id')
+          },
+          success: function(data,status) {
+            //alert("data: \n" + data.id + "\nstatus: " + status);
+            $('.member-in-list[data-user-id='+data.member_id+']').removeClass('member-selected');
+          }
+        });
+      }
+      else{
+        $.ajax({ url: '/addmember.json',
+          type: 'POST',
+          beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+          data: {
+              user_id: $(this).data("user-id"),
+              card_id: $('#modal-card-id').data('card-id')
+          },
+          success: function(data,status) {
+            //alert("data: \n" + data.id + "\nstatus: " + status);
+            $('.member-in-list[data-user-id='+data.member_id+']').addClass('member-selected');
+          }
+        });
+      }
+    });
+    $('#at-member-button').click(function(){
+      $('#comment-at-member-modal-dialog').css({
+           'margin-top': function () {
+               return $('#at-member-button').offset().top+20;
+           },
+           'margin-left': function () {
+               return $('#at-member-button').offset().left;
+           }
+       });
+       $('#comment-at-member-my-modal').css({
+         'display': 'block'
+       })
+      $('#comment-at-member-modal-dialog').fadeIn();
+    });
+    $('.close-comment-at-member-modal').click(function(){
+      $('.my-modal').css({
+        'display': 'none'
+      })
+     $('#comment-at-member-modal-dialog').fadeOut();
+    });
+    $('.at-member-in-list').click(function(){
+      if($(this).hasClass('member-selected')){
+        $('.at-member-in-list').removeClass('member-selected');
+        $('#at-member-name').attr('data-user-id','');
+        $('#at-member-name').html('');
+      }
+      else{
+        $('.at-member-in-list').removeClass('member-selected');
+        $(this).addClass('member-selected');
+        $('#at-member-name').attr('data-user-id',$(this).data('user-id'));
+        $('#at-member-name').html($(this).data('user-name'));
+        $('.close-comment-at-member-modal').click();
+      }
+    });
+  });
 
     </script>
   </body>

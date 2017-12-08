@@ -25,13 +25,11 @@ class TagsController < ApplicationController
   # POST /tags.json
   def create
     @tag = Tag.new(tag_params)
-
     respond_to do |format|
       if @tag.save
-        format.html { redirect_to @tag, notice: 'Tag was successfully created.' }
+        CardTagAssociation.create(card_id: params['card_id'], tag_id: @tag.id)
         format.json { render :show, status: :created, location: @tag }
       else
-        format.html { render :new }
         format.json { render json: @tag.errors, status: :unprocessable_entity }
       end
     end
@@ -69,6 +67,6 @@ class TagsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def tag_params
-      params.require(:tag).permit(:name, :color)
+      params.permit(:name, :color, :board_id)
     end
 end

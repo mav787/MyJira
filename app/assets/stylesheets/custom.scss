@@ -129,7 +129,7 @@ textarea {
 
 .side-menu{
   padding: 0;
-  background-color: #eee;
+  background-color: #def;
   float: left;
   width: 300px;
   height: -webkit-fill-available;
@@ -303,4 +303,8 @@ a {
   height:50px;
   margin: 0 auto;
   content:url("add-but.png");
+}
+
+.navbar{
+  margin-bottom: 0 !important;
 }
