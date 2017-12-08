@@ -341,7 +341,7 @@ jQuery(function($, undefined) {
           type: 'POST',
           beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
           data: {
-            card_id: arg1,//$(ui.item).attr("card_id"),
+            card_id: arg1,
             new_list_id: arg2,// $(ui.item).parents('.card-container').attr("list_id"),
             new_position:1,
           },
