@@ -87,7 +87,7 @@ class CardsController < ApplicationController
   end
 
   def move
-    if (params[:new_list_id].is_a?Integer)
+    if (params[:new_list_id][0] <= '9')
       params_list_id = params[:new_list_id]
     else
       params_list_id = List.where(name:params[:new_list_id]).first.id

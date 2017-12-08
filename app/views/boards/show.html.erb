@@ -37,7 +37,7 @@
     </div>
 
     <%= link_to 'New List', new_list_path(board_id:@board.id) %>
-    <br>
+    <button id="button-console">Open Console</button>
     <%= link_to 'Edit', edit_board_path(@board) %> |
     <%= link_to 'Back', root_path %>
     <br>
@@ -188,80 +188,18 @@
 
 
 </div>
-<div class="terminal">
+<div class="terminal" style = "position:fixed; bottom: 0px;right: 0px;">
 
 </div>
 
 <script>
-$(".side-menu").click(function(){
-  $(".side-menu").hide();
+$(document).ready(function(){
+    $(".terminal").hide();
+    $("#button-console").click(function(){
+        $(".terminal").toggle();
+    });
 });
 
-
-
-(function($) {
-    $.extend_if_has = function(desc, source, array) {
-        for (var i=array.length;i--;) {
-            if (typeof source[array[i]] != 'undefined') {
-                desc[array[i]] = source[array[i]];
-            }
-        }
-        return desc;
-    };
-    $.fn.dterm = function(interpeter, options) {
-        var defaults = Object.keys($.terminal.defaults);
-        var op = $.extend_if_has({}, options, defaults);
-
-        var term = this.append('<div/>').
-              terminal(interpeter, op);
-        if (!options.title) {
-            options.title = 'JQuery Terminal Emulator';
-        }
-        if (options.logoutOnClose) {
-            options.close = function(e, ui) {
-                term.logout();
-                term.clear();
-            };
-        } else {
-            options.close = function(e, ui) {
-                term.focus(false);
-            };
-        }
-        var self = this;
-        if (window.IntersectionObserver) {
-            var visibility_observer = new IntersectionObserver(function() {
-                if (self.is(':visible')) {
-                    terminal.enable().resize();
-                } else {
-                    self.disable();
-                }
-            }, {
-                root: document.body
-            });
-            visibility_observer.observe(terminal[0]);
-        }
-        this.dialog($.extend({}, options, {
-            resizeStop: function() {
-                var content = self.find('.ui-dialog-content');
-                terminal.resize(content.width(), content.height());
-            },
-            open: function(event, ui) {
-                if (!window.IntersectionObserver) {
-                    setTimeout(function() {
-                        terminal.enable().resize();
-                    }, 100);
-                }
-                if (typeof options.open == 'function') {
-                    options.open(event, ui);
-                }
-            },
-            show: 'fade',
-            closeOnEscape: false
-        }));
-        self.terminal = terminal;
-        return self;
-    };
-})(jQuery);
 
 jQuery(function($, undefined) {
   $('.terminal').terminal({
@@ -293,6 +231,13 @@ jQuery(function($, undefined) {
           }
         });
       },
+
+      help: function(){
+        this.echo("id_on : show all cards' id.");
+        this.echo("id_off : hide all cards' id.");
+        this.echo("move [card_id] [list_name] : move cards to a specified list ");
+
+      },
       calc: {
           add: function(a, b) {
               this.echo(a+b);
@@ -302,10 +247,11 @@ jQuery(function($, undefined) {
           }
       }
   }, {
-        greetings: 'This is MyJira Console.',
+        greetings: 'This is MyJira Console. Type "help" to get more commands. ',
         name: 'js_demo',
         height: 200,
         width: 450,
+
         prompt: 'MyJira> '});
 });
 </script>
