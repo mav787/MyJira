@@ -76,12 +76,13 @@ class CardsController < ApplicationController
   # POST /cards.json
   def create
     pars = params[:card]
-    @tags = pars[:tagst].split(',')
+    #@tags = pars[:tagst].split(',')
     @card = Card.new(card_params)
     @card.card_order = Card.where(list_id:params[:card][:list_id]).count+1
     @board = Board.find(List.find(pars[:list_id]).board.id)
     respond_to do |format|
       if @card.save
+=begin
         @tags.each do |tag_name|
           tag = Tag.find_by_name(tag_name)
           if (tag == nil)
@@ -90,8 +91,14 @@ class CardsController < ApplicationController
           end
           CardTagAssociation.create(card_id: @card.id, tag_id: tag.id)
         end
+=end
+ActionCable.server.broadcast "team_#{@card.list.board.id}_channel",
+                             event: "create_card",
+                             card: @card,
+                             tag: @card.tags,
+                             list:@card.list
         format.html { redirect_to @board, notice: 'Card was successfully created.' }
-        format.json { render :show, status: :created, location: @card }
+        format.json { render json: {list_id:@card.list.id}}
       else
         format.html { render :new }
         format.json { render json: @card.errors, status: :unprocessable_entity }

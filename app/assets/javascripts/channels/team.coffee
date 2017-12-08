@@ -43,4 +43,15 @@ jQuery(document).on 'turbolinks:load', ->
             html = html.concat('<span class="at-user">@'+data.to_user_name+'</span>')
           html = html.concat('<span class="comment">'+data.context+'</span></div></div>');
           $('#modal-card-id[data-card-id="'+data.card_id+'"]').find('.comments-list').append(html)
+        else if data.event == "create_card"
+          html = ""
+          html = html.concat('<div class="card-container" list_id="'+data+'">')
+          html = html.concat('<div class="card" card_id="'+data.card.id+'">')
+          html = html.concat('<span class="hidden-id hide">ID: '+data.card.id+'</span>')
+          html = html.concat('<div class="card-out-tag-container">')
+          html = html.concat('</div><div style="clear:both;"></div><span>Content:</span>'+data.card.content+'<br/>')
+          if data.list.name == "doing" || data.list.name == "done"
+            html = html.concat('<span>Start at:</span>'+data.card.startdate+'<br/>')
+          html = html.concat('<span>Deadline:</span>'+data.card.deadline+'<br/></div></div>')
+          $('.card-container[list_id='+data.list.id+']').append(html)
         # Called when there's incoming data on the websocket for this channel

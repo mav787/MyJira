@@ -76,7 +76,17 @@
         </div>
         <% end %>
       </div>
-      <%= link_to 'New Card', new_card_path(list_id:list.id), class: "new-card"%>
+      <% if list.name != "doing" && list.name != "done"%>
+        <div class="show-new-card" data-list-id="<%= list.id %>">
+          <span class="show-new-card-button" data-list-id="<%= list.id %>">create a new card...</span>
+          <div class="new-card-submit-form hide">
+            <textarea class="new-card-content" placeholder="put your card name here"></textarea>
+            <input type="date" class="new-card-deadline">
+            <button type="button" class="btn btn-success create-card-button" data-list-id="<%= list.id %>">Create Card</button>
+          </div>
+        </div>
+      <% end %>
+      <!-- <%= link_to 'New Card', new_card_path(list_id:list.id), class: "new-card"%> -->
     </div>
   <% end %>
   <!-- card edit modal
