@@ -84,7 +84,7 @@ class CardsController < ApplicationController
     end
   end
 
-  def self.move
+  def move
     if (params[:new_list_id].is_a?Integer)
       params_list_id = params[:new_list_id]
     else
