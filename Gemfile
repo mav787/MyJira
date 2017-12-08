@@ -87,7 +87,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 # # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
 # # Use Redis adapter to run Action Cable in production
-# # gem 'redis', '~> 3.0'
+gem 'redis', '~> 3.0'
 # # Use ActiveModel has_secure_password
 # # gem 'bcrypt', '~> 3.1.7'
 #
