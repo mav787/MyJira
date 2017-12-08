@@ -85,13 +85,9 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 # # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 # gem 'turbolinks', '~> 5'
 # # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-# gem 'jbuilder', '~> 2.5'
+# gem 'jbuilder', r'~> 2.5'
 # # Use Redis adapter to run Action Cable in production
-<<<<<<< HEAD
 # gem 'redis', '~> 3.0'
-=======
-# # gem 'redis', '~> 3.0'
->>>>>>> parent of 638a521... try add redies gem
 # # Use ActiveModel has_secure_password
 # # gem 'bcrypt', '~> 3.1.7'
 #
