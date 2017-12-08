@@ -12,7 +12,7 @@ class EmailProcessor
     done_list = List.where("board_id = ?", board.id).where("name = ?", "done").first
     doing_list = List.where("board_id = ?", board.id).where("name = ?", "doing").first
 
-    if (token_task_recipient_id != 0)
+    if (token_recipient_id != 0)
       comment = Comment.create(context: @email.body, from_user_id: author.id, card_id: token_task_id, to_user_id: token_recipient_id)
       n = Notification.create(recipient_id: token_recipient_id, comment_id: comment.id, card_id: token_task_id, read: false, source: "comment")
       CommentMailer.comment_note(n.recipient, n).deliver
