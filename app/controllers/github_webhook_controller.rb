@@ -9,7 +9,7 @@ class GithubWebhooksController < ActionController::Base
       board.lists.each do |l|
         l.cards.each do |card|
           if card.content == c["message"]
-            card.move(:card_id => card.id, :new_list_id => done_list.id )
+            Card.move(:card_id => card.id, :new_list_id => done_list.id )
           end
         end
       end
