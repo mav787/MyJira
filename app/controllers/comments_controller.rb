@@ -28,11 +28,24 @@ class CommentsController < ApplicationController
     @comment = Comment.new(comment_params)
     @card = Card.find(params[:comment][:card_id])
     @comment.from_user_id = current_user.id
+    to_user_name = ""
     respond_to do |format|
       if @comment.save
-        n = Notification.new(recipient_id: comment_params[:to_user_id], comment_id: @comment.id, card_id: @card.id, read: false, source: "comment")
-        n.save
-        CommentMailer.comment_note(n.recipient, n).deliver
+        if(@comment.to_user_id != nil)
+          n = Notification.new(recipient_id: comment_params[:to_user_id], comment_id: @comment.id, card_id: @card.id, read: false, source: "comment")
+          n.save
+          CommentMailer.comment_note(n.recipient, n).deliver
+          to_user_name = User.find(@comment.to_user_id).name
+        end
+        ActionCable.server.broadcast "team_#{@card.list.board.id}_channel",
+                                     event: "create_comment",
+                                     card_id: @card.id,
+                                     context: @comment.context,
+                                     from_user_id: @comment.from_user_id,
+                                     from_user_name: User.find(@comment.from_user_id).name,
+                                     to_user_id: @comment.to_user_id,
+                                     to_user_name: to_user_name,
+                                     created_at: @comment.created_at
         format.html { redirect_to @comment, notice: 'Comment was successfully created.' }
         format.json { render :show, status: :created, location: @comment }
       else

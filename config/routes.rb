@@ -37,8 +37,9 @@ Rails.application.routes.draw do
   get 'searchresult', to: 'cards#searchmember'
   get 'search_for_assign', to: 'users#search_for_assign'
   get 'addmember', to: 'cards#addmember'
-
+  post 'addmember.json', to: 'cards#addmember'
   get 'delmember', to: 'cards#deletemember'
+  post 'delmember.json', to: 'cards#deletemember'
   root 'application#hello'
   get '/signup', to: 'users#new'
   post '/signup', to: 'users#create'
@@ -53,4 +54,7 @@ Rails.application.routes.draw do
 
   post '/card/move', to: 'cards#move'
   get '/card/show_modal.json', to: 'cards#show_modal'
+  post '/card/edit_description.json', to: 'cards#edit_description'
+  post '/tag/bind.json', to: 'tags#bind'
+  post '/tag/unbind.json', to: 'tags#unbind'
 end

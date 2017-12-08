@@ -35,8 +35,19 @@ class CardsController < ApplicationController
 
   def show_modal
     @card = Card.find(params["card_id"])
+
+    card_attributes = @card.as_json
+    card_attributes['tags'] = @card.tags.as_json
+    card_attributes['members'] = @card.users.as_json
+    card_attributes['comments'] = @card.comments.as_json
+    card_attributes['comments'].each do |comment|
+      comment['from_user_name'] = User.find(comment['from_user_id'].to_i).name
+      if comment['to_user_id'] != nil
+        comment['to_user_name'] = User.find(comment['to_user_id'].to_i).name
+      end
+    end
     respond_to do |format|
-      format.json { render json: @card}
+      format.json { render json: card_attributes}
     end
   end
 
@@ -54,12 +65,6 @@ class CardsController < ApplicationController
   # POST /cards
   # POST /cards.json
   def create
-=begin
-@card = Card.new(card_params)
-@card.card_order = Card.where(list_id:params[:card][:list_id]).count+1
-@list = List.find(params[:card][:list_id])
-@board = Board.find(@list.board.id)
-=end
     pars = params[:card]
     @tags = pars[:tagst].split(',')
     @card = Card.new(card_params)
@@ -70,7 +75,7 @@ class CardsController < ApplicationController
         @tags.each do |tag_name|
           tag = Tag.find_by_name(tag_name)
           if (tag == nil)
-            tag = Tag.new(name: tag_name, color: 'default')
+            tag = Tag.new(name: tag_name, color: 0, board_id: @board.id)
             tag.save
           end
           CardTagAssociation.create(card_id: @card.id, tag_id: tag.id)
@@ -116,6 +121,7 @@ class CardsController < ApplicationController
     end
     #$("div[card_id='1']")
     ActionCable.server.broadcast "team_#{moving_card.list.board.id}_channel",
+                                 event: "move_card",
                                  card_id: moving_card.id,
                                  list_id: moving_card.list.id,
                                  order: moving_card.card_order
@@ -134,17 +140,50 @@ class CardsController < ApplicationController
     card = Card.find(params[:card_id])
     if card.users.include? new_member
       flash[:danger] = "User has been enrolled!"
-      redirect_to searchresult_path(card_id: params[:card_id])
     else
       card.users << new_member
+      card.save
     end
-    redirect_to root_path#board_path(id:params[:board])
+    ActionCable.server.broadcast "team_#{card.list.board.id}_channel",
+                                 event: "add_member_to_card",
+                                 card_id: card.id,
+                                 user_id: new_member.id,
+                                 user_name: new_member.name
+    respond_to do |format|
+      format.json { render json: {status: "success",member_id: new_member.id}}
+    end
+
   end
 
   def deletemember
     CardEnrollment.delete(CardEnrollment.where(card_id:params[:card_id],user_id:params[:todeleteuser_id].to_i))
-    redirect_to searchresult_path(card_id: params[:card_id])
+    #redirect_to searchresult_path(card_id: params[:card_id])
+    card = Card.find(params[:card_id])
+    user = User.find(params[:todeleteuser_id])
+    ActionCable.server.broadcast "team_#{card.list.board.id}_channel",
+                                 event: "delete_member_from_card",
+                                 card_id: card.id,
+                                 user_id: user.id,
+                                 user_name: user.name
+    respond_to do |format|
+      format.json { render json: {status: "success",member_id: params[:todeleteuser_id]}}
+    end
+  end
 
+  def edit_description
+    card = Card.find(params[:card_id])
+    card.description = params[:description]
+    respond_to do |format|
+      if card.save
+        ActionCable.server.broadcast "team_#{card.list.board.id}_channel",
+                                     event: "edit_card_description",
+                                     card_id: card.id,
+                                     description: card.description
+        format.json { render json: {status: "success"}}
+      else
+        format.json { render json: {status: "failed"}}
+      end
+    end
   end
 
 

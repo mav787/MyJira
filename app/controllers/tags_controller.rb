@@ -25,18 +25,53 @@ class TagsController < ApplicationController
   # POST /tags.json
   def create
     @tag = Tag.new(tag_params)
-
     respond_to do |format|
       if @tag.save
-        format.html { redirect_to @tag, notice: 'Tag was successfully created.' }
+        CardTagAssociation.create(card_id: params['card_id'], tag_id: @tag.id)
+        ActionCable.server.broadcast "team_#{@tag.board_id}_channel",
+                                     event: "create_tag",
+                                     card_id: params['card_id'],
+                                     tag_id: @tag.id,
+                                     tag_name: @tag.name,
+                                     tag_color: @tag.color
         format.json { render :show, status: :created, location: @tag }
       else
-        format.html { render :new }
         format.json { render json: @tag.errors, status: :unprocessable_entity }
       end
     end
   end
 
+  def bind
+    tag = Tag.find(params['tag_id'].to_i)
+    CardTagAssociation.create(card_id: params['card_id'], tag_id: params['tag_id'])
+    ActionCable.server.broadcast "team_#{tag.board_id}_channel",
+                                 event: "bind_tag",
+                                 card_id: params['card_id'],
+                                 tag_id: params['tag_id'],
+                                 tag_name: tag.name,
+                                 tag_color: tag.color
+    respond_to do |format|
+      format.json { render json: {status: 'success', tag_id: params['tag_id']} }
+    end
+  end
+
+  def unbind
+    card_tag = CardTagAssociation.where(card_id: params['card_id'], tag_id: params['tag_id'])[0]
+    if card_tag != nil
+      card_tag.destroy
+      card_tag.save
+    end
+    tag = Tag.find(params['tag_id'].to_i)
+    ActionCable.server.broadcast "team_#{tag.board_id}_channel",
+                                 event: "unbind_tag",
+                                 card_id: params['card_id'],
+                                 tag_id: params['tag_id'],
+                                 tag_name: tag.name,
+                                 tag_color: tag.color
+    respond_to do |format|
+      format.json { render json: {status: 'success', tag_id: params['tag_id']} }
+    end
+  end
   # PATCH/PUT /tags/1
   # PATCH/PUT /tags/1.json
   def update
@@ -69,6 +104,6 @@ class TagsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def tag_params
-      params.require(:tag).permit(:name, :color)
+      params.permit(:name, :color, :board_id)
     end
 end

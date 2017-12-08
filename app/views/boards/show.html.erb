@@ -55,9 +55,13 @@
         <% list.cards.order(:card_order).each do |card| %>
         <div class="card" card_id="<%= card.id%>">
           <span class="hidden-id hide">ID: <%=card.id%></span>
+          <div class="card-out-tag-container">
           <% card.tags.each do |tag| %>
-            <%= tag.name %>
-          <%end%><br/>
+            <span class="card-tag-color-label tag outside-tag" data-color-id="<%= tag.color%>" data-tag-id="<%= tag.id%>"><%= tag.name %></span>
+          <%end%>
+
+          </div>
+          <div style="clear:both;"></div>
           <span>Content:</span>
           <%= link_to card.content, card_path(card)%><br/>
           <%if ['doing','done'].include? list.name %>
@@ -96,15 +100,15 @@
   </div>-->
 
   <button id="modal-button" class="hide" data-toggle="modal" data-target="#myModal"></button>
-  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
+  <div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog" id="modal-card-id" data-card-id="27">
           <div class="modal-content">
               <div class="modal-header">
                   <span class="head-icon"></span>
                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                   <h4 class="modal-title" id="myModalLabel">Modal Title</h4>
               </div>
-              <div class="modal-bod">
+              <div class="modal-body">
                 <div class="tags-container">
                   <span class="field">Tags:</span><div class="gap"></div>
                   <span class="tag" style="background-color: #5555dd;">test</span>
@@ -119,7 +123,7 @@
                   <div class="card-member"><span class="member-initials">Y</span></div>
                   <div class="card-member"><span class="member-initials">S</span></div>
                   <div class="card-member"><span class="member-initials">P</span></div>
-                  <button type="button" class="btn btn-grey btn-sm">
+                  <button id="show-members-modal" type="button" class="btn btn-grey btn-sm">
                     <span class="glyphicon glyphicon-plus"></span> Add
                   </button>
                 </div>
@@ -128,7 +132,7 @@
                   <button type="button"  id="edit-description">edit description</button>
                   <div class="description">this is the description</div>
                   <div class="edit-description-window hide">
-                    <textarea class="description-input-area" placeholder="put your description here" style="overflow: hidden; word-wrap: break-word; resize: none; height: 108px;"></textarea>
+                    <textarea id="description-input" class="description-input-area" placeholder="put your description here" style="overflow: hidden; word-wrap: break-word; resize: none; height: 108px;"></textarea>
                     <div class="edit-controls">
                       <button type="button" class="btn btn-success" id="save-edit-description">save</button>
                       <button type="button" class="btn btn-default" id="cancel-edit-description">cancel</button>
@@ -143,45 +147,160 @@
                       <span class="username">Jinli Yu</span>
                       <span class="sent-date">posted on 2017-10-10</span>
                       <div class="comment-content">
-                        <span class="left"></span>
+
                         <span class="at-user">@spencer</span>
                         <span class="comment">let's go out for fun!</span>
 
                       </div>
                     </div>
                   </div>
-                  <div class="new-comments"></div>
+                  <span class="field">Add Comment</span>
+                  <div class="new-comments">
+                    <div class="comment-box">
+                      <textarea id="comment-input" class="comment-box-input js-new-comment-input" placeholder="add your comment here..." tabindex="1" dir="auto" style="overflow: hidden; word-wrap: break-word; height: 75px;"></textarea>
+                      <div class="comment-box-options">
+                        <span class="icon-sm icon-mention" id="at-member-button"></span>
+                        <span id="at-member-name" data-user-id=""></span>
+                      </div>
+                    </div>
+                    <button type="button" class="btn btn-success" id="submit-new-comment">submit comment</button>
+                  </div>
                 </div>
 
-              </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary hide">Submit</button>
               </div>
           </div><!-- /.modal-content -->
       </div><!-- /.modal -->
   </div>
-  <div class="my-modal">
+
+  <div class="my-modal" id="tag-my-modal">  <!--tag modal-->
     <div class="modal-dialog edit-tag-modal" id="tag-modal-dialog" style="display:none;">
-      <div class="modal-content">
+      <div class="modal-content" id="tag-modal-content">
         <div class="modal-header">
                   <button type="button" class="close close-tag-modal">&times;</button>
                   <h4 class="modal-title">Edit Tags</h4>
         </div>
             <div class="modal-body">
-              <form data-remote="true" id="search-tag-form" action="/search/user" accept-charset="UTF-8" method="get"><input name="utf8" type="hidden" value="✓">
-                    <input type="text" placeholder="search tags here" name="tag_name" id="tag_name" value="" class="form-control">
-                    <input type="number" name="board_id" id="tag-board_id" value="7" style="display:none;">
-                    <input type="submit" name="commit" value="Search" id="tag-search-submit" style="display:none" data-disable-with="Search">
-              </form>
+
+              <div class="edit-tags-pop-over">
+                <div id="tag-list">
+                  <% @board.tags.each do |tag| %>
+                    <div class="tag-in-list">
+                      <span class="edit-tag"></span>
+                      <span class="card-tag mod-selectable card-tag-color-label" data-color-id="<%= tag.color%>" data-tag-id="<%= tag.id %>"><%= tag.name %><span class="icon-sm icon-check card-label-selectable-icon light"></span></span>
+                    </div>
+                  <%end%>
+
+                </div>
+                <div class="new-tag-button">
+                  <span>create a new tag</span>
+                </div>
+
+              </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default close-tag-modal">Close</button>
                 <button type="button" class="btn btn-primary hide">Submit</button>
             </div>
         </div>
+<!-------------------------------------------------------------------------------------->
+        <div class="modal-content hide" id="create-tag-modal-content">
+          <div class="modal-header">
+            <span type="button" id="back-to-taglist"></span>
+            <button type="button" class="hide close-tag-modal" id="close-create-tag-button"></button>
+                    <button type="button" class="close close-create-tag">&times;</button>
+                    <h4 class="modal-title">Create Tag</h4>
+          </div>
+              <div class="modal-body">
+                <div class="create-tag-form-wrap">
+                  <form class="edit-tag-form">
+                    <label for="tagName">tag name</label>
+                    <input id="tagName" name="name" type="text" class="input-text">
+                    <label for="tagColor">tag color</label>
+                    <div class="card-tag-color-label-wrap">
+                      <span class="card-tag-color-label card-tag-green card-tag-color-label-choose" data-color="green" data-color-id="1"></span>
+                      <span class="card-tag-color-label card-tag-yellow card-tag-color-label-choose" data-color="yellow" data-color-id="2"></span>
+                      <span class="card-tag-color-label card-tag-orange card-tag-color-label-choose" data-color="orange" data-color-id="3"></span>
+                      <span class="card-tag-color-label card-tag-red card-tag-color-label-choose" data-color="red" data-color-id="4"></span>
+                      <span class="card-tag-color-label card-tag-purple card-tag-color-label-choose" data-color="purple" data-color-id="5"></span>
+                      <span class="card-tag-color-label card-tag-blue card-tag-color-label-choose" data-color="blue" data-color-id="6"></span>
+                      <span class="card-tag-color-label card-tag-sky card-tag-color-label-choose" data-color="sky" data-color-id="7"></span>
+                      <span class="card-tag-color-label card-tag-lime card-tag-color-label-choose" data-color="lime" data-color-id="8"></span>
+                      <span class="card-tag-color-label card-tag-pink card-tag-color-label-choose" data-color="pink" data-color-id="9"></span>
+                      <span class="card-tag-color-label card-tag-black card-tag-color-label-choose" data-color="black" data-color-id="10"></span>
+                      <div style="clear:both;"></div>
+                    </div>
+
+                  </form>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="create-tag-button">Create tag</button>
+                <button type="button" class="btn btn-default close-tag-modal">Close</button>
+
+              </div>
+          </div>
+
     </div>
   </div>
+
+  <div class="my-modal" id="member-my-modal">  <!--member modal-->
+    <div class="modal-dialog edit-tag-modal" id="member-modal-dialog" style="display:none;">
+      <div class="modal-content" id="member-modal-content">
+        <div class="modal-header">
+                  <button type="button" class="close close-member-modal">&times;</button>
+                  <h4 class="modal-title">Edit Members</h4>
+        </div>
+            <div class="modal-body">
+
+              <div class="edit-members">
+                <% @board.users.each do |member| %>
+                <div class="member-in-list" data-user-id="<%= member.id%>">
+                  <div class="card-member">
+                    <span class="member-initials"><%= member.name[0].upcase%></span>
+                  </div>
+                  <span class="member-name"><%= member.name%></span>
+                  <div style="clear:both;"></div>
+                </div>
+                <%end%>
+              </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default close-tag-modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+  </div>
+
+  <div class="my-modal" id="comment-at-member-my-modal">  <!--comment modal-->
+    <div class="modal-dialog edit-tag-modal" id="comment-at-member-modal-dialog" style="display:none;">
+      <div class="modal-content" id="comment-at-member-modal-content">
+        <div class="modal-header">
+                  <button type="button" class="close close-comment-at-member-modal">&times;</button>
+                  <h4 class="modal-title">@ Members</h4>
+        </div>
+            <div class="modal-body">
+
+              <div class="edit-members">
+                <% @board.users.each do |member| %>
+                <div class="at-member-in-list" data-user-id="<%= member.id%>" data-user-name="<%= member.name%>">
+                  <div class="card-member">
+                    <span class="member-initials"><%= member.name[0].upcase%></span>
+                  </div>
+                  <span class="member-name"><%= member.name%></span>
+                  <div style="clear:both;"></div>
+                </div>
+                <%end%>
+
+              </div>
+            </div>
+        </div>
+
+    </div>
+  </div>
+
+<div id="tmp-html-store" class="hide"></div>
+
 <div id="tmp-card-container" class="hide"></div>
 
 
