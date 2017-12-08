@@ -2,9 +2,10 @@ class GithubWebhooksController < ActionController::Base
   include GithubWebhook::Processor
 
   def github_push
-    repo = params["full_name"]
-    board = Board.find_by_repo(repo)
-    done_list = List.where("board_id = ?", board.id).where("name = ?", "done")
+
+    repo = params["repository"]["full_name"]
+    board = Board.where("name =? ", repo).first
+    done_list = List.where("board_id = ?", board.id).where("name = ?", "done").first
     params["commits"].each do |c|
       board.lists.each do |l|
         l.cards.each do |card|
