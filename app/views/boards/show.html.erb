@@ -70,7 +70,6 @@
           <span>Deadline:</span><%= card.deadline %><br/>
           <!-- Members: -->
           <!-- <%= link_to 'Assign Member',searchresult_path(card_id:card.id) %></br> -->
-
           <!-- <% card.users.each do |user| %>
             <%= user.name%>
           <% end %><br/> -->
@@ -336,7 +335,35 @@ jQuery(function($, undefined) {
         $(".hidden-id").addClass("hide");
       },
 
+
+      newcard: function(arg1){
+        $(location).attr('href', 'http://localhost:3000/cards/new?list_id='+arg1)
+        // window.location("http://localhost:3000/cards/new?list_id="+arg1);
+        // $.get("/cards/new",{list_id: arg1});
+
+      },
+
       move:  function(arg1,arg2){
+        //alert(arg1+" "+arg2);
+        // for (i = 0; i < arg1.length;){
+        //   j = i;
+        //   while (j < arg1.length && arg1[j] >='0' && arg1[j] <= '9') j++;
+        //   num = Number(arg1.substr(i,j-i));
+        //   $.ajax({ url: '/card/move',
+        //     type: 'POST',
+        //     beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+        //     data: {
+        //       card_id: num,
+        //       new_list_id: arg2,// $(ui.item).parents('.card-container').attr("list_id"),
+        //       new_position:1,// $(ui.item).index()+1
+        //     },
+        //     success: function(data,status) {
+        //       //alert("数据: \n" + data + "\n状态: " + status);
+        //     }
+        //   });
+        //   i = j+1;
+        //
+        // }
         $.ajax({ url: '/card/move',
           type: 'POST',
           beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
@@ -355,8 +382,9 @@ jQuery(function($, undefined) {
         this.echo("id_on : show all cards' id.");
         this.echo("id_off : hide all cards' id.");
         this.echo("move [card_id] [list_name] : move cards to a specified list ");
-
+        this.echo("newcard [list_name] : create a card in a specified list");
       },
+
       calc: {
           add: function(a, b) {
               this.echo(a+b);

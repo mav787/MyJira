@@ -58,7 +58,13 @@ class CardsController < ApplicationController
   # GET /cards/new
   def new
     @card = Card.new
-    @list = List.find(params[:list_id])
+    if (params[:list_id][0] <= '9')
+      params_list_id = params[:list_id]
+    else
+      params_list_id = List.where(name:params[:list_id]).first.id
+    end
+
+    @list = List.find(params_list_id)
   end
 
   # GET /cards/1/edit
