@@ -342,6 +342,28 @@
 
     });
 
+    $('.show-new-card-button').click(function(){
+      $(this).addClass('hide');
+      $(this).siblings('.new-card-submit-form').removeClass('hide');
+    });
+    $('.create-card-button').click(function(){
+      $.ajax({ url: '/cards.json',
+        type: 'POST',
+        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+        data: {
+          card:{
+            list_id: $(this).attr('data-list-id'),
+            content: $(this).siblings('.new-card-content').val(),
+            deadline: $(this).siblings('.new-card-deadline').val()
+          }
+        },
+        success: function(data,status) {
+          //alert("data: \n" + data.id + "\nstatus: " + status);
+          $('.show-new-card-button[data-list-id='+data.list_id+']').removeClass('hide');
+          $('.show-new-card-button[data-list-id='+data.list_id+']').siblings('.new-card-submit-form').addClass('hide');
+        }
+      });
+    });
 
     colorTags();
   });
