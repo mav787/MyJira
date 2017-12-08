@@ -18,8 +18,6 @@ class CardsController < ApplicationController
     else
       @cards = []
     end
-
-    # @cards = Card.all
   end
 
   # GET /cards/1
@@ -107,7 +105,7 @@ class CardsController < ApplicationController
     end
     moving_card.card_order = params[:new_position]
     moving_card.list_id = params_list_id
-    if moving_card.list_id == 2
+    if new_list.name == 'doing'
        moving_card.startdate = Time.now
     end
     moving_card.save

@@ -101,8 +101,10 @@ class BoardsController < ApplicationController
   def stats
     @users = @board.users
     @cards = Card.joins("inner join lists on cards.list_id = lists.id").where(lists: {board_id: @board.id})
+    @finished_cards = @cards.where("cards.finished_at is not null")
     @user_cards = @cards.joins("join card_enrollments on card_enrollments.card_id = cards.id join users on card_enrollments.user_id = users.id")
     @ind_user_cards = Hash.new
+    @tag_cards = @cards.joins("inner join card_tag_associations on card_tag_associations.card_id = cards.id").joins("inner join tags on card_tag_associations.tag_id = tags.id")
     @users.each do |u|
       @ind_user_cards[u.id] = @user_cards.where(users: {id: u.id})
     end
