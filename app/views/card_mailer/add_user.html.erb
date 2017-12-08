@@ -1,0 +1,40 @@
+
+
+<table class="body-wrap">
+	<tr>
+		<td></td>
+		<td class="container" width="600">
+			<div class="content">
+				<table class="main" width="100%" cellpadding="0" cellspacing="0">
+					<tr>
+						<td class="content-wrap">
+							<table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+									<td class="content-block">
+										Hi <%= @user.name %>,
+									</td>
+								</tr>
+								<tr>
+									<td class="content-block">
+										You are assigned a new card <%= link_to @note.card.content, card_url(@note.card)%> in board <%= @note.card.list.board.name %> on MyJira.
+									</td>
+								</tr>
+								<tr>
+									<td class="content-block">
+										You can directly reply "doing" or "done" to this email to update the status of the task.
+									</td>
+								</tr>
+								<tr>
+									<td class="content-block">
+										&mdash; MyJira Team
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+				</div>
+		</td>
+		<td></td>
+	</tr>
+</table>
