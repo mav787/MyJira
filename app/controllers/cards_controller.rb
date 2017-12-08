@@ -121,6 +121,7 @@ class CardsController < ApplicationController
     end
     #$("div[card_id='1']")
     ActionCable.server.broadcast "team_#{moving_card.list.board.id}_channel",
+                                 event: "move_card",
                                  card_id: moving_card.id,
                                  list_id: moving_card.list.id,
                                  order: moving_card.card_order
@@ -143,6 +144,11 @@ class CardsController < ApplicationController
       card.users << new_member
       card.save
     end
+    ActionCable.server.broadcast "team_#{card.list.board.id}_channel",
+                                 event: "add_member_to_card",
+                                 card_id: card.id,
+                                 user_id: new_member.id,
+                                 user_name: new_member.name
     respond_to do |format|
       format.json { render json: {status: "success",member_id: new_member.id}}
     end
@@ -163,6 +169,13 @@ class CardsController < ApplicationController
   def deletemember
     CardEnrollment.delete(CardEnrollment.where(card_id:params[:card_id],user_id:params[:todeleteuser_id].to_i))
     #redirect_to searchresult_path(card_id: params[:card_id])
+    card = Card.find(params[:card_id])
+    user = User.find(params[:todeleteuser_id])
+    ActionCable.server.broadcast "team_#{card.list.board.id}_channel",
+                                 event: "delete_member_from_card",
+                                 card_id: card.id,
+                                 user_id: user.id,
+                                 user_name: user.name
     respond_to do |format|
       format.json { render json: {status: "success",member_id: params[:todeleteuser_id]}}
     end
@@ -173,6 +186,10 @@ class CardsController < ApplicationController
     card.description = params[:description]
     respond_to do |format|
       if card.save
+        ActionCable.server.broadcast "team_#{card.list.board.id}_channel",
+                                     event: "edit_card_description",
+                                     card_id: card.id,
+                                     description: card.description
         format.json { render json: {status: "success"}}
       else
         format.json { render json: {status: "failed"}}

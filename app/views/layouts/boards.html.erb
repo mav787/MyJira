@@ -64,13 +64,14 @@
 
           //alert("data: \n" + data.id + "\nstatus: " + status);
           $('#myModalLabel').html(data.content);
+          $('#modal-card-id').attr("data-card-id",data.id);
           var html = "";
           //var html2 = "";
           html = html.concat('<span class="field">Tags:</span><div class="gap"></div>');
           $('.card-tag').removeClass('selected');
           for(var index in data.tags){
             var tag = data.tags[index];
-            html = html.concat('<span class="tag card-tag-color-label" data-color-id="'+tag.color+'">'+tag.name+'</span>');
+            html = html.concat('<span class="tag card-tag-color-label" data-color-id="'+tag.color+'" data-tag-id="'+tag.id+'">'+tag.name+'</span>');
             //html2 = html2.concat('<div class="tag-in-list"><span class="edit-tag"></span><span class="card-tag mod-selectable card-tag-color-label active js-select-label" data-color-id="'+tag.color+'">'+tag.name+'<span class="icon-sm icon-check card-label-selectable-icon light"></span></span></div>');
             $('.card-tag[data-tag-id='+tag.id+']').addClass('selected');
           }
@@ -137,8 +138,8 @@
                 type: 'POST',
                 beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
                 data: {
-                  card_id: $('#modal-card-id').data("card-id"),
-                  tag_id: $(this).data('tag-id')
+                  card_id: $('#modal-card-id').attr('data-card-id'),
+                  tag_id: $(this).attr('data-tag-id')
                 },
                 success: function(data,status) {
                   $('.card-tag[data-tag-id='+data.tag_id+']').removeClass('selected');
@@ -150,8 +151,8 @@
                 type: 'POST',
                 beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
                 data: {
-                  card_id: $('#modal-card-id').data("card-id"),
-                  tag_id: $(this).data('tag-id')
+                  card_id: $('#modal-card-id').attr('data-card-id'),
+                  tag_id: $(this).attr('data-tag-id')
                 },
                 success: function(data,status) {
                   $('.card-tag[data-tag-id='+data.tag_id+']').addClass('selected');
@@ -164,13 +165,169 @@
               type: 'POST',
               beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
               data: {
-                card_id: $('#modal-card-id').data('card-id'),
+                card_id: $('#modal-card-id').attr('data-card-id'),
                 description: $("#description-input").val()
               },
               success: function(data,status) {
+                $('#cancel-edit-description').click();
+              }
+            });
+          });
+          $('#edit-description').click(function(){
+            $('.edit-description-window').removeClass('hide');
+            $('#edit-description').addClass('hide');
+            $('.description').addClass('hide');
+          });
+
+
+
+          $('#cancel-edit-description').click(function(){
+            $('.edit-description-window').addClass('hide');
+            $('#edit-description').removeClass('hide');
+            $('.description').removeClass('hide');
+          });
+
+
+
+          $('.close-tag-modal').click(function(){
+            $('.my-modal').css({
+              'display': 'none'
+            })
+           $('#tag-modal-dialog').fadeOut();
+          });
+
+          $('.new-tag-button').click(function(){
+            $('#tag-modal-content').addClass('hide');
+            $('#create-tag-modal-content').removeClass('hide');
+          });
+          $('.close-create-tag').click(function(){
+            $('#create-tag-modal-content').addClass('hide');
+            $('#tag-modal-content').removeClass('hide');
+            $('#close-create-tag-button').click();
+          });
+          $('#back-to-taglist').click(function(){
+            $('#create-tag-modal-content').addClass('hide');
+            $('#tag-modal-content').removeClass('hide');
+          });
+          $('.card-tag-color-label-choose').click(function(){
+            if(!$(this).hasClass('color-selected')){
+              $(this).siblings(".color-selected").removeClass('color-selected');
+              $(this).addClass('color-selected');
+            }
+          });
+
+          $('#create-tag-button').click(function(){
+            $.ajax({ url: '/tags',
+              type: 'POST',
+              beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+              data: {
+                name: $('#tagName').val(),
+                color: $('.color-selected').attr('data-color-id'),
+                board_id: $('#board-id').attr('data-board-id'),
+                card_id: $('#modal-card-id').attr('data-card-id')
+              },
+              success: function(data,status) {
+                $('.close-create-tag').click();
+                //alert("data: \n" + data.id + "\nstatus: " + status);
 
               }
             });
+          });
+
+
+          $("#submit-new-comment").click(function(){
+            if($('#comment-input').val()==""){
+              alert("write some comment before submit!");
+              return;
+            }
+            var to_user_id = $('#at-member-name').attr('data-user-id');
+            $.ajax({ url: '/comments.json',
+              type: 'POST',
+              beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+              data: {
+                comment: {
+                  context: $('#comment-input').val(),
+                  from_user_id: $("#user").attr("data-user-id"),
+                  card_id: $('#modal-card-id').attr('data-card-id'),
+                  to_user_id: to_user_id
+                }
+              },
+              success: function(data,status) {
+                //alert("data: \n" + data.id + "\nstatus: " + status);
+              }
+            });
+          });
+
+
+          $('.close-member-modal').click(function(){
+            $('.my-modal').css({
+              'display': 'none'
+            })
+           $('#member-modal-dialog').fadeOut();
+          });
+          $('.member-in-list').click(function(){
+            if($(this).hasClass('member-selected')){
+              $.ajax({ url: '/delmember.json',
+                type: 'POST',
+                beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+                data: {
+                    todeleteuser_id: $(this).attr("data-user-id"),
+                    card_id: $('#modal-card-id').attr('data-card-id')
+                },
+                success: function(data,status) {
+                  //alert("data: \n" + data.id + "\nstatus: " + status);
+                  $('.member-in-list[data-user-id='+data.member_id+']').removeClass('member-selected');
+                }
+              });
+            }
+            else{
+              $.ajax({ url: '/addmember.json',
+                type: 'POST',
+                beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+                data: {
+                    user_id: $(this).attr("data-user-id"),
+                    card_id: $('#modal-card-id').attr('data-card-id')
+                },
+                success: function(data,status) {
+                  //alert("data: \n" + data.id + "\nstatus: " + status);
+                  $('.member-in-list[data-user-id='+data.member_id+']').addClass('member-selected');
+                }
+              });
+            }
+          });
+          $('#at-member-button').click(function(){
+            $('#comment-at-member-modal-dialog').css({
+                 'margin-top': function () {
+                     return $('#at-member-button').offset().top-250;
+                 },
+                 'margin-left': function () {
+                     return $('#at-member-button').offset().left;
+                 }
+             });
+             $('#comment-at-member-my-modal').css({
+               'display': 'block'
+             })
+            $('#comment-at-member-modal-dialog').fadeIn();
+          });
+          $('.close-comment-at-member-modal').click(function(){
+            $('.my-modal').css({
+              'display': 'none'
+            })
+           $('#comment-at-member-modal-dialog').fadeOut();
+          });
+          $('.at-member-in-list').click(function(){
+            if($(this).hasClass('member-selected')){
+              $('.at-member-in-list').removeClass('member-selected');
+              $('#at-member-name').attr('data-user-id','');
+              $('#at-member-name').html('');
+            }
+            else{
+              $('.at-member-in-list').removeClass('member-selected');
+              $(this).addClass('member-selected');
+              $('#at-member-name').attr('data-user-id',$(this).attr('data-user-id'));
+              $('#at-member-name').html($(this).attr('data-user-name'));
+              $('.close-comment-at-member-modal').click();
+            }
           });
           colorTags();
           //$('#card-modal-body').html('<span>Deadline:</span>'+data.deadline+'<br/><a class="btn btn-default" href="/prerequisites_index?card_id='+data.id+'">Add Prerequisite</a><a class="btn btn-default" href="/comments/new?card_id='+data.id+'">Add Comment</a>');
@@ -180,162 +337,7 @@
 
     });
 
-    $('#edit-description').click(function(){
-      $('.edit-description-window').removeClass('hide');
-      $('#edit-description').addClass('hide');
-      $('.description').addClass('hide');
-    });
 
-
-
-    $('#cancel-edit-description').click(function(){
-      $('.edit-description-window').addClass('hide');
-      $('#edit-description').removeClass('hide');
-      $('.description').removeClass('hide');
-    });
-
-
-
-    $('.close-tag-modal').click(function(){
-      $('.my-modal').css({
-        'display': 'none'
-      })
-     $('#tag-modal-dialog').fadeOut();
-    });
-
-    $('.new-tag-button').click(function(){
-      $('#tag-modal-content').addClass('hide');
-      $('#create-tag-modal-content').removeClass('hide');
-    });
-    $('.close-create-tag').click(function(){
-      $('#create-tag-modal-content').addClass('hide');
-      $('#tag-modal-content').removeClass('hide');
-      $('#close-create-tag-button').click();
-    });
-    $('#back-to-taglist').click(function(){
-      $('#create-tag-modal-content').addClass('hide');
-      $('#tag-modal-content').removeClass('hide');
-    });
-    $('.card-tag-color-label-choose').click(function(){
-      if(!$(this).hasClass('color-selected')){
-        $(this).siblings(".color-selected").removeClass('color-selected');
-        $(this).addClass('color-selected');
-      }
-    });
-
-    $('#create-tag-button').click(function(){
-      $.ajax({ url: '/tags',
-        type: 'POST',
-        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-        data: {
-          name: $('#tagName').val(),
-          color: $('.color-selected').data('color-id'),
-          board_id: $('#board-id').data('board-id'),
-          card_id: $('#modal-card-id').data('card-id')
-        },
-        success: function(data,status) {
-
-          //alert("data: \n" + data.id + "\nstatus: " + status);
-
-        }
-      });
-    });
-
-
-    $("#submit-new-comment").click(function(){
-      if($('#comment-input').val()==""){
-        alert("write some comment before submit!");
-        return;
-      }
-      var to_user_id = $('#at-member-name').data('user-id');
-      $.ajax({ url: '/comments.json',
-        type: 'POST',
-        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-        data: {
-          comment: {
-            context: $('#comment-input').val(),
-            from_user_id: $("#user").data("user-id"),
-            card_id: $('#modal-card-id').data('card-id'),
-            to_user_id: to_user_id
-          }
-        },
-        success: function(data,status) {
-          //alert("data: \n" + data.id + "\nstatus: " + status);
-        }
-      });
-    });
-
-
-    $('.close-member-modal').click(function(){
-      $('.my-modal').css({
-        'display': 'none'
-      })
-     $('#member-modal-dialog').fadeOut();
-    });
-    $('.member-in-list').click(function(){
-      if($(this).hasClass('member-selected')){
-        $.ajax({ url: '/delmember.json',
-          type: 'POST',
-          beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-          data: {
-              todeleteuser_id: $(this).data("user-id"),
-              card_id: $('#modal-card-id').data('card-id')
-          },
-          success: function(data,status) {
-            //alert("data: \n" + data.id + "\nstatus: " + status);
-            $('.member-in-list[data-user-id='+data.member_id+']').removeClass('member-selected');
-          }
-        });
-      }
-      else{
-        $.ajax({ url: '/addmember.json',
-          type: 'POST',
-          beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-          data: {
-              user_id: $(this).data("user-id"),
-              card_id: $('#modal-card-id').data('card-id')
-          },
-          success: function(data,status) {
-            //alert("data: \n" + data.id + "\nstatus: " + status);
-            $('.member-in-list[data-user-id='+data.member_id+']').addClass('member-selected');
-          }
-        });
-      }
-    });
-    $('#at-member-button').click(function(){
-      $('#comment-at-member-modal-dialog').css({
-           'margin-top': function () {
-               return $('#at-member-button').offset().top-250;
-           },
-           'margin-left': function () {
-               return $('#at-member-button').offset().left;
-           }
-       });
-       $('#comment-at-member-my-modal').css({
-         'display': 'block'
-       })
-      $('#comment-at-member-modal-dialog').fadeIn();
-    });
-    $('.close-comment-at-member-modal').click(function(){
-      $('.my-modal').css({
-        'display': 'none'
-      })
-     $('#comment-at-member-modal-dialog').fadeOut();
-    });
-    $('.at-member-in-list').click(function(){
-      if($(this).hasClass('member-selected')){
-        $('.at-member-in-list').removeClass('member-selected');
-        $('#at-member-name').attr('data-user-id','');
-        $('#at-member-name').html('');
-      }
-      else{
-        $('.at-member-in-list').removeClass('member-selected');
-        $(this).addClass('member-selected');
-        $('#at-member-name').attr('data-user-id',$(this).data('user-id'));
-        $('#at-member-name').html($(this).data('user-name'));
-        $('.close-comment-at-member-modal').click();
-      }
-    });
     colorTags();
   });
 
@@ -350,6 +352,37 @@
     $(".card-tag-color-label[data-color-id=8]").addClass('card-tag-lime');
     $(".card-tag-color-label[data-color-id=9]").addClass('card-tag-pink');
     $(".card-tag-color-label[data-color-id=10]").addClass('card-tag-black');
+  };
+
+  var cardTagClick = function(){
+    $('.card-tag').click(function(){
+      if($(this).hasClass('selected')){
+        $.ajax({ url: '/tag/unbind.json',
+          type: 'POST',
+          beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+          data: {
+            card_id: $('#modal-card-id').attr('data-card-id'),
+            tag_id: $(this).attr('data-tag-id')
+          },
+          success: function(data,status) {
+            $('.card-tag[data-tag-id='+data.tag_id+']').removeClass('selected');
+          }
+        });
+      }
+      else{
+        $.ajax({ url: '/tag/bind.json',
+          type: 'POST',
+          beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+          data: {
+            card_id: $('#modal-card-id').attr('data-card-id'),
+            tag_id: $(this).attr('data-tag-id')
+          },
+          success: function(data,status) {
+            $('.card-tag[data-tag-id='+data.tag_id+']').addClass('selected');
+          }
+        });
+      }
+    });
   };
     </script>
   </body>

@@ -53,12 +53,13 @@
       <div class="card-container" list_id="<%= list.id%>">
         <% list.cards.order(:card_order).each do |card| %>
         <div class="card" card_id="<%= card.id%>">
-          <div>
+          <div class="card-out-tag-container">
           <% card.tags.each do |tag| %>
-            <span class="card-tag-color-label tag outside-tag" data-color-id="<%= tag.color%>"><%= tag.name %></span>
+            <span class="card-tag-color-label tag outside-tag" data-color-id="<%= tag.color%>" data-tag-id="<%= tag.id%>"><%= tag.name %></span>
           <%end%>
-          <div style="clear:both;"></div>
+
           </div>
+          <div style="clear:both;"></div>
           <span>Content:</span>
           <%= link_to card.content, card_path(card)%><br/>
           <%if ['doing','done'].include? list.name %>
@@ -99,8 +100,7 @@
 
   <button id="modal-button" class="hide" data-toggle="modal" data-target="#myModal"></button>
   <div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div id="modal-card-id" data-card-id="27" class="hide"></div>
+      <div class="modal-dialog" id="modal-card-id" data-card-id="27">
           <div class="modal-content">
               <div class="modal-header">
                   <span class="head-icon"></span>

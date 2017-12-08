@@ -28,6 +28,12 @@ class TagsController < ApplicationController
     respond_to do |format|
       if @tag.save
         CardTagAssociation.create(card_id: params['card_id'], tag_id: @tag.id)
+        ActionCable.server.broadcast "team_#{@tag.board_id}_channel",
+                                     event: "create_tag",
+                                     card_id: params['card_id'],
+                                     tag_id: @tag.id,
+                                     tag_name: @tag.name,
+                                     tag_color: @tag.color
         format.json { render :show, status: :created, location: @tag }
       else
         format.json { render json: @tag.errors, status: :unprocessable_entity }
@@ -36,7 +42,14 @@ class TagsController < ApplicationController
   end
 
   def bind
+    tag = Tag.find(params['tag_id'].to_i)
     CardTagAssociation.create(card_id: params['card_id'], tag_id: params['tag_id'])
+    ActionCable.server.broadcast "team_#{tag.board_id}_channel",
+                                 event: "bind_tag",
+                                 card_id: params['card_id'],
+                                 tag_id: params['tag_id'],
+                                 tag_name: tag.name,
+                                 tag_color: tag.color
     respond_to do |format|
       format.json { render json: {status: 'success', tag_id: params['tag_id']} }
     end
@@ -44,8 +57,17 @@ class TagsController < ApplicationController
 
   def unbind
     card_tag = CardTagAssociation.where(card_id: params['card_id'], tag_id: params['tag_id'])[0]
-    card_tag.destroy
-    card_tag.save
+    if card_tag != nil
+      card_tag.destroy
+      card_tag.save
+    end
+    tag = Tag.find(params['tag_id'].to_i)
+    ActionCable.server.broadcast "team_#{tag.board_id}_channel",
+                                 event: "unbind_tag",
+                                 card_id: params['card_id'],
+                                 tag_id: params['tag_id'],
+                                 tag_name: tag.name,
+                                 tag_color: tag.color
     respond_to do |format|
       format.json { render json: {status: 'success', tag_id: params['tag_id']} }
     end

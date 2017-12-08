@@ -211,6 +211,36 @@
 .card-tag-black {
     background-color: #4d4d4d;
 }
+.card-tag-color-1 {
+    background-color: #61bd4f;
+}
+.card-tag-color-2 {
+    background-color: #f2d600;
+}
+.card-tag-color-3 {
+    background-color: #ffab4a;
+}
+.card-tag-color-4 {
+    background-color: #eb5a46;
+}
+.card-tag-color-5 {
+    background-color: #c377e0;
+}
+.card-tag-color-6 {
+    background-color: #0079bf;
+}
+.card-tag-color-7 {
+    background-color: #00c2e0;
+}
+.card-tag-color-8 {
+    background-color: #51e898;
+}
+.card-tag-color-9 {
+    background-color: #ff80ce;
+}
+.card-tag-color-10 {
+    background-color: #4d4d4d;
+}
 .edit-tag{
   background-image: image-url("icons8-edit-50.png");
   background-repeat: no-repeat;
@@ -382,4 +412,8 @@ position: relative;
 }
 .outside-tag{
   padding: 4px 6px !important;
+}
+.card-out-tag-container::after{
+  content: "";
+  clear: both;
 }
