@@ -42,6 +42,8 @@
     <%= link_to 'Back', root_path %>
     <br>
     <%= link_to 'Stats', board_stats_path(id:@board.id) %>
+    <br>
+    <%= link_to 'Github webhook configuration guide', gitconfig_path(id:@board.id) %>
   </div>
 </div>
 <div class="container">

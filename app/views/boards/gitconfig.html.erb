@@ -1,0 +1,41 @@
+<% provide(:title, "Github push webhook configuration guide") %>
+<p id="notice"><%= notice %></p>
+<div class="container">
+  <div class="jumbotron">
+    <% if logged_in? %>
+      <h2 style="text-align: center;"> Set up the webhook on Github </h2>
+      <%= link_to 'Back to board', @board %>
+      <ol>
+        <li>
+          <p style="line-height: 200%;">
+            Navigate to your repository on Github, and open the Settings.
+            <%= image_tag("github1.png", style: 'max-width:100%;') %>
+          </p>
+        </li>
+        <li>
+          <p style="line-height: 200%;">
+            Select add webhook.
+            <%= image_tag("github2.png", style: 'max-width:100%;') %>
+          </p>
+        </li>
+        <li>
+          <p style="line-height: 200%;">
+            Paste <span class="copytext">"https://my-jira-heroku.herokuapp.com/github_webhooks"</span> into the Payload URL box,
+            select <span class="copytext">"application/json"</span> in the dropdown box for Content type,
+            and enter <span class="copytext">"a_gr34t_s3cr3t"</span> for the Secret box.
+            Select <span class="copytext">"Just the push event"</span>, and click <span class="copytext">"Add webhook"</span>.
+            <%= image_tag("github3.png", style: 'max-width:100%;') %>
+          </p>
+        </li>
+        <li>
+          <p style="line-height: 200%;">
+            Now when you push a commit with the commit message matching a "doing" card's content,
+            the card will be moved to "done" automatically.
+          </p>
+        </li>
+      </ol>
+    <% else %>
+      <h3 class="center"> Please log in first and make sure you're enrolled in the board!</h3>
+    <% end %>
+  </div>
+</div>

@@ -138,7 +138,7 @@
                     <div>
                       <% all_cards = @user_cards.where("users.name = ?", u.name).where("cards.finished_at is null").where("cards.deadline > ?", Time.now).order("cards.deadline") %>
                       <% if !all_cards.empty? %>
-                        <table>
+                        <table class="analysis-table">
                           <tr>
                             <th>Content</th>
                             <th>Deadline</th>
@@ -223,7 +223,7 @@
 
 
       <% else %>
-        <h3 class="center"> Please log in first!</h3>
+        <h3 class="center"> Please log in first and make sure you're enrolled in the board!</h3>
       <% end %>
   </div>
 </div>

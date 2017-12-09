@@ -20,9 +20,11 @@ Rails.application.routes.draw do
   end
 
   get '/git/board', to: 'boards#git'
+  get '/gitconfig', to: 'boards#gitconfig'
   post '/github_webhooks', to: 'github_webhooks#github_push', defaults: { formats: :json }
-
   post '/email_processor', to:'griddler/emails#create'
+
+
   resources :sessions, only: [:create,:destroy]
   resources :application, only: [:hello]
 

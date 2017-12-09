@@ -185,20 +185,24 @@
     width: initial;
     box-sizing: border-box;
 }
-table {
+.analysis-table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
     width: 100%;
 }
 
-td, th {
+.analysis-table td, th {
     border: 1px solid #dddddd;
     text-align: left;
     padding: 8px;
 }
 
-tr:nth-child(even) {
+.analysis-table tr:nth-child(even) {
     background-color: #dddddd;
+}
+
+.copytext {
+  font-family: 'Courier New', Courier, monospace;
 }
 
 .edit-tags-pop-over {
