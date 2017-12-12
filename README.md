@@ -13,33 +13,43 @@
 
 ## How did we make MyJira?
 
-* Action Cable
+- [x] Action Cable
+
 We provide every team board with a unique channel, which allows team members to receive information update automatically as long as they opened the board page and subscribed the channel. 
 
-* JQuery Draggable Widget
+- [x] JQuery Draggable Widget
+
 We made our cards draggable using JQuery draggable widget. We bind the dragging events with recall functions, which can be used to make HTTP request with ajax and update the position of card.
 
-* Rails ActionMailer
+- [x] Rails ActionMailer
+
 We used the ActionMailer class in Rails to implement the feature of sending emails to users. By setting up different mailer models and views for each model, we accomplished the feature of sending different emails to users when triggered by different events.
 
-* Postmark Inbound Email Server
+- [x] Postmark Inbound Email Server
+
 We used the inbound webhook feature of Postmark app. By configuring the inbound webhook address to the route to our application’s email processor class, every time when an email sent to the email address id Postmark has given us, the email will be converted to JSON data and be posted to our server.
 
-* Griddler Email Parsing
+- [x] Griddler Email Parsing
+
 Griddler is a Rails engine that provides an endpoint for services that convert incoming emails to HTTP POST requests. It parses these POSTs and hands off a built email object to an email processor model class that we created.
 
-* Chartkick Smart Chart Generator
+- [x] Chartkick Smart Chart Generator
+
 Chartkick is a Ruby gem that helps generate Javascript charts with only one line of Ruby code. It helped us present clear and precise statistics visualization to our users about their projects.
 
-* Github Statistics API
+- [x] Github Statistics API
+
 Github 's statistics API returns JSON data containing each contributor’s activity broken down to the commit number, added lines and deleted lines by week. We use this API to offer a visualization of a project’s github contributions.
 
-* Github Webhook
+- [x] Github Webhook
+
 Github also provides the webhook function that can be triggered by different repository events. We made use of it by linking the commit message text with possibly a card in the doing list of a project, and updating the card status when appropriate.
 
-* Google Login
+- [x] Google Login
+
 Google provides some APIs that allow users to get authorized through their Google account. We used omniauth-google_oauth2 gem which will automatically send request and fetch the data. With our database to persist the data, we made it possible for users to sign in conveniently with their google-related accounts.
 
-* JQuery Terminal Emulator
+- [x] JQuery Terminal Emulator
+
 jQuery Terminal Emulator is a plugin that provides the interpreter parsing users’ inputs and automatically calling JSON-RPC service. In our application, every time the user types in commands like “move cards”, the terminal will send AJAX requests and the server will respond and push changes to every client by Action Cable.  
 
