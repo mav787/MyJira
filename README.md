@@ -1,5 +1,5 @@
 # Welcome to MyJira
-*_Team: Phoebe Zhang, Haotian Sun, Yuan Zhou, Jinli Yu
+***Team: Phoebe Zhang, Haotian Sun, Yuan Zhou, Jinli Yu
 
 **My Jira is a clear-to-read and easy-to-update team project tracking tool built with Ruby on Rails as an online version of Kanban board.**
 
