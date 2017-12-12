@@ -1,5 +1,5 @@
 # Welcome to MyJira
-***Team: Phoebe Zhang, Haotian Sun, Yuan Zhou, Jinli Yu
+***Team: Phoebe Zhang, Haotian Sun, Yuan Zhou, Jinli Yu***
 
 **My Jira is a clear-to-read and easy-to-update team project tracking tool built with Ruby on Rails as an online version of Kanban board.**
 
@@ -76,4 +76,4 @@ jQuery Terminal Emulator is a plugin that provides the interpreter parsing users
 * Implement live chat feature and group chat functionalities;
 * Integration into phone and tablet users and mobile app.
 
-Finally, huge thanks to Brandeis Univeristy, Professor Pito Salas and all Teaching Assistants for the Software Capston Project Course!
+**Finally, huge thanks to Brandeis Univeristy, Professor Pito Salas and all Teaching Assistants for the Software Capston Project Course!**
