@@ -76,4 +76,4 @@ jQuery Terminal Emulator is a plugin that provides the interpreter parsing users
 * Implement live chat feature and group chat functionalities;
 * Integration into phone and tablet users and mobile app.
 
-**Finally, huge thanks to Brandeis Univeristy, Professor Pito Salas and all Teaching Assistants for the Software Capston Project Course!**
+**Finally, huge thanks to Brandeis University, Professor Pito Salas and all Teaching Assistants for the Software Capstone Project Course!**
