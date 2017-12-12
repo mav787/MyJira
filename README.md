@@ -69,3 +69,10 @@ Google provides some APIs that allow users to get authorized through their Googl
 
 jQuery Terminal Emulator is a plugin that provides the interpreter parsing users’ inputs and automatically calling JSON-RPC service. In our application, every time the user types in commands like “move cards”, the terminal will send AJAX requests and the server will respond and push changes to every client by Action Cable.  
 
+## What we want for MyJira 2.0
+* The option of having subcards under a card;
+* Dynamically order cards based on the deadline and status of the card;
+* Implement live chat feature and group chat functionalities;
+* Integration into phone and tablet users and mobile app.
+
+Finally, huge thanks to Brandeis Univeristy, Professor Pito Salas and all Teaching Assistants for the Software Capston Project Course!
