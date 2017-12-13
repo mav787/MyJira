@@ -4,12 +4,12 @@ class BoardsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @board = boards(:one)
   end
-
+=begin
   test "should get index" do
     get boards_url
     assert_response :success
   end
-=begin
+
   test "should get new" do
     get new_board_url
     assert_response :success
@@ -25,11 +25,6 @@ class BoardsControllerTest < ActionDispatch::IntegrationTest
 
   test "should show board" do
     get board_url(@board)
-    assert_response :success
-  end
-
-  test "should get edit" do
-    get edit_board_url(@board)
     assert_response :success
   end
 =end
