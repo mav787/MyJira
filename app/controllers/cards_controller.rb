@@ -39,7 +39,14 @@ class CardsController < ApplicationController
 
   def show_modal
     @card = Card.find(params["card_id"])
-
+    if current_user != nil
+      notes = current_user.notifications.where(card_id: @card.id)
+      if (notes != nil)
+        notes.each do |note|
+          note.update(read: true)
+        end
+      end
+    end
     card_attributes = @card.as_json
     card_attributes['tags'] = @card.tags.as_json
     card_attributes['members'] = @card.users.as_json
