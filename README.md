@@ -1,5 +1,5 @@
 # Welcome to MyJira
-Product Link: https://my-jira-heroku.herokuapp.com
+[Link to Product](https://my-jira-heroku.herokuapp.com)
 
 ***Team: Phoebe Zhang, Haotian Sun, Yuan Zhou, Jinli Yu***
 
