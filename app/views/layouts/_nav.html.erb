@@ -55,7 +55,7 @@
                             <div class="media-body">
                               <strong class="notification-title">
                                 <% if notification.source == 'comment' %>
-                                  <%= link_to "You received a new comment under card #{notification.card.content}", notification.card %>
+                                  <%= link_to "You received a new comment under card #{notification.card.content}", board_path(notification.card.list.board, :card_id => notification.card.id) %>
                                 <% elsif notification.source == 'card' %>
                                   <%= link_to "You are assigned to a new card #{notification.card.content}", notification.card %>
                                 <% elsif notification.source == 'board' %>

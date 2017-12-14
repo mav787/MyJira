@@ -18,6 +18,63 @@
     <!--<%= debug(params) if Rails.env.development? %>-->
     <div id="user" data-user-id="<%= current_user.id %>"></div>
     <script type="text/javascript">
+    function GetURLParameter(sParam){
+        var sPageURL = window.location.search.substring(1);
+        var sURLVariables = sPageURL.split('&');
+        for (var i = 0; i < sURLVariables.length; i++)
+        {
+            var sParameterName = sURLVariables[i].split('=');
+            if (sParameterName[0] == sParam)
+            {
+                return sParameterName[1];
+            }
+        }
+    }
+
+    var colorTags = function(){
+      $(".card-tag-color-label[data-color-id=1]").addClass('card-tag-green');
+      $(".card-tag-color-label[data-color-id=2]").addClass('card-tag-yellow');
+      $(".card-tag-color-label[data-color-id=3]").addClass('card-tag-orange');
+      $(".card-tag-color-label[data-color-id=4]").addClass('card-tag-red');
+      $(".card-tag-color-label[data-color-id=5]").addClass('card-tag-purple');
+      $(".card-tag-color-label[data-color-id=6]").addClass('card-tag-blue');
+      $(".card-tag-color-label[data-color-id=7]").addClass('card-tag-sky');
+      $(".card-tag-color-label[data-color-id=8]").addClass('card-tag-lime');
+      $(".card-tag-color-label[data-color-id=9]").addClass('card-tag-pink');
+      $(".card-tag-color-label[data-color-id=10]").addClass('card-tag-black');
+    };
+
+    var cardTagClick = function(){
+      $('.card-tag').click(function(){
+        if($(this).hasClass('selected')){
+          $.ajax({ url: '/tag/unbind.json',
+            type: 'POST',
+            beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+            data: {
+              card_id: $('#modal-card-id').attr('data-card-id'),
+              tag_id: $(this).attr('data-tag-id')
+            },
+            success: function(data,status) {
+              $('.card-tag[data-tag-id='+data.tag_id+']').removeClass('selected');
+            }
+          });
+        }
+        else{
+          $.ajax({ url: '/tag/bind.json',
+            type: 'POST',
+            beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+            data: {
+              card_id: $('#modal-card-id').attr('data-card-id'),
+              tag_id: $(this).attr('data-tag-id')
+            },
+            success: function(data,status) {
+              $('.card-tag[data-tag-id='+data.tag_id+']').addClass('selected');
+            }
+          });
+        }
+      });
+    };
+
     $(document).ready(function(){
       $('#user_name').on('input',function(){
         $('#search-submit').click();
@@ -365,52 +422,13 @@
       });
     });
 
+    $('.card[card_id='+GetURLParameter('card_id')+']').click();
+
     colorTags();
+
   });
 
-  var colorTags = function(){
-    $(".card-tag-color-label[data-color-id=1]").addClass('card-tag-green');
-    $(".card-tag-color-label[data-color-id=2]").addClass('card-tag-yellow');
-    $(".card-tag-color-label[data-color-id=3]").addClass('card-tag-orange');
-    $(".card-tag-color-label[data-color-id=4]").addClass('card-tag-red');
-    $(".card-tag-color-label[data-color-id=5]").addClass('card-tag-purple');
-    $(".card-tag-color-label[data-color-id=6]").addClass('card-tag-blue');
-    $(".card-tag-color-label[data-color-id=7]").addClass('card-tag-sky');
-    $(".card-tag-color-label[data-color-id=8]").addClass('card-tag-lime');
-    $(".card-tag-color-label[data-color-id=9]").addClass('card-tag-pink');
-    $(".card-tag-color-label[data-color-id=10]").addClass('card-tag-black');
-  };
 
-  var cardTagClick = function(){
-    $('.card-tag').click(function(){
-      if($(this).hasClass('selected')){
-        $.ajax({ url: '/tag/unbind.json',
-          type: 'POST',
-          beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-          data: {
-            card_id: $('#modal-card-id').attr('data-card-id'),
-            tag_id: $(this).attr('data-tag-id')
-          },
-          success: function(data,status) {
-            $('.card-tag[data-tag-id='+data.tag_id+']').removeClass('selected');
-          }
-        });
-      }
-      else{
-        $.ajax({ url: '/tag/bind.json',
-          type: 'POST',
-          beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-          data: {
-            card_id: $('#modal-card-id').attr('data-card-id'),
-            tag_id: $(this).attr('data-tag-id')
-          },
-          success: function(data,status) {
-            $('.card-tag[data-tag-id='+data.tag_id+']').addClass('selected');
-          }
-        });
-      }
-    });
-  };
     </script>
   </body>
 </html>
