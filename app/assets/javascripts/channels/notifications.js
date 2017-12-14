@@ -1,5 +1,5 @@
-jQuery(document).on 'turbolinks:load', ->
-    App.team = App.cable.subscriptions.create (channel: "NotificationsChannel", {
+
+    App.team = App.cable.subscriptions.create ("NotificationsChannel", {
       connected: function() {
         // Called when the subscription is ready for use on the server
       },
