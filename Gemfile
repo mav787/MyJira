@@ -30,6 +30,7 @@ gem 'arel'
 gem 'httparty'
 gem 'github_webhook', '~> 1.1'
 gem 'octokit'
+gem 'redis', '~> 3.0'
 
 group :development, :test do
   gem 'sqlite3', '1.3.13'

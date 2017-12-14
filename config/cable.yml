@@ -1,10 +1,12 @@
-development:
-  adapter: async
+production:
+  adapter: redis
+  url: redis://https://my-jira-heroku.herokuapp.com/1
+  channel_prefix: my_jira_production
 
 test:
   adapter: async
 
-production:
+development:
   adapter: redis
   url: redis://localhost:6379/1
-  channel_prefix: my_jira_production
+  channel_prefix: my_jira_development

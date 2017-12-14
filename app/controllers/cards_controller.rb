@@ -46,6 +46,7 @@ class CardsController < ApplicationController
           note.update(read: true)
         end
       end
+      ActionCable.server.broadcast "#{current_user.id}_channel", event: "read_card"
     end
     card_attributes = @card.as_json
     card_attributes['tags'] = @card.tags.as_json
@@ -70,7 +71,6 @@ class CardsController < ApplicationController
     else
       params_list_id = List.where(name:params[:list_id]).first.id
     end
-
     @list = List.find(params_list_id)
   end
 
@@ -83,23 +83,12 @@ class CardsController < ApplicationController
   # POST /cards.json
   def create
     pars = params[:card]
-    #@tags = pars[:tagst].split(',')
     @card = Card.new(card_params)
     @card.card_order = Card.where(list_id:params[:card][:list_id]).count+1
     @board = Board.find(List.find(pars[:list_id]).board.id)
     respond_to do |format|
       if @card.save
-=begin
-        @tags.each do |tag_name|
-          tag = Tag.find_by_name(tag_name)
-          if (tag == nil)
-            tag = Tag.new(name: tag_name, color: 0, board_id: @board.id)
-            tag.save
-          end
-          CardTagAssociation.create(card_id: @card.id, tag_id: tag.id)
-        end
-=end
-ActionCable.server.broadcast "team_#{@card.list.board.id}_channel",
+        ActionCable.server.broadcast "team_#{@card.list.board.id}_channel",
                              event: "create_card",
                              card: @card,
                              tag: @card.tags,
@@ -184,7 +173,6 @@ ActionCable.server.broadcast "team_#{@card.list.board.id}_channel",
 
   def deletemember
     CardEnrollment.delete(CardEnrollment.where(card_id:params[:card_id],user_id:params[:todeleteuser_id].to_i))
-    #redirect_to searchresult_path(card_id: params[:card_id])
     card = Card.find(params[:card_id])
     user = User.find(params[:todeleteuser_id])
     ActionCable.server.broadcast "team_#{card.list.board.id}_channel",
