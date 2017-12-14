@@ -5,16 +5,7 @@ class CardsController < ApplicationController
   # GET /cards.json
   def index
     if logged_in?
-      # @cards = Card.paginate(page: params[:page])
       @cards = Card.all
-      # @cards = []
-      # current_user.boards.each do |board|
-      #   board.lists.each do |list|
-      #     list.cards.each do |card|
-      #       @cards.push(card)
-      #     end
-      #   end
-      # end
     else
       @cards = []
     end
@@ -111,31 +102,15 @@ class CardsController < ApplicationController
     else
       params_list_id = List.where(name:params[:new_list_id]).first.id
     end
-    moving_card = Card.find(params[:card_id])
-    origin_list_cards = Card.where("list_id = ? AND card_order > ?", moving_card.list_id, moving_card.card_order)
-    origin_list_cards.each do |card|
-      card.card_order -= 1
-      card.save
-    end
-    old_list = moving_card.list
+    @moving_card = Card.find(params[:card_id])
+    move_origin_cards
+    old_list = @moving_card.list
     new_list = List.find(params_list_id)
-    if new_list.name == 'done'
-      moving_card.finished_at = Time.now
-    elsif old_list.name == 'done'
-      moving_card.finished_at = nil
-    end
-    moving_card.card_order = params[:new_position]
-    moving_card.list_id = params_list_id
-    if new_list.name == 'doing'
-       moving_card.startdate = Time.now
-    end
-    moving_card.save
-    new_list_cards = Card.where("list_id = ? AND card_order >= ?", moving_card.list_id, moving_card.card_order).where.not(id:moving_card.id)
-    new_list_cards.each do |card|
-      card.card_order += 1
-      card.save
-    end
-    #$("div[card_id='1']")
+    change_status old_list, new_list
+    @moving_card.card_order = params[:new_position]
+    @moving_card.list_id = params_list_id
+    @moving_card.save
+    move_new_cards
     ActionCable.server.broadcast "team_#{moving_card.list.board.id}_channel",
                                  event: "move_card",
                                  card_id: moving_card.id,
@@ -143,6 +118,33 @@ class CardsController < ApplicationController
                                  order: moving_card.card_order
     respond_to do |format|
       format.js{}
+    end
+  end
+
+  def move_origin_cards
+    origin_list_cards = Card.where("list_id = ? AND card_order > ?", @moving_card.list_id, @moving_card.card_order)
+    origin_list_cards.each do |card|
+      card.card_order -= 1
+      card.save
+    end
+  end
+
+  def move_new_cards
+    new_list_cards = Card.where("list_id = ? AND card_order >= ?", @moving_card.list_id, @moving_card.card_order).where.not(id:moving_card.id)
+    new_list_cards.each do |card|
+      card.card_order += 1
+      card.save
+    end
+  end
+
+  def change_status old_list, new_list
+    if new_list.name == 'done'
+      @moving_card.finished_at = Time.now
+    elsif old_list.name == 'done'
+      @moving_card.finished_at = nil
+    end
+    if new_list.name == 'doing'
+       @moving_card.startdate = Time.now
     end
   end
 

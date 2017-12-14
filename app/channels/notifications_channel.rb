@@ -1,5 +1,6 @@
-class TeamChannel < ApplicationCable::Channel
+class NotificationsChannel < ApplicationCable::Channel
   def subscribed
+    
     stream_from "#{current_user.id}_channel"
   end
 
