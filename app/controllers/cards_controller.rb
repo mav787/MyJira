@@ -29,32 +29,32 @@ class CardsController < ApplicationController
   end
 
   def show_modal
-    if (current_user == nil)
-      redirect_to root_path
-    end
-    @card = Card.find(params["card_id"])
-    if current_user != nil
-      notes = current_user.notifications.where(card_id: @card.id)
-      if (notes != nil)
-        notes.each do |note|
-          note.update(read: true)
+
+      @card = Card.find(params["card_id"])
+      if current_user != nil
+        notes = current_user.notifications.where(card_id: @card.id)
+        if (notes != nil)
+          notes.each do |note|
+            note.update(read: true)
+          end
+        end
+
+      end
+      card_attributes = @card.as_json
+      card_attributes['tags'] = @card.tags.as_json
+      card_attributes['members'] = @card.users.as_json
+      card_attributes['comments'] = @card.comments.as_json
+      card_attributes['comments'].each do |comment|
+        comment['from_user_name'] = User.find(comment['from_user_id'].to_i).name
+        if comment['to_user_id'] != nil
+          comment['to_user_name'] = User.find(comment['to_user_id'].to_i).name
         end
       end
-      ActionCable.server.broadcast "#{current_user.id}_channel", event: "read_card"
-    end
-    card_attributes = @card.as_json
-    card_attributes['tags'] = @card.tags.as_json
-    card_attributes['members'] = @card.users.as_json
-    card_attributes['comments'] = @card.comments.as_json
-    card_attributes['comments'].each do |comment|
-      comment['from_user_name'] = User.find(comment['from_user_id'].to_i).name
-      if comment['to_user_id'] != nil
-        comment['to_user_name'] = User.find(comment['to_user_id'].to_i).name
+      respond_to do |format|
+        format.json { render json: card_attributes}
+        format.js {render js: "$('#notifications').load(location.href+' #notifications>*','');"}
       end
-    end
-    respond_to do |format|
-      format.json { render json: card_attributes}
-    end
+
   end
 
   # GET /cards/new

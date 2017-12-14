@@ -27,7 +27,6 @@ class BoardsController < ApplicationController
   # GET /boards/1
   # GET /boards/1.json
   def show
-    #flash[:alert] = "User has been enrolled!"
     notes = current_user.notifications.where(board_id: @board.id)
     if (notes != nil)
       notes.each do |note|

@@ -34,7 +34,6 @@ class CommentsController < ApplicationController
         if(@comment.to_user_id != nil)
           n = Notification.new(recipient_id: comment_params[:to_user_id], comment_id: @comment.id, card_id: @card.id, read: false, source: "comment")
           n.save
-          ActionCable.server.broadcast "#{comment_params[:to_user_id]}_channel", event: "note_created"
           CommentMailer.comment_note(n.recipient, n).deliver
           to_user_name = User.find(@comment.to_user_id).name
         end
