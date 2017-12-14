@@ -38,6 +38,9 @@ class CardsController < ApplicationController
   end
 
   def show_modal
+    if (current_user == nil)
+      redirect_to root_path
+    end
     @card = Card.find(params["card_id"])
     if current_user != nil
       notes = current_user.notifications.where(card_id: @card.id)
