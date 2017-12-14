@@ -20,7 +20,6 @@ class CardsControllerTest < ActionDispatch::IntegrationTest
     assert_difference('Card.count') do
       post cards_url, params: { card: { content: @card.content, deadline: @card.deadline, list_id: @card.list_id, tagst: "tag" } }
     end
-
     assert_redirected_to board_url(Card.last.list.board)
   end
 
