@@ -1,11 +1,5 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  leader_id: 1
-  id: 1
-
-two:
-  name: MyString
-  leader_id: 1
-  id: 2
+  name: FirstBoard
+  leader: test_user1
