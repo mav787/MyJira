@@ -50,6 +50,8 @@ class CardsController < ApplicationController
     card_attributes = @card.as_json
     card_attributes['tags'] = @card.tags.as_json
     card_attributes['members'] = @card.users.as_json
+    card_attributes['precards_done'] = @card.precards.where(list_id: 3).as_json
+    card_attributes['precards_undone'] = @card.precards.where.not(list_id:3).as_json
     card_attributes['comments'] = @card.comments.as_json
     card_attributes['comments'].each do |comment|
       comment['from_user_name'] = User.find(comment['from_user_id'].to_i).name

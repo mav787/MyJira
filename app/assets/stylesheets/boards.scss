@@ -31,7 +31,7 @@
   color: #fff;
 }
 
-.tags-container, .card-member-container, .description-container, .comments-container{
+.tags-container, .card-member-container, .description-container, .comments-container, .card-prereq-container{
   padding: 10px 30px;
 }
 .card-member-container::after{
@@ -434,12 +434,12 @@ margin-top: 3px;
   padding-bottom: 10px;
 }
 
-.member-in-list{
+.member-in-list, .prereq-in-list{
   background-color: white;
     padding: 4px 14px;
     border-radius: 5px;
 }
-.member-in-list:hover{
+.member-in-list:hover, .prereq-in-list:hover{
   background-color: #f5faff;
 }
 .member-name{
@@ -447,8 +447,12 @@ margin-top: 3px;
 top: 6px;
 left: 10px;
 }
-.member-selected::after{
-  background-image: url(icons8-checkmark-50.png);
+.prereq-name{
+  position: relative;
+left: 10px;
+}
+.member-selected::after, .prereq-selected::after{
+background-image: url(icons8-checkmark-50.png);
 background-size: 18px 18px;
 display: inline-block;
 width: 18px;
@@ -457,6 +461,17 @@ content: "";
 float: right;
 position: relative;
     top: -24px;
+}
+.prereq-selected::after{
+background-image: url(icons8-checkmark-50.png);
+background-size: 18px 18px;
+display: inline-block;
+width: 18px;
+height: 18px;
+content: "";
+float: right;
+position: relative;
+    top: -17px;
 }
 #at-member-name{
   position: relative;
@@ -491,4 +506,34 @@ border: none;
 }
 .create-card-button{
   margin: 5px
+}
+.precard-name-done{
+  background-color: #449d44;
+  float: left;
+margin: 0 10px 10px 0;
+border-radius: 3px;
+color: #fff;
+display: block;
+margin-right: 3px;
+max-width: 100%;
+overflow: hidden;
+padding: 6px 6px;
+position: relative;
+text-overflow: ellipsis;
+white-space: nowrap;
+}
+.precard-name-undone{
+  background-color: #eb5a46;
+  float: left;
+margin: 0 10px 10px 0;
+border-radius: 3px;
+color: #fff;
+display: block;
+margin-right: 3px;
+max-width: 100%;
+overflow: hidden;
+padding: 6px 6px;
+position: relative;
+text-overflow: ellipsis;
+white-space: nowrap;
 }

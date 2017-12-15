@@ -7,6 +7,7 @@
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag "boards" %>
+
     <style>
 
     </style>
@@ -136,7 +137,7 @@
           html = html.concat('<button id="show-tags-modal" type="button" class="btn btn-grey btn-sm"><span class="glyphicon glyphicon-plus"></span> Add</button>');
           $('.tags-container').html(html);
           html = "";
-          html = html.concat('<span class="field">Members:</span><div class="gap"></div>');
+          html = html.concat('<span class="field">Members</span><div class="gap"></div>');
           $('.member-in-list').removeClass('member-selected');
           for(var index in data.members){
             var member = data.members[index];
@@ -145,6 +146,28 @@
           }
           html = html.concat('<button id="show-members-modal" type="button" class="btn btn-grey btn-sm"><span class="glyphicon glyphicon-plus"></span> Add</button>');
           $('.card-member-container').html(html);
+
+          html = "";
+          html = html.concat('<span class="field">Prerequisites</span><div class="gap"></div>');
+          $('.prereq-in-list').removeClass('prereq-selected');
+          for(var index in data.precards_done){
+            var precard = data.precards_done[index];
+
+            html = html.concat('<div class="precard-name-done" data-precard-id="'+precard.id+'">'+precard.content+'</div>');
+            // alert(html);
+            $('.prereq-in-list[data-precard-id='+precard.id+']').addClass('prereq-selected');
+          }
+          for(var index in data.precards_undone){
+            var precard = data.precards_undone[index];
+
+            html = html.concat('<div class="precard-name-undone" data-precard-id="'+precard.id+'">'+precard.content+'</div>');
+            // alert(html);
+            $('.prereq-in-list[data-precard-id='+precard.id+']').addClass('prereq-selected');
+          }
+          html = html.concat('<button id="show-prereq-modal" type="button" class="btn btn-grey btn-sm"><span class="glyphicon glyphicon-plus"></span> Add</button>');
+
+          $('.card-prereq-container').html(html);
+
           html = "";
           $('.description').html(data.description);
           for(var index in data.comments){
@@ -188,6 +211,20 @@
                'display': 'block'
              })
             $('#member-modal-dialog').fadeIn();
+          });
+          $('#show-prereq-modal').click(function(){
+            $('#prereq-modal-dialog').css({
+                 'margin-top': function () {
+                     return $('#show-prereq-modal').offset().top+35;
+                 },
+                 'margin-left': function () {
+                     return $('#show-prereq-modal').offset().left;
+                 }
+             });
+             $('#prereq-my-modal').css({
+               'display': 'block'
+             })
+            $('#prereq-modal-dialog').fadeIn();
           });
           $('.card-tag').click(function(){
             if($(this).hasClass('selected')){
@@ -353,6 +390,42 @@
                 success: function(data,status) {
                   //alert("data: \n" + data.id + "\nstatus: " + status);
                   $('.member-in-list[data-user-id='+data.member_id+']').addClass('member-selected');
+                }
+              });
+            }
+          });
+          $('.close-prereq-modal').click(function(){
+            $('.my-modal').css({
+              'display': 'none'
+            })
+           $('#prereq-modal-dialog').fadeOut();
+          });
+          $('.prereq-in-list').click(function(){
+            if($(this).hasClass('prereq-selected')){
+              $.ajax({ url: '/delprereq.json',
+                type: 'POST',
+                beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+                data: {
+                    todeletecard_id: $(this).attr("data-precard-id"),
+                    card_id: $('#modal-card-id').attr('data-card-id')
+                },
+                success: function(data,status) {
+                  alert("data: \n" + data.precard_id + "\nstatus: " + status);
+                  $('.prereq-in-list[data-precard-id='+data.precard_id+']').removeClass('prereq-selected');
+                }
+              });
+            }
+            else{
+              $.ajax({ url: '/addprereq.json',
+                type: 'POST',
+                beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+                data: {
+                    toaddcard_id: $(this).attr("data-precard-id"),
+                    card_id: $('#modal-card-id').attr('data-card-id')
+                },
+                success: function(data,status) {
+                  //alert("data: \n" + data.id + "\nstatus: " + status);
+                  $('.prereq-in-list[data-precard-id='+data.precard_id+']').addClass('prereq-selected');
                 }
               });
             }

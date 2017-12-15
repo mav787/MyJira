@@ -130,7 +130,7 @@
                   </button>
                 </div>
                 <div class="card-member-container">
-                  <span class="field">Members:</span><div class="gap"></div>
+                  <span class="field">Members</span><div class="gap"></div>
                   <div class="card-member"><span class="member-initials">Y</span></div>
                   <div class="card-member"><span class="member-initials">S</span></div>
                   <div class="card-member"><span class="member-initials">P</span></div>
@@ -149,6 +149,13 @@
                       <button type="button" class="btn btn-default" id="cancel-edit-description">cancel</button>
                     </div>
                   </div>
+                </div>
+                <div class="card-prereq-container">
+                  <span class="field">Prerequisites</span><div class="gap"></div>
+
+                    <button id="show-prereq-modal" type="button" class="btn btn-grey btn-sm">
+                    <span class="glyphicon glyphicon-plus"></span> Add
+                  </button>
                 </div>
                 <div class="comments-container">
                   <span class="field">Comments</span>
@@ -272,6 +279,34 @@
                   <span class="member-name"><%= member.name%></span>
                   <div style="clear:both;"></div>
                 </div>
+                <%end%>
+              </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default close-tag-modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+  </div>
+
+  <div class="my-modal" id="prereq-my-modal">  <!--prereq modal-->
+    <div class="modal-dialog edit-tag-modal" id="prereq-modal-dialog" style="display:none;">
+      <div class="modal-content" id="prereq-modal-content">
+        <div class="modal-header">
+                  <button type="button" class="close close-prereq-modal">&times;</button>
+                  <h4 class="modal-title">Edit Perequisites</h4>
+        </div>
+            <div class="modal-body">
+
+              <div class="edit-prereq">
+                <% @board.lists.each do |list| %>
+                  <% list.cards.each do |card| %>
+                  <div class="prereq-in-list" data-precard-id="<%= card.id%>" >
+                    <span class="prereq_content"><%= card.content%></span>
+                    <div style="clear:both;"></div>
+                  </div>
+                  <%end%>
                 <%end%>
               </div>
             </div>
