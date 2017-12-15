@@ -81,8 +81,8 @@
         <div class="show-new-card" data-list-id="<%= list.id %>">
           <span class="show-new-card-button" data-list-id="<%= list.id %>">create a new card...</span>
           <div class="new-card-submit-form hide">
-            <textarea class="new-card-content" placeholder="put your card name here"></textarea>
-            <input type="date" class="new-card-deadline">
+            <textarea class="new-card-content" placeholder="Put your card's content here."></textarea>
+            <span>Pick the deadline: </span><input type="datetime-local" class="new-card-deadline">
             <button type="button" class="btn btn-success create-card-button" data-list-id="<%= list.id %>">Create Card</button>
           </div>
         </div>
@@ -111,7 +111,7 @@
                   <button type="button"  id="edit-description">edit description</button>
                   <div class="description">this is the description</div>
                   <div class="edit-description-window hide">
-                    <textarea id="description-input" class="description-input-area" placeholder="put your description here" style="overflow: hidden; word-wrap: break-word; resize: none; height: 108px;"></textarea>
+                    <textarea id="description-input" class="description-input-area" placeholder="Put your description here" style="overflow: hidden; word-wrap: break-word; resize: none; height: 108px;"></textarea>
                     <div class="edit-controls">
                       <button type="button" class="btn btn-success" id="save-edit-description">save</button>
                       <button type="button" class="btn btn-default" id="cancel-edit-description">cancel</button>
@@ -126,7 +126,7 @@
                   <span class="field">Add Comment</span>
                   <div class="new-comments">
                     <div class="comment-box">
-                      <textarea id="comment-input" class="comment-box-input js-new-comment-input" placeholder="add your comment here..." tabindex="1" dir="auto" style="overflow: hidden; word-wrap: break-word; height: 75px;"></textarea>
+                      <textarea id="comment-input" class="comment-box-input js-new-comment-input" placeholder="Add your comment here..." tabindex="1" dir="auto" style="overflow: hidden; word-wrap: break-word; height: 75px;"></textarea>
                       <div class="comment-box-options">
                         <span class="icon-sm icon-mention" id="at-member-button"></span>
                         <span id="at-member-name" data-user-id=""></span>
@@ -161,7 +161,7 @@
 
                 </div>
                 <div class="new-tag-button">
-                  <span>create a new tag</span>
+                  <span>Create a new tag</span>
                 </div>
 
               </div>
@@ -305,32 +305,9 @@ jQuery(function($, undefined) {
 
       newcard: function(arg1){
         $(location).attr('href', 'http://localhost:3000/cards/new?list_id='+arg1)
-        // window.location("http://localhost:3000/cards/new?list_id="+arg1);
-        // $.get("/cards/new",{list_id: arg1});
-
       },
 
       move:  function(arg1,arg2){
-        //alert(arg1+" "+arg2);
-        // for (i = 0; i < arg1.length;){
-        //   j = i;
-        //   while (j < arg1.length && arg1[j] >='0' && arg1[j] <= '9') j++;
-        //   num = Number(arg1.substr(i,j-i));
-        //   $.ajax({ url: '/card/move',
-        //     type: 'POST',
-        //     beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-        //     data: {
-        //       card_id: num,
-        //       new_list_id: arg2,// $(ui.item).parents('.card-container').attr("list_id"),
-        //       new_position:1,// $(ui.item).index()+1
-        //     },
-        //     success: function(data,status) {
-        //       //alert("数据: \n" + data + "\n状态: " + status);
-        //     }
-        //   });
-        //   i = j+1;
-        //
-        // }
         $.ajax({ url: '/card/move',
           type: 'POST',
           beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},

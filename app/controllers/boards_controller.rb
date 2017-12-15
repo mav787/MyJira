@@ -27,6 +27,9 @@ class BoardsController < ApplicationController
   # GET /boards/1
   # GET /boards/1.json
   def show
+    if (!@board.users.include? current_user)
+      redirect_to root_path
+    end
     notes = current_user.notifications.where(board_id: @board.id)
     if (notes != nil)
       notes.each do |note|
