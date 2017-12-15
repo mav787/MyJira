@@ -19,7 +19,7 @@
                             <tr>
                                 <td align="center" valign="top" style="font-family:Arial, Helvetica, sans-serif;">
 																	You received a comment on MyJira from <%= @note.comment.from_user.name %> in card
-																	<%= link_to @note.card.content, card_url(@note.card)%>:
+																	<%= link_to @note.card.content, board_url(@note.card.list.board, :card_id => @note.card.id)%>:
                                 </td>
                             </tr>
 														<tr>

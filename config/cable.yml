@@ -1,10 +1,15 @@
-development:
-  adapter: async
+production:
+  adapter: redis
+  url: redis://redistogo:5baddebfe90e937c6e585254d2179a5b@soldierfish.redistogo.com:9454/
+  host: soldierfish.redistogo.com
+  port: 9454
+  password: 5baddebfe90e937c6e585254d2179a5b
+  channel_prefix: my_jira_production
 
 test:
   adapter: async
 
-production:
+development:
   adapter: redis
   url: redis://localhost:6379/1
-  channel_prefix: my_jira_production
+  channel_prefix: my_jira_development

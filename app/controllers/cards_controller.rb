@@ -5,16 +5,7 @@ class CardsController < ApplicationController
   # GET /cards.json
   def index
     if logged_in?
-      # @cards = Card.paginate(page: params[:page])
       @cards = Card.all
-      # @cards = []
-      # current_user.boards.each do |board|
-      #   board.lists.each do |list|
-      #     list.cards.each do |card|
-      #       @cards.push(card)
-      #     end
-      #   end
-      # end
     else
       @cards = []
     end
@@ -38,13 +29,16 @@ class CardsController < ApplicationController
   end
 
   def show_modal
-    @card = Card.find(params["card_id"])
-    if current_user != nil
-      notes = current_user.notifications.where(card_id: @card.id)
-      if (notes != nil)
-        notes.each do |note|
-          note.update(read: true)
+
+      @card = Card.find(params["card_id"])
+      if current_user != nil
+        notes = current_user.notifications.where(card_id: @card.id)
+        if (notes != nil)
+          notes.each do |note|
+            note.update(read: true)
+          end
         end
+
       end
     end
     card_attributes = @card.as_json
@@ -58,10 +52,11 @@ class CardsController < ApplicationController
       if comment['to_user_id'] != nil
         comment['to_user_name'] = User.find(comment['to_user_id'].to_i).name
       end
-    end
-    respond_to do |format|
-      format.json { render json: card_attributes}
-    end
+      respond_to do |format|
+        format.json { render json: card_attributes}
+        format.js {render js: "$('#notifications').load(location.href+' #notifications>*','');"}
+      end
+
   end
 
   # GET /cards/new
@@ -72,7 +67,6 @@ class CardsController < ApplicationController
     else
       params_list_id = List.where(name:params[:list_id]).first.id
     end
-
     @list = List.find(params_list_id)
   end
 
@@ -85,23 +79,12 @@ class CardsController < ApplicationController
   # POST /cards.json
   def create
     pars = params[:card]
-    #@tags = pars[:tagst].split(',')
     @card = Card.new(card_params)
     @card.card_order = Card.where(list_id:params[:card][:list_id]).count+1
     @board = Board.find(List.find(pars[:list_id]).board.id)
     respond_to do |format|
       if @card.save
-=begin
-        @tags.each do |tag_name|
-          tag = Tag.find_by_name(tag_name)
-          if (tag == nil)
-            tag = Tag.new(name: tag_name, color: 0, board_id: @board.id)
-            tag.save
-          end
-          CardTagAssociation.create(card_id: @card.id, tag_id: tag.id)
-        end
-=end
-ActionCable.server.broadcast "team_#{@card.list.board.id}_channel",
+        ActionCable.server.broadcast "team_#{@card.list.board.id}_channel",
                              event: "create_card",
                              card: @card,
                              tag: @card.tags,
@@ -121,31 +104,15 @@ ActionCable.server.broadcast "team_#{@card.list.board.id}_channel",
     else
       params_list_id = List.where(name:params[:new_list_id]).first.id
     end
-    moving_card = Card.find(params[:card_id])
-    origin_list_cards = Card.where("list_id = ? AND card_order > ?", moving_card.list_id, moving_card.card_order)
-    origin_list_cards.each do |card|
-      card.card_order -= 1
-      card.save
-    end
-    old_list = moving_card.list
+    @moving_card = Card.find(params[:card_id])
+    move_origin_cards
+    old_list = @moving_card.list
     new_list = List.find(params_list_id)
-    if new_list.name == 'done'
-      moving_card.finished_at = Time.now
-    elsif old_list.name == 'done'
-      moving_card.finished_at = nil
-    end
-    moving_card.card_order = params[:new_position]
-    moving_card.list_id = params_list_id
-    if new_list.name == 'doing'
-       moving_card.startdate = Time.now
-    end
-    moving_card.save
-    new_list_cards = Card.where("list_id = ? AND card_order >= ?", moving_card.list_id, moving_card.card_order).where.not(id:moving_card.id)
-    new_list_cards.each do |card|
-      card.card_order += 1
-      card.save
-    end
-    #$("div[card_id='1']")
+    change_status old_list, new_list
+    @moving_card.card_order = params[:new_position]
+    @moving_card.list_id = params_list_id
+    @moving_card.save
+    move_new_cards
     ActionCable.server.broadcast "team_#{moving_card.list.board.id}_channel",
                                  event: "move_card",
                                  card_id: moving_card.id,
@@ -153,6 +120,33 @@ ActionCable.server.broadcast "team_#{@card.list.board.id}_channel",
                                  order: moving_card.card_order
     respond_to do |format|
       format.js{}
+    end
+  end
+
+  def move_origin_cards
+    origin_list_cards = Card.where("list_id = ? AND card_order > ?", @moving_card.list_id, @moving_card.card_order)
+    origin_list_cards.each do |card|
+      card.card_order -= 1
+      card.save
+    end
+  end
+
+  def move_new_cards
+    new_list_cards = Card.where("list_id = ? AND card_order >= ?", @moving_card.list_id, @moving_card.card_order).where.not(id:moving_card.id)
+    new_list_cards.each do |card|
+      card.card_order += 1
+      card.save
+    end
+  end
+
+  def change_status old_list, new_list
+    if new_list.name == 'done'
+      @moving_card.finished_at = Time.now
+    elsif old_list.name == 'done'
+      @moving_card.finished_at = nil
+    end
+    if new_list.name == 'doing'
+       @moving_card.startdate = Time.now
     end
   end
 
@@ -186,7 +180,6 @@ ActionCable.server.broadcast "team_#{@card.list.board.id}_channel",
 
   def deletemember
     CardEnrollment.delete(CardEnrollment.where(card_id:params[:card_id],user_id:params[:todeleteuser_id].to_i))
-    #redirect_to searchresult_path(card_id: params[:card_id])
     card = Card.find(params[:card_id])
     user = User.find(params[:todeleteuser_id])
     ActionCable.server.broadcast "team_#{card.list.board.id}_channel",

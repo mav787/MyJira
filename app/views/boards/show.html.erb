@@ -23,8 +23,8 @@
     <p>
       <strong>Members:</strong><br/>
       <% @board.users.each do |user| %>
-        <span>name:</span><%= user.name %><br/><span>email:</span><%= user.email %>
-        <br/>
+        <%= user.name %>  <%= user.email %>
+        <br>
       <% end %>
     </p>
     <%= form_tag("/search/user", method: "get", "data-remote": "true", "id": "search-form") do %>
@@ -35,15 +35,17 @@
     <% end %>
     <div id="users-container">
     </div>
-
-    <%= link_to 'New List', new_list_path(board_id:@board.id) %>
-    <button id="button-console">Open Console</button>
-    <%= link_to 'Edit', edit_board_path(@board) %> |
-    <%= link_to 'Back', root_path %>
     <br>
-    <%= link_to 'Stats', board_stats_path(id:@board.id) %>
+    <a href="<%= new_list_path(board_id:@board.id) %>" class="menuButton">Create New List</a>
     <br>
-    <%= link_to 'Github webhook configuration guide', gitconfig_path(id:@board.id) %>
+    <br>
+    <a href="<%= edit_board_path(@board) %>" class="menuButton">Edit Board</a>
+    <br>
+    <br>
+    <a href="<%= board_stats_path(id:@board.id) %>" class="menuButton">Board Stats</a>
+    <br>
+    <br>
+    <button id="button-console" class="menuButton">Open Console</button>
   </div>
 </div>
 <div class="container">
@@ -64,17 +66,14 @@
 
           </div>
           <div style="clear:both;"></div>
-          <span>Content:</span>
-          <%= link_to card.content, card_path(card)%><br/>
+          <h4><%= card.content %> </h4>
           <%if ['doing','done'].include? list.name %>
-            <span>Start at:</span><%= card.startdate %><br/>
+            <span><b>Started at: </b></span><%= card.startdate %><br/>
           <%end%>
-          <span>Deadline:</span><%= card.deadline %><br/>
-          <!-- Members: -->
-          <!-- <%= link_to 'Assign Member',searchresult_path(card_id:card.id) %></br> -->
-          <!-- <% card.users.each do |user| %>
-            <%= user.name%>
-          <% end %><br/> -->
+          <%if list.name=='done' %>
+            <span><b>Finished at: </b></span><%= card.finished_at %><br/>
+          <%end%>
+          <span><b>Deadline: </b></span><%= card.deadline %><br/>
         </div>
         <% end %>
       </div>
@@ -82,33 +81,14 @@
         <div class="show-new-card" data-list-id="<%= list.id %>">
           <span class="show-new-card-button" data-list-id="<%= list.id %>">create a new card...</span>
           <div class="new-card-submit-form hide">
-            <textarea class="new-card-content" placeholder="put your card name here"></textarea>
-            <input type="date" class="new-card-deadline">
+            <textarea class="new-card-content" placeholder="Put your card's content here."></textarea>
+            <span>Pick the deadline: </span><input type="datetime-local" class="new-card-deadline">
             <button type="button" class="btn btn-success create-card-button" data-list-id="<%= list.id %>">Create Card</button>
           </div>
         </div>
       <% end %>
-      <!-- <%= link_to 'New Card', new_card_path(list_id:list.id), class: "new-card"%> -->
     </div>
   <% end %>
-  <!-- card edit modal
-  <button id="modal-button" class="hide" data-toggle="modal" data-target="#myModal"></button>
-  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                  <h4 class="modal-title" id="myModalLabel">Modal Title</h4>
-              </div>
-              <div class="modal-body">
-              </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary hide">Submit</button>
-              </div>
-          </div>
-      </div>
-  </div>-->
 
   <button id="modal-button" class="hide" data-toggle="modal" data-target="#myModal"></button>
   <div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -121,29 +101,17 @@
               </div>
               <div class="modal-body">
                 <div class="tags-container">
-                  <span class="field">Tags:</span><div class="gap"></div>
-                  <span class="tag" style="background-color: #5555dd;">test</span>
-                  <span class="tag" style="background-color: #55dd55;">database</span>
-                  <span class="tag" style="background-color: #dd5555;">routes</span>
-                  <button id="show-tags-modal" type="button" class="btn btn-grey btn-sm">
-                    <span class="glyphicon glyphicon-plus"></span> Add
-                  </button>
+
                 </div>
                 <div class="card-member-container">
-                  <span class="field">Members</span><div class="gap"></div>
-                  <div class="card-member"><span class="member-initials">Y</span></div>
-                  <div class="card-member"><span class="member-initials">S</span></div>
-                  <div class="card-member"><span class="member-initials">P</span></div>
-                  <button id="show-members-modal" type="button" class="btn btn-grey btn-sm">
-                    <span class="glyphicon glyphicon-plus"></span> Add
-                  </button>
+
                 </div>
                 <div class="description-container">
                   <span class="field">Description</span>
                   <button type="button"  id="edit-description">edit description</button>
                   <div class="description">this is the description</div>
                   <div class="edit-description-window hide">
-                    <textarea id="description-input" class="description-input-area" placeholder="put your description here" style="overflow: hidden; word-wrap: break-word; resize: none; height: 108px;"></textarea>
+                    <textarea id="description-input" class="description-input-area" placeholder="Put your description here" style="overflow: hidden; word-wrap: break-word; resize: none; height: 108px;"></textarea>
                     <div class="edit-controls">
                       <button type="button" class="btn btn-success" id="save-edit-description">save</button>
                       <button type="button" class="btn btn-default" id="cancel-edit-description">cancel</button>
@@ -160,22 +128,12 @@
                 <div class="comments-container">
                   <span class="field">Comments</span>
                   <div class="comments-list">
-                    <div class="comment-container">
-                      <div class="headshot"><span class="member-initials">Y</span></div>
-                      <span class="username">Jinli Yu</span>
-                      <span class="sent-date">posted on 2017-10-10</span>
-                      <div class="comment-content">
 
-                        <span class="at-user">@spencer</span>
-                        <span class="comment">let's go out for fun!</span>
-
-                      </div>
-                    </div>
                   </div>
                   <span class="field">Add Comment</span>
                   <div class="new-comments">
                     <div class="comment-box">
-                      <textarea id="comment-input" class="comment-box-input js-new-comment-input" placeholder="add your comment here..." tabindex="1" dir="auto" style="overflow: hidden; word-wrap: break-word; height: 75px;"></textarea>
+                      <textarea id="comment-input" class="comment-box-input js-new-comment-input" placeholder="Add your comment here..." tabindex="1" dir="auto" style="overflow: hidden; word-wrap: break-word; height: 75px;"></textarea>
                       <div class="comment-box-options">
                         <span class="icon-sm icon-mention" id="at-member-button"></span>
                         <span id="at-member-name" data-user-id=""></span>
@@ -210,7 +168,7 @@
 
                 </div>
                 <div class="new-tag-button">
-                  <span>create a new tag</span>
+                  <span>Create a new tag</span>
                 </div>
 
               </div>
@@ -322,11 +280,10 @@
     <div class="modal-dialog edit-tag-modal" id="comment-at-member-modal-dialog" style="display:none;">
       <div class="modal-content" id="comment-at-member-modal-content">
         <div class="modal-header">
-                  <button type="button" class="close close-comment-at-member-modal">&times;</button>
-                  <h4 class="modal-title">@ Members</h4>
+            <button type="button" class="close close-comment-at-member-modal">&times;</button>
+            <h4 class="modal-title">@ Members</h4>
         </div>
             <div class="modal-body">
-
               <div class="edit-members">
                 <% @board.users.each do |member| %>
                 <div class="at-member-in-list" data-user-id="<%= member.id%>" data-user-name="<%= member.name%>">
@@ -337,11 +294,9 @@
                   <div style="clear:both;"></div>
                 </div>
                 <%end%>
-
               </div>
             </div>
         </div>
-
     </div>
   </div>
 
@@ -385,32 +340,9 @@ jQuery(function($, undefined) {
 
       newcard: function(arg1){
         $(location).attr('href', 'http://localhost:3000/cards/new?list_id='+arg1)
-        // window.location("http://localhost:3000/cards/new?list_id="+arg1);
-        // $.get("/cards/new",{list_id: arg1});
-
       },
 
       move:  function(arg1,arg2){
-        //alert(arg1+" "+arg2);
-        // for (i = 0; i < arg1.length;){
-        //   j = i;
-        //   while (j < arg1.length && arg1[j] >='0' && arg1[j] <= '9') j++;
-        //   num = Number(arg1.substr(i,j-i));
-        //   $.ajax({ url: '/card/move',
-        //     type: 'POST',
-        //     beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-        //     data: {
-        //       card_id: num,
-        //       new_list_id: arg2,// $(ui.item).parents('.card-container').attr("list_id"),
-        //       new_position:1,// $(ui.item).index()+1
-        //     },
-        //     success: function(data,status) {
-        //       //alert("数据: \n" + data + "\n状态: " + status);
-        //     }
-        //   });
-        //   i = j+1;
-        //
-        // }
         $.ajax({ url: '/card/move',
           type: 'POST',
           beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},

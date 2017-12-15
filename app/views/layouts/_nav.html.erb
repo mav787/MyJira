@@ -18,6 +18,8 @@
         <li><%= link_to 'Users', users_path %></li>
         <li><%= link_to 'Boards', boards_path %></li>
         <li><%= link_to 'Cards', cards_path %></li>
+        <li><%= link_to 'Github webhook configuration guide', gitconfig_path %></li>
+        <br>
       </ul>
 
         <div class="form-group">
@@ -48,6 +50,7 @@
 
               <ul class="dropdown-menu">
                 <ul class="notifications">
+                  <div id="notifications">
                   <% if !notes.empty? %>
                     <% notes.each do |notification| %>
                         <li class="notification">
@@ -57,7 +60,7 @@
                                 <% if notification.source == 'comment' %>
                                   <%= link_to "You received a new comment under card #{notification.card.content}", board_path(notification.card.list.board, :card_id => notification.card.id) %>
                                 <% elsif notification.source == 'card' %>
-                                  <%= link_to "You are assigned to a new card #{notification.card.content}", notification.card %>
+                                  <%= link_to "You are assigned to a new card #{notification.card.content}", board_path(notification.card.list.board, :card_id => notification.card.id) %>
                                 <% elsif notification.source == 'board' %>
                                   <%= link_to "You are invited to a new board #{notification.board.name}", notification.board %>
                                 <% end %>
@@ -81,6 +84,7 @@
                       </div>
                     </li>
                 <% end %>
+              </div>
               </ul>
             </div><!-- /dropdown-container -->
           </li><!-- /dropdown -->

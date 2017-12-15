@@ -1,10 +1,9 @@
 class BoardsController < ApplicationController
-  before_action :set_board, only: [:show, :edit, :update, :destroy, :stats, :gitconfig]
+  before_action :set_board, only: [:show, :edit, :update, :destroy, :stats]
   # GET /boards
   # GET /boards.json
   def index
     if logged_in?
-      # @boards = current_user.boards
       @boards = Board.paginate(page: params[:page])
       @states = {}
       user_boards = current_user.boards
@@ -28,7 +27,9 @@ class BoardsController < ApplicationController
   # GET /boards/1
   # GET /boards/1.json
   def show
-    #flash[:alert] = "User has been enrolled!"
+    if (!@board.users.include? current_user)
+      redirect_to root_path
+    end
     notes = current_user.notifications.where(board_id: @board.id)
     if (notes != nil)
       notes.each do |note|
@@ -112,26 +113,30 @@ class BoardsController < ApplicationController
       @ind_user_cards[u.id] = @user_cards.where(users: {id: u.id})
     end
     if @board.repo != nil
-      url = "https://api.github.com/repos/" +@board.repo+ "/stats/contributors"
-      response = HTTParty.get(url)
-      @valid = (response.code == 200)
-      if (@valid)
-        stats = response.parsed_response
-        @commit = Hash.new
-        @add = Hash.new
-        @delete = Hash.new
-        stats.each do |u|
-          name = u["author"]["login"]
-          @commit[name] = u["total"]
-          a = 0
-          d = 0
-          u["weeks"].each do |w|
-            a += w["a"]
-            d += w["d"]
-          end
-          @add[name] = a
-          @delete[name] = d
+      init_stats
+    end
+  end
+
+  def init_stats
+    url = "https://api.github.com/repos/" +@board.repo+ "/stats/contributors"
+    response = HTTParty.get(url)
+    @valid = (response.code == 200)
+    if (@valid)
+      stats = response.parsed_response
+      @commit = Hash.new
+      @add = Hash.new
+      @delete = Hash.new
+      stats.each do |u|
+        name = u["author"]["login"]
+        @commit[name] = u["total"]
+        a = 0
+        d = 0
+        u["weeks"].each do |w|
+          a += w["a"]
+          d += w["d"]
         end
+        @add[name] = a
+        @delete[name] = d
       end
     end
   end
