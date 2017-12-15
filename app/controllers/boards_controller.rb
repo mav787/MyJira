@@ -1,5 +1,5 @@
 class BoardsController < ApplicationController
-  before_action :set_board, only: [:show, :edit, :update, :destroy, :stats, :gitconfig]
+  before_action :set_board, only: [:show, :edit, :update, :destroy, :stats]
   # GET /boards
   # GET /boards.json
   def index

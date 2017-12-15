@@ -37,13 +37,14 @@
     </div>
 
     <%= link_to 'New List', new_list_path(board_id:@board.id) %>
-    <button id="button-console">Open Console</button>
+
     <%= link_to 'Edit', edit_board_path(@board) %> |
     <%= link_to 'Back', root_path %>
     <br>
-    <%= link_to 'Stats', board_stats_path(id:@board.id) %>
+    <a href="<%= board_stats_path(id:@board.id) %>" class="menuButton">Board Stats</a>
     <br>
-    <%= link_to 'Github webhook configuration guide', gitconfig_path(id:@board.id) %>
+    <br>
+    <button id="button-console" class="menuButton">Open Console</button>
   </div>
 </div>
 <div class="container">
@@ -67,14 +68,12 @@
           <span>Content:</span>
           <%= link_to card.content, card_path(card)%><br/>
           <%if ['doing','done'].include? list.name %>
-            <span>Start at:</span><%= card.startdate %><br/>
+            <span><b>Started at: </b></span><%= card.startdate %><br/>
           <%end%>
-          <span>Deadline:</span><%= card.deadline %><br/>
-          <!-- Members: -->
-          <!-- <%= link_to 'Assign Member',searchresult_path(card_id:card.id) %></br> -->
-          <!-- <% card.users.each do |user| %>
-            <%= user.name%>
-          <% end %><br/> -->
+          <%if list.name=='done' %>
+            <span><b>Finished at: </b></span><%= card.finished_at %><br/>
+          <%end%>
+          <span><b>Deadline: </b></span><%= card.deadline %><br/>
         </div>
         <% end %>
       </div>
@@ -88,7 +87,6 @@
           </div>
         </div>
       <% end %>
-      <!-- <%= link_to 'New Card', new_card_path(list_id:list.id), class: "new-card"%> -->
     </div>
   <% end %>
   <!-- card edit modal
@@ -158,10 +156,8 @@
                       <span class="username">Jinli Yu</span>
                       <span class="sent-date">posted on 2017-10-10</span>
                       <div class="comment-content">
-
                         <span class="at-user">@spencer</span>
                         <span class="comment">let's go out for fun!</span>
-
                       </div>
                     </div>
                   </div>
@@ -287,11 +283,10 @@
     <div class="modal-dialog edit-tag-modal" id="comment-at-member-modal-dialog" style="display:none;">
       <div class="modal-content" id="comment-at-member-modal-content">
         <div class="modal-header">
-                  <button type="button" class="close close-comment-at-member-modal">&times;</button>
-                  <h4 class="modal-title">@ Members</h4>
+            <button type="button" class="close close-comment-at-member-modal">&times;</button>
+            <h4 class="modal-title">@ Members</h4>
         </div>
             <div class="modal-body">
-
               <div class="edit-members">
                 <% @board.users.each do |member| %>
                 <div class="at-member-in-list" data-user-id="<%= member.id%>" data-user-name="<%= member.name%>">
@@ -302,11 +297,9 @@
                   <div style="clear:both;"></div>
                 </div>
                 <%end%>
-
               </div>
             </div>
         </div>
-
     </div>
   </div>
 
