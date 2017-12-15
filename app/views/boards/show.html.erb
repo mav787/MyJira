@@ -23,8 +23,8 @@
     <p>
       <strong>Members:</strong><br/>
       <% @board.users.each do |user| %>
-        <span>name:</span><%= user.name %><br/><span>email:</span><%= user.email %>
-        <br/>
+        <%= user.name %>  <%= user.email %>
+        <br>
       <% end %>
     </p>
     <%= form_tag("/search/user", method: "get", "data-remote": "true", "id": "search-form") do %>
@@ -35,11 +35,12 @@
     <% end %>
     <div id="users-container">
     </div>
-
-    <%= link_to 'New List', new_list_path(board_id:@board.id) %>
-
-    <%= link_to 'Edit', edit_board_path(@board) %> |
-    <%= link_to 'Back', root_path %>
+    <br>
+    <a href="<%= new_list_path(board_id:@board.id) %>" class="menuButton">Create New List</a>
+    <br>
+    <br>
+    <a href="<%= edit_board_path(@board) %>" class="menuButton">Edit Board</a>
+    <br>
     <br>
     <a href="<%= board_stats_path(id:@board.id) %>" class="menuButton">Board Stats</a>
     <br>
@@ -65,8 +66,7 @@
 
           </div>
           <div style="clear:both;"></div>
-          <span>Content:</span>
-          <%= link_to card.content, card_path(card)%><br/>
+          <h4><%= card.content %> </h4>
           <%if ['doing','done'].include? list.name %>
             <span><b>Started at: </b></span><%= card.startdate %><br/>
           <%end%>
@@ -89,24 +89,6 @@
       <% end %>
     </div>
   <% end %>
-  <!-- card edit modal
-  <button id="modal-button" class="hide" data-toggle="modal" data-target="#myModal"></button>
-  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                  <h4 class="modal-title" id="myModalLabel">Modal Title</h4>
-              </div>
-              <div class="modal-body">
-              </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary hide">Submit</button>
-              </div>
-          </div>
-      </div>
-  </div>-->
 
   <button id="modal-button" class="hide" data-toggle="modal" data-target="#myModal"></button>
   <div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -119,22 +101,10 @@
               </div>
               <div class="modal-body">
                 <div class="tags-container">
-                  <span class="field">Tags:</span><div class="gap"></div>
-                  <span class="tag" style="background-color: #5555dd;">test</span>
-                  <span class="tag" style="background-color: #55dd55;">database</span>
-                  <span class="tag" style="background-color: #dd5555;">routes</span>
-                  <button id="show-tags-modal" type="button" class="btn btn-grey btn-sm">
-                    <span class="glyphicon glyphicon-plus"></span> Add
-                  </button>
+
                 </div>
                 <div class="card-member-container">
-                  <span class="field">Members:</span><div class="gap"></div>
-                  <div class="card-member"><span class="member-initials">Y</span></div>
-                  <div class="card-member"><span class="member-initials">S</span></div>
-                  <div class="card-member"><span class="member-initials">P</span></div>
-                  <button id="show-members-modal" type="button" class="btn btn-grey btn-sm">
-                    <span class="glyphicon glyphicon-plus"></span> Add
-                  </button>
+
                 </div>
                 <div class="description-container">
                   <span class="field">Description</span>
@@ -151,15 +121,7 @@
                 <div class="comments-container">
                   <span class="field">Comments</span>
                   <div class="comments-list">
-                    <div class="comment-container">
-                      <div class="headshot"><span class="member-initials">Y</span></div>
-                      <span class="username">Jinli Yu</span>
-                      <span class="sent-date">posted on 2017-10-10</span>
-                      <div class="comment-content">
-                        <span class="at-user">@spencer</span>
-                        <span class="comment">let's go out for fun!</span>
-                      </div>
-                    </div>
+
                   </div>
                   <span class="field">Add Comment</span>
                   <div class="new-comments">
