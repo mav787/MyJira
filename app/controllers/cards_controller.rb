@@ -127,6 +127,9 @@ class CardsController < ApplicationController
     end
   end
 
+  
+
+
   def move_origin_cards
     origin_list_cards = Card.where("list_id = ? AND card_order > ?", @moving_card.list_id, @moving_card.card_order)
     origin_list_cards.each do |card|

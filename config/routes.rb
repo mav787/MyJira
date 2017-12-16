@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   resources :application, only: [:hello]
   resources :boards
   resources :lists
-  resources :cards, only: [:index, :create]
+  resources :cards, only: [:show, :index, :create]
   resources :tags
   resources :comments
   resources :notifications do
