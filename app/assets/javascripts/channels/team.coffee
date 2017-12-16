@@ -35,11 +35,20 @@ jQuery(document).on 'turbolinks:load', ->
         else if data.event == "delete_member_from_card"
           $('#modal-card-id[data-card-id="'+data.card_id+'"]').find('.card-member-container .member-initials[data-user-id="'+data.user_id+'"]').parent().remove()
         else if data.event == "add_prereq_to_card"
-          precard_class = data.isdone == 'Y'? precard-name-done : precard-name-undone
-          $('#modal-card-id[data-card-id="'+data.card_id+'"]').find('.card-prereq-container #show-prereq-modal').before('<div class=" '+ precard_class +'" data-precard-id="'+data.precard_id+'">'+data.precard_content+'</div>')
+          precard_class = ''
+          if data.isdone == "Y"
+            precard_class = 'precard-name-done'
+          else
+            precard_class = 'precard-name-undone'
+          $('#modal-card-id[data-card-id="'+data.card_id+'"]').find('.card-prereq-container #show-prereq-modal').before('<div class="'+precard_class+'" data-precard-id="'+data.precard_id+'">'+data.precard_content+'</div>')
           $('#modal-card-id[data-card-id="'+data.card_id+'"]').find('.prereq-in-list[data-precard-id='+data.precard_id+']').addClass('prereq-selected');
         else if data.event == "delete_prereq_from_card"
-          $('#modal-card-id[data-card-id="'+data.card_id+'"]').find('.card-prereq-container .card-prereq[data-precard-id="'+data.precard_id+'"]').remove()
+          precard_class = ''
+          if data.isdone == "Y"
+            precard_class = 'precard-name-done'
+          else
+            precard_class = 'precard-name-undone'
+          $('#modal-card-id[data-card-id="'+data.card_id+'"]').find('.card-prereq-container .'+precard_class+'[data-precard-id="'+data.precard_id+'"]').remove()
         else if data.event == "edit_card_description"
           $('#modal-card-id[data-card-id="'+data.card_id+'"]').find('.description').html(data.description)
         else if data.event == "create_comment"

@@ -40,7 +40,8 @@ class CardsController < ApplicationController
         end
 
       end
-    end
+
+
     card_attributes = @card.as_json
     card_attributes['tags'] = @card.tags.as_json
     card_attributes['members'] = @card.users.as_json
@@ -51,6 +52,7 @@ class CardsController < ApplicationController
       comment['from_user_name'] = User.find(comment['from_user_id'].to_i).name
       if comment['to_user_id'] != nil
         comment['to_user_name'] = User.find(comment['to_user_id'].to_i).name
+      end
       end
       respond_to do |format|
         format.json { render json: card_attributes}
@@ -113,11 +115,11 @@ class CardsController < ApplicationController
     @moving_card.list_id = params_list_id
     @moving_card.save
     move_new_cards
-    ActionCable.server.broadcast "team_#{moving_card.list.board.id}_channel",
+    ActionCable.server.broadcast "team_#{@moving_card.list.board.id}_channel",
                                  event: "move_card",
-                                 card_id: moving_card.id,
-                                 list_id: moving_card.list.id,
-                                 order: moving_card.card_order
+                                 card_id: @moving_card.id,
+                                 list_id: @moving_card.list.id,
+                                 order: @moving_card.card_order
     respond_to do |format|
       format.js{}
     end
@@ -132,7 +134,7 @@ class CardsController < ApplicationController
   end
 
   def move_new_cards
-    new_list_cards = Card.where("list_id = ? AND card_order >= ?", @moving_card.list_id, @moving_card.card_order).where.not(id:moving_card.id)
+    new_list_cards = Card.where("list_id = ? AND card_order >= ?", @moving_card.list_id, @moving_card.card_order).where.not(id:@moving_card.id)
     new_list_cards.each do |card|
       card.card_order += 1
       card.save

@@ -213,6 +213,8 @@
             $('#member-modal-dialog').fadeIn();
           });
           $('#show-prereq-modal').click(function(){
+             card_id = $('#modal-card-id').attr('data-card-id');
+             $('#prereq-modal-dialog').find('.prereq-in-list[data-precard-id="'+card_id+'"]').remove();
             $('#prereq-modal-dialog').css({
                  'margin-top': function () {
                      return $('#show-prereq-modal').offset().top+35;
@@ -410,7 +412,7 @@
                     card_id: $('#modal-card-id').attr('data-card-id')
                 },
                 success: function(data,status) {
-                  alert("data: \n" + data.precard_id + "\nstatus: " + status);
+                  // alert("data: \n" + data.precard_id + "\nstatus: " + status);
                   $('.prereq-in-list[data-precard-id='+data.precard_id+']').removeClass('prereq-selected');
                 }
               });

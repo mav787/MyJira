@@ -16,6 +16,7 @@ gem 'bcrypt', 	    '3.1.11'
 gem 'json'
 gem 'activerecord-import'
 gem "better_errors"
+gem 'therubyracer'
 gem "pry-rails"
 gem 'rails_12factor'
 gem 'rails_admin', '~> 1.2'

@@ -260,6 +260,7 @@
               <div class="edit-prereq">
                 <% @board.lists.each do |list| %>
                   <% list.cards.each do |card| %>
+                    <% next if card.id == %>
                   <div class="prereq-in-list" data-precard-id="<%= card.id%>" >
                     <span class="prereq_content"><%= card.content%></span>
                     <div style="clear:both;"></div>
