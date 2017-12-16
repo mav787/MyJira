@@ -29,7 +29,6 @@ class CardsController < ApplicationController
   end
 
   def show_modal
-
       @card = Card.find(params["card_id"])
       if current_user != nil
         notes = current_user.notifications.where(card_id: @card.id)
@@ -58,7 +57,6 @@ class CardsController < ApplicationController
         format.json { render json: card_attributes}
         format.js {render js: "$('#notifications').load(location.href+' #notifications>*','');"}
       end
-
   end
 
   # GET /cards/new
@@ -124,22 +122,22 @@ class CardsController < ApplicationController
                                  order: @moving_card.card_order
     respond_to do |format|
       format.js{}
+      format.json{}
+      format.html{}
     end
   end
 
   def move_origin_cards
     origin_list_cards = Card.where("list_id = ? AND card_order > ?", @moving_card.list_id, @moving_card.card_order)
     origin_list_cards.each do |card|
-      card.card_order -= 1
-      card.save
+      card.update(card_order: card.card_order-1)
     end
   end
 
   def move_new_cards
     new_list_cards = Card.where("list_id = ? AND card_order >= ?", @moving_card.list_id, @moving_card.card_order).where.not(id:@moving_card.id)
     new_list_cards.each do |card|
-      card.card_order += 1
-      card.save
+      card.update(card_order: card.card_order+1)
     end
   end
 

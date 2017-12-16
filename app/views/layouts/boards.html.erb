@@ -16,6 +16,7 @@
   <body>
     <%= render "layouts/nav"%>
     <%= yield %>
+    <% if logged_in? %>
     <!--<%= debug(params) if Rails.env.development? %>-->
     <div id="user" data-user-id="<%= current_user.id %>"></div>
     <script type="text/javascript">
@@ -522,5 +523,6 @@
 
 
     </script>
+    <% end %>
   </body>
 </html>

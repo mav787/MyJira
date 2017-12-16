@@ -2,8 +2,11 @@ require 'test_helper'
 
 class CardsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @card = cards(:one)
-    @list = lists(:one)
+    @card1 = cards(:todo_card1)
+    @card2 = cards(:todo_card2)
+    @todo_list = lists(:todo)
+    @doing_list = lists(:doing)
+    @done_list = lists(:done)
   end
 
   test "should get index" do
@@ -11,38 +14,54 @@ class CardsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should get new" do
-    get new_card_url, params: {list_id: @list.id}
-    assert_response :success
-  end
-
   test "should create card" do
     assert_difference('Card.count') do
-      post cards_url, params: { card: { content: @card.content, deadline: @card.deadline, list_id: @card.list_id, tagst: "tag" } }
+      post cards_url, params: { card: { content: @card1.content, deadline: @card1.deadline, list_id: @card1.list_id } }
     end
     assert_redirected_to board_url(Card.last.list.board)
   end
 
-  test "should show card" do
-    get card_url(@card)
-    assert_response :success
-  end
-
-  test "should get edit" do
-    get edit_card_url(@card)
-    assert_response :success
-  end
-
-  test "should update card" do
-    patch card_url(@card), params: { card: { content: @card.content, deadline: @card.deadline, list_id: @card.list_id } }
-    assert_redirected_to card_url(@card)
-  end
-
-  test "should destroy card" do
-    assert_difference('Card.count', -1) do
-      delete card_url(@card)
+  test "should move card within list" do
+    assert_difference('@card1.card_order') do
+      post '/card/move', params: {card_id: @card1.id, new_list_id: @todo_list.id, new_position: @card1.card_order+1}
+      @card1 = Card.find(@card1.id)
     end
+  end
 
-    assert_redirected_to cards_url
+  test "should move other card within the same list" do
+    assert_difference('@card2.card_order', -1) do
+      post '/card/move', params: {card_id: @card1.id, new_list_id: @todo_list.id, new_position: @card1.card_order+1}
+      @card2 = Card.find(@card2.id)
+    end
+  end
+
+  test "should set start time when card moved to doing" do
+    assert_nil @card1.startdate
+    post '/card/move', params: {card_id: @card1.id, new_list_id: @doing_list.id, new_position: 1}
+    @card1 = Card.find(@card1.id)
+    assert_not_nil @card1.startdate
+  end
+
+  test "should set finish time when card moved to done" do
+    assert_nil @card1.finished_at
+    post '/card/move', params: {card_id: @card1.id, new_list_id: @doing_list.id, new_position: 1}
+    post '/card/move', params: {card_id: @card1.id, new_list_id: @done_list.id, new_position: 1}
+    @card1 = Card.find(@card1.id)
+    assert_not_nil @card1.finished_at
+  end
+
+  test "should assign new member" do
+    log_in_as users(:test_user1)
+    assert_difference(['@card1.users.count', 'Notification.count']) do
+      post '/addmember.json', params: { card_id: @card1.id, user_id: users(:test_user2).id }
+    end
+  end
+
+  test "should not enroll same member twice" do
+    log_in_as users(:test_user1)
+    post '/addmember.json', params: { card_id: @card1.id, user_id: users(:test_user2).id }
+    assert_no_difference('@card1.users.count') do
+      post '/addmember.json', params: { card_id: @card1.id, user_id: users(:test_user2).id }
+    end
   end
 end

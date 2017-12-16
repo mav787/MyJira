@@ -1,13 +1,7 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  context: MyString
-  from_user_id: 1
-  card_id: 1
-  to_user_id: 1
-
-two:
-  context: MyString
-  from_user_id: 1
-  card_id: 1
-  to_user_id: 1
+  context: Have something to say
+  card: todo_card1
+  to_user: test_user2
+  from_user: test_user1

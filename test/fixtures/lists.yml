@@ -1,11 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  name: MyString
-  board_id: 1
-  id: 1
+todo:
+  name: todo
+  board: one
 
-two:
-  name: MyString
-  board_id: 1
-  id: 2
+doing:
+  name: doing
+  board: one
+
+done:
+  name: done
+  board: one

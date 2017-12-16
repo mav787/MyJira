@@ -5,17 +5,15 @@ class BoardsController < ApplicationController
   def index
     if logged_in?
       @boards = Board.paginate(page: params[:page])
-      @states = {}
+      @states = Hash.new
       user_boards = current_user.boards
       @boards.each do |board|
-      if user_boards.include?(board)
-        @states[board.id] = true
-      else
-        @states[board.id] = false
+        if user_boards.include?(board)
+          @states[board.id] = true
+        else
+          @states[board.id] = false
+        end
       end
-    end
-    else
-      @boards = []
     end
 
     respond_to do |format|
@@ -28,7 +26,7 @@ class BoardsController < ApplicationController
   # GET /boards/1.json
   def show
     if (!@board.users.include? current_user)
-      redirect_to root_path
+      return redirect_to root_path
     end
     notes = current_user.notifications.where(board_id: @board.id)
     if (notes != nil)
@@ -40,7 +38,11 @@ class BoardsController < ApplicationController
 
   def enroll
     enrolled = User.find(params[:user].to_i)
-    Board.find(params[:board]).users << enrolled
+    to_enroll = Board.find(params[:board])
+    if (!to_enroll.users.include? current_user)
+      return redirect_to root_path
+    end
+    to_enroll.users << enrolled
     n = Notification.new(recipient_id: enrolled.id, board_id: params[:board].to_i, read: false, source: "board")
     n.save
     BoardMailer.enroll_note(enrolled, n).deliver
@@ -49,7 +51,11 @@ class BoardsController < ApplicationController
 
   # GET /boards/new
   def new
-    @board = Board.new
+    if logged_in?
+      @board = Board.new
+    else
+      redirect_to root_path
+    end
   end
 
   # GET /boards/1/edit
@@ -62,33 +68,42 @@ class BoardsController < ApplicationController
   # POST /boards
   # POST /boards.json
   def create
-    @board = Board.new(board_params)
-    respond_to do |format|
-      if @board.save
-        @board.users << current_user
-        List.create(name: "todo",board_id: @board.id.to_i)
-        List.create(name: "doing",board_id: @board.id.to_i)
-        List.create(name: "done",board_id: @board.id.to_i)
-        format.html { redirect_to @board, notice: 'Board was successfully created.' }
-        format.json { render :show, status: :created, location: @board }
-      else
-        format.html { render :new }
-        format.json { render json: @board.errors, status: :unprocessable_entity }
+    if logged_in?
+      @board = Board.new(board_params)
+      respond_to do |format|
+        if @board.save
+          @board.users << current_user
+          List.create(name: "todo",board_id: @board.id.to_i)
+          List.create(name: "doing",board_id: @board.id.to_i)
+          List.create(name: "done",board_id: @board.id.to_i)
+          format.html { redirect_to @board, notice: 'Board was successfully created.' }
+          format.json { render :show, status: :created, location: @board }
+        else
+          format.html { render :new }
+          format.json { render json: @board.errors, status: :unprocessable_entity }
+        end
       end
+    else
+      redirect_to root_path
     end
   end
 
   # PATCH/PUT /boards/1
   # PATCH/PUT /boards/1.json
   def update
-    respond_to do |format|
-      if @board.update(board_params)
-        format.html { redirect_to @board, notice: 'Board was successfully updated.' }
-        format.json { render :show, status: :ok, location: @board }
-      else
-        format.html { render :edit }
-        format.json { render json: @board.errors, status: :unprocessable_entity }
+    puts current_user.email
+    if (@board.users.include? current_user)
+      respond_to do |format|
+        if @board.update(board_params)
+          format.html { redirect_to @board, notice: 'Board was successfully updated.' }
+          format.json { render :show, status: :ok, location: @board }
+        else
+          format.html { render :edit }
+          format.json { render json: @board.errors, status: :unprocessable_entity }
+        end
       end
+    else
+      return redirect_to root_path
     end
   end
 

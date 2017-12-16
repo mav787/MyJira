@@ -59,7 +59,6 @@ class TagsController < ApplicationController
     card_tag = CardTagAssociation.where(card_id: params['card_id'], tag_id: params['tag_id'])[0]
     if card_tag != nil
       card_tag.destroy
-      card_tag.save
     end
     tag = Tag.find(params['tag_id'].to_i)
     ActionCable.server.broadcast "team_#{tag.board_id}_channel",
