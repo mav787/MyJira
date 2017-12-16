@@ -107,6 +107,8 @@ class CardsController < ApplicationController
       params_list_id = List.where(name:params[:new_list_id]).first.id
     end
     @moving_card = Card.find(params[:card_id])
+
+
     move_origin_cards
     old_list = @moving_card.list
     new_list = List.find(params_list_id)
@@ -241,6 +243,20 @@ class CardsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to cards_url, notice: 'Card was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  def can_move
+    card = Card.find(params[:card_id])
+    ret = "Y"
+    card.precards.each do |precard|
+      if precard.list_id != 3
+        ret = "N";
+        break
+      end
+    end
+    respond_to do |format|
+      format.json { render json: {status: "success",canmove: ret}}
     end
   end
 

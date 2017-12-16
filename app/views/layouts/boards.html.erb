@@ -86,6 +86,23 @@
       connectWith: ".card-container",
       dropOnEmpty: true,
       start: function(event,ui) {
+        bool = true;
+        $.ajax({url: '/card/can_move',
+          type: 'GET',
+          beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+          data:{
+            card_id: $(ui.item).attr("card_id")
+          },
+          success: function(data,status){
+            if (data.canmove == 'N')
+              alert("Can't Move! Unfinished Prerequisites!");
+            bool = false;
+          }
+
+        });
+        if (!bool) return;
+
+
         $(ui.item).addClass('rotate');
       },
       beforeStop: function(event,ui) {

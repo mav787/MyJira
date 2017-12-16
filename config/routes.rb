@@ -34,7 +34,6 @@ Rails.application.routes.draw do
 
   get 'sessions/new'
   post 'addprereq.json', to:'prerequisites#add'
-  # get '/prerequisites_index', to: 'prerequisites#index'
   post 'delprereq.json', to: 'prerequisites#delete'
   get 'searchresult', to: 'cards#searchmember'
   get 'search_for_assign', to: 'users#search_for_assign'
@@ -59,4 +58,5 @@ Rails.application.routes.draw do
   post '/card/edit_description.json', to: 'cards#edit_description'
   post '/tag/bind.json', to: 'tags#bind'
   post '/tag/unbind.json', to: 'tags#unbind'
+  get '/card/can_move', to: 'cards#can_move'
 end
