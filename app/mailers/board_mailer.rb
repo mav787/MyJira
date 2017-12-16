@@ -5,7 +5,7 @@ class BoardMailer < ActionMailer::Base
     @user = user
     @note = note
     mail(:to => "#{user.name} <#{user.email}>",
-      :subject => "#{note.board.leader.name} invited you to join board #{note.board.name}")
+      :subject => "You're invited to join board #{note.board.name} on MyJira")
  end
 
 end

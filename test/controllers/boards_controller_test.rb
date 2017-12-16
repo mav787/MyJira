@@ -61,7 +61,7 @@ class BoardsControllerTest < ActionDispatch::IntegrationTest
 
   test "should enroll new member if belong to board" do
     log_in_as users(:test_user1)
-    assert_difference("@board.users.count") do
+    assert_difference(['@board.users.count', 'Notification.count']) do
       get enroll_url, params: { board: @board.id, user: users(:test_user2).id }
     end
   end

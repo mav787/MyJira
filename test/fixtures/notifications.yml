@@ -1,11 +1,20 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  recipient_id: 1
+comment_note:
+  recipient: test_user2
   read: false
-  card_id: 1
+  comment: one
+  card: todo_card1
+  source: comment
 
-two:
-  recipient_id: 1
+board_note:
+  recipient: test_user2
   read: false
-  card_id: 1
+  board: one
+  source: board
+
+card_note:
+  recipient: test_user2
+  read: false
+  card: todo_card1
+  source: card

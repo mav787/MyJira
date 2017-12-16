@@ -5,44 +5,10 @@ class CommentsControllerTest < ActionDispatch::IntegrationTest
     @comment = comments(:one)
   end
 
-  test "should get index" do
-    get comments_url
-    assert_response :success
-  end
-
-  # test "should get new" do
-  #   get new_comment_url
-  #   assert_response :success
-  # end
-
-  # test "should create comment" do
-  #   assert_difference('Comment.count') do
-  #     post comments_url, params: { comment: { card_id: @comment.card_id, context: @comment.context, from_user_id: @comment.from_user_id, to_user_id: @comment.to_user_id } }
-  #   end
-  #
-  #   assert_redirected_to comment_url(Comment.last)
-  # end
-
-  test "should show comment" do
-    get comment_url(@comment)
-    assert_response :success
-  end
-
-  # test "should get edit" do
-  #   get edit_comment_url(@comment)
-  #   assert_response :success
-  # end
-
-  # test "should update comment" do
-  #   patch comment_url(@comment), params: { comment: { card_id: @comment.card_id, context: @comment.context, from_user_id: @comment.from_user_id, to_user_id: @comment.to_user_id } }
-  #   assert_redirected_to comment_url(@comment)
-  # end
-
-  test "should destroy comment" do
-    assert_difference('Comment.count', -1) do
-      delete comment_url(@comment)
+  test "should create comment and notification too" do
+   log_in_as users(:test_user1)
+    assert_difference(['Comment.count', 'Notification.count']) do
+     post comments_url, params: { comment: { card_id: @comment.card_id, context: @comment.context, to_user_id: @comment.to_user_id } }
     end
-
-    assert_redirected_to comments_url
   end
 end

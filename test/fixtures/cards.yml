@@ -4,8 +4,10 @@ todo_card1:
   list: todo
   content: Need to do this
   deadline: 2017-12-25 22:55:02
+  card_order: 1
 
 todo_card2:
-  list_id: todo
+  list: todo
   content: Need to do this too
   deadline: 2017-12-25 22:55:02
+  card_order: 2

@@ -2,47 +2,27 @@ require 'test_helper'
 
 class TagsControllerTest < ActionDispatch::IntegrationTest
   setup do
+    @card = cards(:todo_card1)
     @tag = tags(:one)
   end
 
-  test "should get index" do
-    get tags_url
-    assert_response :success
-  end
-
-  test "should get new" do
-    get new_tag_url
-    assert_response :success
-  end
-
-  # test "should create tag" do
-  #   assert_difference('Tag.count') do
-  #     post tags_url, params: { tag: { color: @tag.color, name: @tag.name } }
-  #   end
-  #
-  #   assert_redirected_to tag_url(Tag.last)
-  # end
-
-  test "should show tag" do
-    get tag_url(@tag)
-    assert_response :success
-  end
-
-  test "should get edit" do
-    get edit_tag_url(@tag)
-    assert_response :success
-  end
-
-  # test "should update tag" do
-  #   patch tag_url(@tag), params: { tag: { color: @tag.color, name: @tag.name } }
-  #   assert_redirected_to tag_url(@tag)
-  # end
-
-  test "should destroy tag" do
-    assert_difference('Tag.count', -1) do
-      delete tag_url(@tag)
+  test "should bind tag" do
+    assert_difference('@card.tags.count') do
+      post '/tag/bind.json', params: { tag_id: @tag.id, card_id: @card.id }
     end
+  end
 
-    assert_redirected_to tags_url
+  test "should not bind same tag twice" do
+    post '/tag/bind.json', params: { tag_id: @tag.id, card_id: @card.id }
+    assert_no_difference('@card.tags.count') do
+      post '/tag/bind.json', params: { tag_id: @tag.id, card_id: @card.id }
+    end
+  end
+
+  test "should unbind tag" do
+    post '/tag/bind.json', params: { tag_id: @tag.id, card_id: @card.id }
+    assert_difference('@card.tags.count', -1) do
+      post '/tag/unbind.json', params: { tag_id: @tag.id, card_id: @card.id }
+    end
   end
 end

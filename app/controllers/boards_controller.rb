@@ -38,10 +38,11 @@ class BoardsController < ApplicationController
 
   def enroll
     enrolled = User.find(params[:user].to_i)
-    Board.find(params[:board]).users << enrolled
-    if (!enrolled.users.include? current_user)
+    to_enroll = Board.find(params[:board])
+    if (!to_enroll.users.include? current_user)
       return redirect_to root_path
     end
+    to_enroll.users << enrolled
     n = Notification.new(recipient_id: enrolled.id, board_id: params[:board].to_i, read: false, source: "board")
     n.save
     BoardMailer.enroll_note(enrolled, n).deliver
