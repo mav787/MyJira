@@ -18,7 +18,7 @@ jQuery(document).on 'turbolinks:load', ->
           if data.order == 1
             $(".card-container[list_id='"+data.list_id+"']").prepend($(".card[card_id='"+data.card_id+"']"))
           else
-            $(".card-container[list_id='"+data.list_id+"'] div:eq("+(data.order-2)+")").after($(".card[card_id='"+data.card_id+"']"))
+            $(".card-container[list_id='"+data.list_id+"']").children("div:nth-child("+(data.order-1)+")").after($(".card[card_id='"+data.card_id+"']"))
 
         else if data.event == "create_tag" || data.event == "bind_tag"
           if data.event == "create_tag"
