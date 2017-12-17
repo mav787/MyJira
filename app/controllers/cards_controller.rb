@@ -127,7 +127,58 @@ class CardsController < ApplicationController
     end
   end
 
-  
+  def mulmove
+    arg1 = params[:cards_id]
+    i = 0
+    cannot_do = "";
+    while i < arg1.length
+      j = i
+      while j < arg1.length && arg1[j] >='0' && arg1[j] <= '9'
+         j = j+1
+      end
+      tomov_card_id = arg1[i..j-1].to_i
+
+      @moving_card = Card.find(tomov_card_id)
+      ret = "Y"
+      @moving_card.precards.each do |precard|
+        if precard.list_id != 3
+          ret = "N";
+          break
+        end
+      end
+      if ret == "N"
+        if cannot_do != ""
+          cannot_do += ","
+        end
+        cannot_do += tomov_card_id.to_s
+        i = j+1
+        next
+      end
+      params_list_id = List.where(name:params[:new_list_id]).first.id
+      move_origin_cards
+      old_list = @moving_card.list
+      new_list = List.find(params_list_id)
+      change_status old_list, new_list
+      @moving_card.card_order = new_list.cards.count+1
+      @moving_card.list_id = params_list_id
+      @moving_card.save
+      move_new_cards
+      ActionCable.server.broadcast "team_#{@moving_card.list.board.id}_channel",
+                                   event: "move_card",
+                                   card_id: @moving_card.id,
+                                   list_id: @moving_card.list.id,
+                                   order: @moving_card.card_order
+      i = j+1;
+
+    end
+    respond_to do |format|
+      format.js{}
+      format.json{render json: {status: "success", abortlist: cannot_do}}
+      format.html{}
+    end
+  end
+
+
 
 
   def move_origin_cards

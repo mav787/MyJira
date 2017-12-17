@@ -345,43 +345,30 @@ jQuery(function($, undefined) {
 
       move:  function(arg1,arg2){
         // alert(arg1+" "+arg2);
-        for (i = 0; i < arg1.length;){
-          j = i;
-          while (j < arg1.length && arg1[j] >='0' && arg1[j] <= '9') j++;
-          num = Number(arg1.substr(i,j-i));
-          $.ajax({ url: '/card/move',
+          var str = "";
+
+          $.ajax({ url: '/card/mulmove.json',
             type: 'POST',
             beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
             data: {
-              card_id: num,
-              new_list_id: arg2,// $(ui.item).parents('.card-container').attr("list_id"),
-              new_position:1,// $(ui.item).index()+1
+              cards_id: arg1,
+              new_list_id: arg2,
             },
             success: function(data,status) {
-              //alert("数据: \n" + data + "\n状态: " + status);
-            }
-          });
-          i = j+1;
+              str = data.abortlist;
+              if (str.length>0)
+                $(".terminal").terminal().echo("Card "+str+" didn't move due to unfinished prerequisites!");
+            },
 
-       }
-        // $.ajax({ url: '/card/move',
-        //   type: 'POST',
-        //   beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
-        //   data: {
-        //     card_id: arg1,
-        //     new_list_id: arg2,// $(ui.item).parents('.card-container').attr("list_id"),
-        //     new_position:1,// $(ui.item).index()+1
-        //   },
-        //   success: function(data,status) {
-        //     //alert("数据: \n" + data + "\n状态: " + status);
-        //   }
-        // });
+          });
+
       },
 
       help: function(){
         this.echo("id_on : show all cards' id.");
         this.echo("id_off : hide all cards' id.");
-        this.echo("move [card_id] [list_name] : move cards to a specified list ");
+        this.echo("move [card_id] [list_name] : move cards to a specified list.");
+        this.echo("   e.g move 1 doing; move 1,2 todo");
         this.echo("newcard [list_name] : create a card in a specified list");
       },
 
@@ -394,7 +381,7 @@ jQuery(function($, undefined) {
           }
       }
   }, {
-        greetings: 'This is MyJira Console. Type "help" to get more commands. ',
+        greetings: 'This is MyJira Console. Type "help" to get more commands. Click "Open Console" again to close.',
         name: 'js_demo',
         height: 200,
         width: 550,

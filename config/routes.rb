@@ -36,6 +36,8 @@ Rails.application.routes.draw do
 
 
   post '/card/move', to: 'cards#move'
+  post '/card/mulmove', to: 'cards#mulmove'
+  post '/card/mulmove.json', to: 'cards#mulmove'
   get '/card/show_modal.json', to: 'cards#show_modal'
   post '/card/edit_description.json', to: 'cards#edit_description'
   post '/tag/bind.json', to: 'tags#bind'
