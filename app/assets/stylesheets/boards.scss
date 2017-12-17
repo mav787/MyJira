@@ -311,7 +311,7 @@
   clear: both;
 }
 .selected::after{
-  background-image: url('icons8-checkmark-50.png');
+  background-image: image-url("icons8-checkmark-50.png");
   background-size: 18px 18px;
   display: inline-block;
   width: 18px;
@@ -334,7 +334,7 @@
   color: #898;
 }
 #back-to-taglist{
-  background-image: url('icons8-back-filled-50.png');
+  background-image: image-url("icons8-back-filled-50.png");
   background-repeat: no-repeat;
     background-size: 18px;
     height: 20px;
@@ -386,7 +386,7 @@ white-space: nowrap;
   white-space: nowrap;
 }
 .color-selected::after{
-  background-image: url('icons8-checkmark-50.png');
+  background-image: image-url("icons8-checkmark-50.png");
 background-size: 18px 18px;
 display: inline-block;
 width: 18px;
@@ -420,7 +420,7 @@ border: none;
     right: 6px;
 }
 .icon-mention{
-  background-image: url('icons8-email-50.png');
+  background-image: image-url("icons8-email-50.png");
 background-size: 18px 18px;
 display: inline-block;
 width: 18px;
@@ -451,7 +451,7 @@ left: 10px;
 left: 10px;
 }
 .member-selected::after, .prereq-selected::after{
-background-image: url(icons8-checkmark-50.png);
+background-image: image-url("icons8-checkmark-50.png");
 background-size: 18px 18px;
 display: inline-block;
 width: 18px;
@@ -462,7 +462,7 @@ position: relative;
     top: -24px;
 }
 .prereq-selected::after{
-background-image: url(icons8-checkmark-50.png);
+background-image: image-url("icons8-checkmark-50.png");
 background-size: 18px 18px;
 display: inline-block;
 width: 18px;
