@@ -312,6 +312,7 @@
 }
 .selected::after{
   background-image: image-url("icons8-checkmark-50.png");
+  background-repeat: no-repeat;
   background-size: 18px 18px;
   display: inline-block;
   width: 18px;
@@ -387,6 +388,7 @@ white-space: nowrap;
 }
 .color-selected::after{
   background-image: image-url("icons8-checkmark-50.png");
+  background-repeat: no-repeat;
 background-size: 18px 18px;
 display: inline-block;
 width: 18px;
@@ -421,6 +423,7 @@ border: none;
 }
 .icon-mention{
   background-image: image-url("icons8-email-50.png");
+  background-repeat: no-repeat;
 background-size: 18px 18px;
 display: inline-block;
 width: 18px;
@@ -452,6 +455,7 @@ left: 10px;
 }
 .member-selected::after, .prereq-selected::after{
 background-image: image-url("icons8-checkmark-50.png");
+background-repeat: no-repeat;
 background-size: 18px 18px;
 display: inline-block;
 width: 18px;
@@ -463,6 +467,7 @@ position: relative;
 }
 .prereq-selected::after{
 background-image: image-url("icons8-checkmark-50.png");
+background-repeat: no-repeat;
 background-size: 18px 18px;
 display: inline-block;
 width: 18px;
