@@ -9,8 +9,8 @@ class EmailProcessor
     token_task_id, token_recipient_id = token_items.captures
     card = Card.find(token_task_id)
     board = card.list.board
-    done_list = List.where("board_id = ?", board.id).where("name = ?", "done").first
-    doing_list = List.where("board_id = ?", board.id).where("name = ?", "doing").first
+    done_list = List.where("board_id = ? and name = ?", board.id, "done").first
+    done_list = List.where("board_id = ? and name = ?", board.id, "doing").first
 
     if (token_recipient_id != "0")
       comment = Comment.create(context: @email.body, from_user_id: author.id, card_id: token_task_id, to_user_id: token_recipient_id)
