@@ -40,12 +40,12 @@ class CardsController < ApplicationController
 
       end
 
-
+    done_list_id = @card.board.list.where(name: "done").first.id
     card_attributes = @card.as_json
     card_attributes['tags'] = @card.tags.as_json
     card_attributes['members'] = @card.users.as_json
-    card_attributes['precards_done'] = @card.precards.where(list_id: 3).as_json
-    card_attributes['precards_undone'] = @card.precards.where.not(list_id:3).as_json
+    card_attributes['precards_done'] = @card.precards.where(list_id: done_list_id).as_json
+    card_attributes['precards_undone'] = @card.precards.where.not(list_id:done_list_id).as_json
     card_attributes['comments'] = @card.comments.as_json
     card_attributes['comments'].each do |comment|
       comment['from_user_name'] = User.find(comment['from_user_id'].to_i).name
@@ -141,7 +141,7 @@ class CardsController < ApplicationController
       @moving_card = Card.find(tomov_card_id)
       ret = "Y"
       @moving_card.precards.each do |precard|
-        if precard.list_id != 3
+        if precard.list.name != "done"
           ret = "N";
           break
         end
@@ -154,7 +154,7 @@ class CardsController < ApplicationController
         i = j+1
         next
       end
-      params_list_id = List.where(name:params[:new_list_id]).first.id
+      params_list_id = List.where(name:params[:new_list_id],board_id: @moving_card.list.board_id).first.id
       move_origin_cards
       old_list = @moving_card.list
       new_list = List.find(params_list_id)
@@ -302,7 +302,7 @@ class CardsController < ApplicationController
     card = Card.find(params[:card_id])
     ret = "Y"
     card.precards.each do |precard|
-      if precard.list_id != 3
+      if precard.list.name != "done"
         ret = "N";
         break
       end

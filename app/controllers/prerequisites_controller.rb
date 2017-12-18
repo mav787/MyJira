@@ -2,7 +2,7 @@ class PrerequisitesController < ApplicationController
 
   def add
     new_precard = Card.find(params[:toaddcard_id])
-    is_newprecard_done = new_precard.list_id == 3 ? "Y" : "N"
+    is_newprecard_done = new_precard.list.name == "done" ? "Y" : "N"
     card = Card.find(params[:card_id])
     Prerequisite.create(card_id:params[:card_id],precard_id:params[:toaddcard_id])
     ActionCable.server.broadcast "team_#{card.list.board.id}_channel",
@@ -18,7 +18,7 @@ class PrerequisitesController < ApplicationController
 
   def delete
     todel_precard = Card.find(params[:todeletecard_id])
-    is_done = todel_precard.list_id == 3 ? "Y" : "N"
+    is_done = todel_precard.list.name == "done "? "Y" : "N"
     card = Card.find(params[:card_id])
     Prerequisite.delete(Prerequisite.where(card_id:params[:card_id],precard_id:params[:todeletecard_id]).first.id)
     ActionCable.server.broadcast "team_#{card.list.board.id}_channel",
