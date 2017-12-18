@@ -4,8 +4,8 @@ class GithubWebhooksController < ActionController::Base
   def github_push
     repo = params["repository"]["full_name"]
     board = Board.where("repo =? ", repo).first
-    done_list = List.where("board_id = ?", board.id).where("name = ?", "done").first
-    doing_list = List.where("board_id = ?", board.id).where("name = ?", "doing").first
+    done_list = List.where("board_id = ? and name = ?", board.id, "done").first
+    doing_list = List.where("board_id = ? and name = ?", board.id, "doing").first
     params["commits"].each do |c|
       doing_list.cards.each do |card|
         if card.content == c["message"]
