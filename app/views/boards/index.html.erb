@@ -20,7 +20,7 @@
           <% @boards.each do |board| %>
             <tr>
               <td><%= board.name %></td>
-              <td><%= board.leader_id %></td>
+              <td><%= board.leader.name %></td>
               <td><% if @states[board.id] %><%= link_to 'Show', board %><% end %></td>
               <td>
               <% if !@states[board.id] %>
