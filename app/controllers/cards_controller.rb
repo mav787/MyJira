@@ -40,7 +40,7 @@ class CardsController < ApplicationController
 
       end
 
-    done_list_id = @card.list.board.list.where(name: "done").first.id
+    done_list_id = @card.list.board.lists.where(name: "done").first.id
     card_attributes = @card.as_json
     card_attributes['tags'] = @card.tags.as_json
     card_attributes['members'] = @card.users.as_json

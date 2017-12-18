@@ -112,7 +112,7 @@
           <ul class="nav nav-tabs">
             <li class="active"><a data-toggle="tab" href="#home">All Users</a></li>
             <% @users.each do |u| %>
-              <li><a data-toggle="tab" href="#<%= u.name %>"><%= u.name %></a></li>
+              <li><a data-toggle="tab" href="#<%= u.name.delete' ' %>"><%= u.name %></a></li>
             <% end %>
           </ul>
           <div class="tab-content">
@@ -127,7 +127,7 @@
               </div>
             </div>
             <% @users.each do |u| %>
-              <div id="<%= u.name %>" class="tab-pane fade">
+              <div id="<%= u.name.delete' ' %>" class="tab-pane fade">
                 <div class="row">
                   <div class="col-md-4 no-padding analysis-block">
                     <h4><%= u.name %>'s Cards By Lists</h4>
